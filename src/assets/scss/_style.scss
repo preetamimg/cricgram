@@ -1,0 +1,417 @@
+body {
+  background-color: $theme2;
+  & .pageInner {
+    padding-top: 50px;
+    @include lg {
+      padding-top: 60px;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  width: 5px;
+  background-color: $theme3;
+  border-radius: 5px;
+}
+
+.commonHeading {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  & img {
+    height: 20px;
+    object-fit: contain;
+    margin-right: 8px;
+  }
+}
+
+.commonBtn {
+  background-color: $theme1;
+  font-size: 12px;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 700;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  min-width: 80px;
+}
+
+.commonTabs {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  align-items: center;
+  white-space: nowrap;
+  background-color: $theme3;
+  padding: 5px;
+  border-radius: 10px;
+  position: relative;
+  & .tab {
+    min-width: 120px;
+    font-size: 12px;
+    color: $theme4;
+    text-transform: uppercase;
+    font-weight: 700;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    &.active {
+      color: white;
+      background-color: $theme1;
+    }
+  }
+  &.commonInnerTabs {
+    // background-color: transparent;
+    padding-block: 0;
+    & .tab {
+      border-bottom: 3px solid transparent;
+      border-radius: 0;
+      padding: 12px 8px;
+      &.active {
+        background-color: transparent;
+        border-color: $theme1;
+      }
+    }
+  }
+}
+
+
+.matchCard {
+  background-color: $theme3;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  & .matchStatus {
+    font-size: 12px;
+    color: $theme4;
+    font-weight: 700;
+    text-transform: uppercase;
+    &.live {
+      color: red;
+    }
+    &.notLive, &.lunch {
+      color: orange;
+    }
+  }
+  & .matchDate {
+    font-size: 12px;
+    color: $theme4;
+  }
+  & .matchTeam {
+    font-size: 14px;
+    text-transform: capitalize;
+    color: white;
+    font-weight: 700;
+    & img {
+      height: 20px;
+      margin-right: 7px;
+      object-fit: contain;
+    }
+    &.disabled {
+      color: $theme4;
+      opacity: 0.8;
+    }
+    &.playing {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: -10px;
+        height: 6px;
+        width: 6px;
+        border-radius: 20px;
+        background-color: red;
+      }
+    }
+  }
+  & .matchScore {
+    font-size: 14px;
+    text-transform: capitalize;
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    & .small {
+      font-size: 12px;
+      font-weight: 500;
+    }
+    & .disabled {
+      color: $theme4;
+      opacity: 0.8;
+    }
+  }
+  & .matchMsg {
+    font-size: 12px;
+    color: white;
+    margin-top: 7px;
+  }
+  & .matchOptns {
+    border-top: 1px solid rgba($theme5, 0.7);
+    font-size: 12px;
+    color: $theme4;
+    text-transform: capitalize;
+    margin-top: 8px;
+    padding-top: 7px;
+  }
+}
+
+.currentSeriesCard {
+  background-color: $theme3;
+  padding: 13px;
+  border-radius: 8px;
+  color: $theme4;
+  font-size: 14px;
+  text-transform: capitalize;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & img {
+    height: 15px;
+    object-fit: contain;
+    opacity: 0.8;
+    transition: 0.3s ease-in-out;
+  }
+  &:hover {
+    color: white;
+    & img {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+  }
+}
+
+.filterTabCol {
+  width: calc(100% - 100px) !important;
+}
+
+.filterBtn {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  // aspect-ratio: 1;
+  width: 44.4px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.filterBtnAccordian {
+  & .accordion {
+    & .accordion-item {
+      border-radius: 0 !important;
+      background-color: transparent !important;
+      border: 0 !important;
+      & .accordion-header {
+        display: flex;
+        justify-content: end;
+        & .accordion-button {
+          margin-top: -44.4px;
+          border-radius: 10px;
+          background-color: $theme3;
+          border: 0 !important;
+          height: 44.4px;
+          width: 44.4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: none !important;
+          &::after {
+            display: none;
+          }
+          &:not(.collapsed) {
+            box-shadow: none !important;
+          }
+        }
+      }
+      & .accordion-collapse {
+        & .accordion-body {
+          background-color: $theme3;
+          padding: 10px;
+          margin-top: 15px;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+}
+
+.customDropdown {
+  @include md {
+    max-width: calc((100% - 96px)/3);
+  }
+  & .dropdown {
+    & .dropdown-toggle {
+      width: 100%;
+      background-color: $theme2;
+      border-color: $theme2;
+      font-size: 13px;
+      font-weight: 600;
+      padding-right: 30px;
+      position: relative;
+      text-align: left;
+      height: 34px;
+      & .innerTxt {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      &::after {
+        height: 13px;
+        width: 13px;
+        border: 0 !important;
+        background-size: contain;
+        background-image: url(./../img/arrow.svg);
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%) rotate(90deg);
+      }
+      &.show {
+        &::after {
+          transform: translateY(-50%) rotate(270deg);
+        }
+      }
+    }
+    & .dropdown-menu {
+      background-color: $theme2;
+      padding: 10px;
+      min-width: 100%;
+      max-width: 100%;
+      max-height: 205px;
+      overflow-y: auto;
+      & .dropdownItem {
+        margin-bottom: 3px;
+        padding: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 6px;
+        color: $theme4;
+        &:is(:hover, .active) {
+          background-color: $theme3;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+.matchDetailCard {
+  background-color: $theme3;
+  padding: 20px;
+  border-radius: 10px;
+  & .matchTeams {
+    font-size: 22px;
+    color: white;
+    font-weight: 700;
+  }
+  & .shareBtn {
+    height: 35px;
+    width: 35px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba($theme1, .6);
+    cursor: pointer;
+  }
+  & .matchDes {
+    margin-top: 5px;
+    font-size: 12px;
+    color: $theme4;
+    font-weight: 500;
+    & .urlLink {
+      cursor: pointer;
+      text-decoration: underline;
+      padding-right: 4px;
+      &:hover {
+        color: white;
+      }
+    }
+  }
+  & .startTxt {
+    font-size: 16px;
+    color: $theme4;
+    margin-bottom: 5px;
+    text-align: center;
+    font-weight: 700;
+  }
+  & .teamAndScore {
+    & table {
+      vertical-align: middle;
+      & td {
+        padding: 10px;
+      }
+    }
+    & .teamName {
+      & img {
+        height: 48px;
+        width: 48px;
+        object-fit: contain;
+        margin-right: 10px;
+      }
+      & span {
+        font-size: 18px;
+        color: $theme4;
+        font-weight: 600;
+      }
+    }
+    & .scoreDetail {
+      font-size: 14px;
+      font-weight: 600;
+      color: $theme4;
+    }
+  }
+}
+
+.tymBox {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  gap: 10px;
+  & .timeCount {
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    & span {
+      font-size: 14px;
+      font-weight: 500;
+      color: $theme4;
+    }
+  }
+  & .tymDot {
+    font-size: 22px;
+    font-weight: 700;
+  }
+}
