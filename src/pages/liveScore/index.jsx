@@ -6,6 +6,7 @@ import RecentOver from 'components/recentOver'
 import Commentary from './components/Commentary'
 import ScoreCard from './components/ScoreCard'
 import AdsComp from 'components/ads'
+import Overs from './components/Overs'
 
 const LiveScorePage = () => {
   const [activeTab, setActiveTab] = useState('commentary')
@@ -111,8 +112,8 @@ const LiveScorePage = () => {
                 </div>
                 {
                   activeTab === 'commentary' ? <Commentary/> : 
-                  activeTab === 'scoreCard' ? <ScoreCard/> : ''
-
+                  activeTab === 'scoreCard' ? <ScoreCard/> : 
+                  activeTab === 'overs' ? <Overs/> : ''
                 }
 
             </div>
