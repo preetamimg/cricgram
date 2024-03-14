@@ -79,7 +79,7 @@ const Home = () => {
     setSelectedTeam('')
     setSelectedSeries('')
   }
-
+    
   return (
     <>
       <HeroBanner/>
