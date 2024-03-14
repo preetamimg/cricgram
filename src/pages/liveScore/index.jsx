@@ -5,9 +5,10 @@ import CurrentSeries from 'components/currentSeries'
 import RecentOver from 'components/recentOver'
 import Commentary from './components/Commentary'
 import ScoreCard from './components/ScoreCard'
+import AdsComp from 'components/ads'
 
 const LiveScorePage = () => {
-  const [activeTab, setActiveTab] = useState('scoreCard')
+  const [activeTab, setActiveTab] = useState('commentary')
   return (
     <>
     <div className="container-fluid my-4">
@@ -118,6 +119,7 @@ const LiveScorePage = () => {
 
             <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
               <CurrentSeries/>
+              <AdsComp/>
             </div>
           </div>
         </div>

@@ -1,10 +1,13 @@
+import { ROUTE_CONST } from 'constants'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const MatchCard = () => {
+  const navigate = useNavigate()
   return (
     <>
       <div className="col">
-        <div className="matchCard">
+        <div className="matchCard" onClick={()=>navigate(ROUTE_CONST.LIVE_SCORE)}>
           <div className="row mx-0 gx-0">
             {/* live, notLive, lunch */}
             <div className="col-12 matchStatus live">live</div>
