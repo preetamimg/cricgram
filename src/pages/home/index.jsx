@@ -4,6 +4,8 @@ import MatchCard from 'components/matchCard'
 import filterIcon from 'assets/img/filter.svg'
 import Accordion from 'react-bootstrap/Accordion';
 import Dropdown from 'react-bootstrap/Dropdown';
+import HeroBanner from 'components/heroBanner';
+import AdsComp from 'components/ads';
 
 const arr = [1,1,1,1,1,1,1]
 
@@ -80,6 +82,7 @@ const Home = () => {
 
   return (
     <>
+      <HeroBanner/>
       <div className="container-fluid my-4">
           <div className="container px-0">
             <div className="row">
@@ -187,6 +190,7 @@ const Home = () => {
               </div>
               <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
                 <CurrentSeries/>
+                <AdsComp/>
               </div>
             </div>
           </div>

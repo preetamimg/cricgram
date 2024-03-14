@@ -33,7 +33,7 @@ const Header = () => {
           <div className="container px-0">
             <div className="row align-items-center">
               <div className="col-auto">
-                <Link to={ROUTE_CONST.HOME} className='navBrand'>
+                <Link to={ROUTE_CONST.HOME_PAGE} className='navBrand'>
                   <img className='h-100 object-fit-contain' src={logo} alt="" />
                 </Link>
               </div>
