@@ -3,7 +3,7 @@ import fourImg from 'assets/img/four.svg'
 import sixImg from 'assets/img/six.svg'
 import wicketImg from 'assets/img/wicket.svg'
 
-const commentryOvers = [1,1,1,1,1,1,1]
+const commentryOvers = [1,1,1]
 const Commentary = () => {
   return (
     <>
@@ -251,6 +251,9 @@ const Commentary = () => {
             </ul>
           ))
         }
+      </div>
+      <div className="mt-3 d-flex justify-content-center">
+        <div className="commonBtn" style={{maxWidth: '150px'}}>Load more</div>
       </div>
     </>
   )
