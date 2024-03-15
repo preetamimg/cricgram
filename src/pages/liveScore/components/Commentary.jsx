@@ -1,15 +1,42 @@
-import React from 'react'
-import fourImg from 'assets/img/four.svg'
-import sixImg from 'assets/img/six.svg'
-import wicketImg from 'assets/img/wicket.svg'
+import React, { useEffect, useState } from 'react';
+import fourImg from 'assets/img/four.svg';
+import sixImg from 'assets/img/six.svg';
+import wicketImg from 'assets/img/wicket.svg';
+import axios from 'axios';
+import {useLocation} from 'react-router-dom';
+import { baseUrl } from 'pages/home';
+import { token } from 'pages/home';
 
 const commentryOvers = [1,1,1,1,1,1,1]
-const Commentary = () => {
+const Commentary = ({Inning}) => {
+
+  const locate = useLocation();
+  const matchId=  locate?.state;
+  console.log(matchId);
+
+
+const [commentary,setCommentary] = useState([]);
+const [Innings,setInnings]=useState([]);
+
+useEffect(()=>{
+  axios.get(`${baseUrl}//v2/matches/${matchId}/innings/${Inning}/commentary?token=${token}`)
+    .then((res)=>{
+      setCommentary(res?.data?.response)
+      setInnings(res?.data?.response?.inning)
+      console.log(res)
+      })
+    .catch((err)=> console.log(err))
+  },[])
+
+  console.log(commentary)
+  console.log(Innings)
   return (
     <>
-      <div className="row g-3 mb-3">
+    
+      <div className="row g-3 mb-3" >
         <div className="xol-xl-7 col-xxl-8">
-          <div className="table-responsive">
+
+            <div className="table-responsive">
             <table className='table commonTable'>
               <thead>
                 <tr>
@@ -22,22 +49,16 @@ const Commentary = () => {
                 </tr>
               </thead>
               <tbody>
+          {Innings?.batsmen?.map((batsmen)=>(
                 <tr>
-                  <td>Salome Sunday*</td>
-                  <td>37</td>
-                  <td>48</td>
-                  <td>77.08</td>
-                  <td>4</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td>Salome Sunday</td>
-                  <td>37</td>
-                  <td>48</td>
-                  <td>77.08</td>
-                  <td>4</td>
-                  <td>0</td>
-                </tr>
+                  <td>{batsmen?.name}</td>
+                  <td>{batsmen?.runs}</td>
+                  <td>{batsmen?.balls_faced}</td>
+                  <td>{batsmen?.strike_rate}</td>
+                  <td>{batsmen?.fours}</td>
+                  <td>{batsmen?.sixes}</td>
+                </tr>           
+            ))}
               </tbody>
             </table>
           </div>
@@ -54,22 +75,16 @@ const Commentary = () => {
                 </tr>
               </thead>
               <tbody>
+                {Innings?.bowlers?.map((bowlers)=>(
                 <tr>
-                  <td>Salome Sunday*</td>
-                  <td>37</td>
-                  <td>48</td>
-                  <td>77.08</td>
-                  <td>4</td>
-                  <td>0</td>
+                  <td>{bowlers?.name}</td>
+                  <td>{bowlers?.overs}</td>
+                  <td>{bowlers?.maidens}</td>
+                  <td>{bowlers?.run0}</td>
+                  <td>{bowlers?.run0}</td>
+                  <td>{bowlers?.econ}</td>
                 </tr>
-                <tr>
-                  <td>Salome Sunday</td>
-                  <td>37</td>
-                  <td>48</td>
-                  <td>77.08</td>
-                  <td>4</td>
-                  <td>0</td>
-                </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -105,6 +120,7 @@ const Commentary = () => {
           </div>
         </div>
       </div>
+    
       <div className="commentaryTabs">
         <div className="commentaryTab all active">All</div>
         <div className="commentaryTab">

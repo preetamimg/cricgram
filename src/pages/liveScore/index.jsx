@@ -1,14 +1,41 @@
-import React, { useState } from 'react'
-import shareIcon from 'assets/img/share.svg'
-import TimerComponent from 'components/timer/TimerComponent'
-import CurrentSeries from 'components/currentSeries'
-import RecentOver from 'components/recentOver'
-import Commentary from './components/Commentary'
-import ScoreCard from './components/ScoreCard'
-import AdsComp from 'components/ads'
+import React, { useEffect, useState } from 'react';
+import shareIcon from 'assets/img/share.svg';
+import TimerComponent from 'components/timer/TimerComponent';
+import CurrentSeries from 'components/currentSeries';
+import RecentOver from 'components/recentOver';
+import Commentary from './components/Commentary';
+import ScoreCard from './components/ScoreCard';
+import AdsComp from 'components/ads';
+import axios from 'axios';
+import { baseUrl } from 'pages/home';
+import { token } from 'pages/home';
+import {useLocation} from 'react-router-dom';
+import moment from 'moment';
+import { max } from 'moment/moment';
 
 const LiveScorePage = () => {
-  const [activeTab, setActiveTab] = useState('commentary')
+  const [activeTab, setActiveTab] = useState('commentary');
+  const [MatchInfo,setMatchInfo]=useState({});
+  const [InningNumber,setInningNumber] = useState(1);
+
+
+  const locate = useLocation();
+  const matchId=  locate?.state;
+  console.log(matchId);
+
+  useEffect(()=>{
+    axios.get(`${baseUrl}/v2/matches/${matchId}/info?token=${token}`)
+    .then((res)=>{
+      console.log(res?.data?.response)
+      setMatchInfo(res?.data?.response)
+      setInningNumber(res?.data?.response?.latest_inning_number)
+    })
+    .catch((err)=> console.log(err))
+  },[])
+
+
+
+
   return (
     <>
     <div className="container-fluid my-4">
@@ -18,7 +45,7 @@ const LiveScorePage = () => {
               <div className="matchDetailCard">
                 <div className="row align-items-start">
                   <div className="col-10 matchTeams">
-                    Mumbai vs Vidarbha, Final - Live Cricket Score
+                    {MatchInfo.title}
                   </div>
                   <div className="col-2 d-flex justify-content-end">
                     <div className="shareBtn">
@@ -26,7 +53,7 @@ const LiveScorePage = () => {
                     </div>
                   </div>
                   <div className="col-12 matchDes">
-                    <span className='urlLink'>Ranji Trophy, 2024</span>| 10 Mar 2024, Sun, 9:30 AM IST | Wankhede Stadium, Mumbai
+                    <span className='urlLink'>{MatchInfo?.competition?.abbr}, {MatchInfo?.competition?.season}</span>| {moment(MatchInfo?.competition?.dateend).format('MMMM Do YYYY')}| {MatchInfo?.venue?.name},{MatchInfo?.venue?.location}
                   </div>
                 </div>
               </div>
@@ -45,9 +72,9 @@ const LiveScorePage = () => {
                     <div className="row mb-2">
                       <div className="col d-flex align-items-center gap-2 gap-md-3 overflow-hidden">
                         <div className="mStatus">
-                          Live
+                          {MatchInfo.live}
                         </div>
-                        <div className="whoPlaying">Icon Academy Women elected to bat </div>
+                        <div className="whoPlaying">{MatchInfo?.result}</div>
                       </div>
                       <div className="col-auto d-none d-md-block">
                         <div className="runRate">Current Run Rate : 5.76</div>
@@ -60,31 +87,31 @@ const LiveScorePage = () => {
                         <tr>
                           <td className='ps-0'>
                             <div className="flex align-items-center teamName">
-                              <img src="https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-43_a162.png&w=40&q=75" alt="" />
+                              <img src={MatchInfo?.teama?.logo_url} alt="" />
                             </div>
                           </td>
                           <td className='ps-0'>
                             <div className="flex align-items-center teamName pe-3 pe-md-4">
-                              <span>IAW</span>
+                              <span>{MatchInfo?.teama?.short_name}</span>
                             </div>
                           </td>
                           <td>
-                            <div className="scoreDetail nowPlaying">*91/4 (13.4 ov)</div>
+                            <div className="scoreDetail nowPlaying">{MatchInfo?.teama?.scores_full}</div>
                           </td>
                         </tr>
                         <tr>
                           <td className='ps-0'>
                             <div className="flex align-items-center teamName">
-                              <img src="https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-42_85a2.png&w=40&q=75" alt="" />
+                              <img src={MatchInfo?.teamb?.logo_url} alt="" />
                             </div>
                           </td>
                           <td className='ps-0'>
                             <div className="flex align-items-center teamName pe-3 pe-md-4">
-                              <span>gtw</span>
+                              <span>{MatchInfo?.teamb?.short_name}</span>
                             </div>
                           </td>
                           <td>
-                            <div className="scoreDetail">Yet To Bat</div>
+                            <div className="scoreDetail">{MatchInfo?.teamb?.scores_full}</div>
                           </td>
                         </tr>
                       </tbody>
@@ -110,7 +137,7 @@ const LiveScorePage = () => {
                   <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>result</div>
                 </div>
                 {
-                  activeTab === 'commentary' ? <Commentary/> : 
+                  activeTab === 'commentary' ? <Commentary Inning={InningNumber} matchId={matchId}/> : 
                   activeTab === 'scoreCard' ? <ScoreCard/> : ''
 
                 }
