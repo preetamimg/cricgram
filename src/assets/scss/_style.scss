@@ -865,6 +865,7 @@ body {
         font-size: 14px;
         font-weight: 700;
         padding: 0.6rem 0.8rem;
+        white-space: nowrap;
         &:first-child {
           border-radius: 7px 0 0 7px;
         }
@@ -901,6 +902,9 @@ body {
         font-size: 14px;
         font-weight: 600;
         padding: 0.6rem 0.8rem;
+        &.roundedTd {
+          border-radius: 7px !important;
+        }
         &:first-child {
           border-radius: 7px 0 0 7px;
         }
@@ -930,11 +934,75 @@ body {
         &.activeTd {
           background-color: rgba($themeLight, 0.2);
         }
+        & .overBalls {
+          & .overBall {
+            font-size: 10px;
+            font-weight: 700;
+            height: 21px;
+            width: 21px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            background-color: $theme6;
+            line-height: normal;
+            &.green {
+              background-color: $green;
+              color: white;
+            }
+            &.red {
+              background-color: red;
+              color: white;
+            }
+          }
+        }
+        & .tableArrowIcon {
+          margin-left: 10px;
+          cursor: pointer;
+          & img {
+            height: 13px;
+            object-fit: contain;
+            filter: brightness(0.65);
+            transform: rotate(90deg);
+            transition: 0.3s ease-in-out;
+          }
+          &.active {
+            & img {
+              transform: rotate(270deg);
+            }
+          }
+        }
       }
     }
     & .fadedTxt {
       color: $theme5;
     }
+
+  }
+  & .innerTable {
+      & thead {
+        & tr {
+          & th {
+            background-color: transparent;
+            font-size: 12px;
+            padding: 0.4rem 0.8rem;
+          }
+        }
+      }
+      & tbody {
+        & tr {
+          & td {
+            font-size: 12px;
+            padding: 0.4rem 0.8rem;
+            border-bottom: 1px solid rgba($theme5, 0.4);
+          }
+          &:last-child {
+            & td {
+              border-bottom: 0;
+            }
+          }
+        }
+      }
   }
 }
 

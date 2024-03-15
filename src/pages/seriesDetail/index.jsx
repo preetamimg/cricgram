@@ -4,9 +4,10 @@ import React, { useState } from 'react'
 import shareIcon from 'assets/img/share.svg'
 import { Link } from 'react-router-dom'
 import Stats from './components/Stats'
+import Standings from './components/Standings'
 
 const SeriesDetail = () => {
-  const [activeTab, setActiveTab] = useState('stats')
+  const [activeTab, setActiveTab] = useState('standings')
   return (
     <>
       <div className="container-fluid my-4">
@@ -53,7 +54,8 @@ const SeriesDetail = () => {
                   </div>
 
                   {
-                    activeTab === 'stats' ? <Stats/> : ''
+                    activeTab === 'stats' ? <Stats/> :
+                    activeTab === 'standings' ? <Standings/> : ''
                   }
               </div>
               <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
