@@ -977,7 +977,6 @@ body {
     & .fadedTxt {
       color: $theme5;
     }
-
   }
   & .innerTable {
       & thead {
@@ -1006,6 +1005,14 @@ body {
   }
 }
 
+.statsDetailTxt {
+  font-size: 12px;
+  color: $theme4;
+  font-weight: 500;
+  & span {
+    font-weight: 700;
+  }
+}
 
 .commonAccordian {
   & .accordion-item {
