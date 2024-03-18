@@ -73,6 +73,7 @@ const Home = () => {
   const [status, setStatus] = useState(searchParams.get("status") || "Completed");
   const [category, setCategory] = useState("international");
   const [isLoading, setIsLoading] = useState(false);
+  const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(null);
   const [matchListData, setMatchListData] = useState([]);
@@ -87,7 +88,7 @@ const Home = () => {
     setSelectedSeries("");
   };
 
-  const getMatches = async (pageChanged) => {
+  const getMatches = async () => {
     setIsLoading(true);
     try {
       const res = await getAPI(
@@ -96,17 +97,32 @@ const Home = () => {
 
       console.log({ res });
 
-      if (pageChanged) {
-        setMatchListData((prev) => [...prev, ...res.data.data]);
-      } else {
         setMatchListData(res?.data?.data);
-      }
       setPageCount(res?.data?.pageCount);
     } catch (error) {
       console.log({ error });
       setMatchListData([]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const getMoreMatches = async () => {
+    setLoadMoreLoading(true);
+    try {
+      const res = await getAPI(
+        `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20`
+      );
+
+      console.log({ res });
+
+      setMatchListData((prev) => [...prev, ...res.data.data]);
+      setPageCount(res?.data?.pageCount);
+    } catch (error) {
+      console.log({ error });
+      setMatchListData([]);
+    } finally {
+      setLoadMoreLoading(false);
     }
   };
 
@@ -118,7 +134,7 @@ const Home = () => {
 
   useEffect(() => {
     if (currentPage !== 1) {
-      getMatches(true);
+      getMoreMatches();
     }
   }, [currentPage]); //eslint-disable-line
 
@@ -324,13 +340,13 @@ const Home = () => {
                     </div>
                     {(pageCount === currentPage) || (pageCount === 0) ? null : (
                       <div className="mt-3 d-flex justify-content-center">
-                        <div
+                        {!loadMoreLoading ? <div
                           className="commonBtn"
                           style={{ maxWidth: "150px" }}
                           onClick={handleLoadMore}
                         >
                           Load more
-                        </div>
+                        </div>:<div style={{ color: "white" }}>Loading.....{ console.log("FIIIIIIIIIk") }</div>}
                       </div>
                     )}
                   </>
