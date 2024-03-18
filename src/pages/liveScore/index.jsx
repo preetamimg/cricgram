@@ -10,6 +10,7 @@ import axios from 'axios';
 import { baseUrl } from 'pages/home';
 import { token } from 'pages/home';
 import {useLocation} from 'react-router-dom';
+import {RWebShare} from 'react-web-share';
 import moment from 'moment';
 
 const LiveScorePage = () => {
@@ -32,7 +33,7 @@ const LiveScorePage = () => {
     })
     .catch((err)=> console.log(err))
 
-    axios.get(`${baseUrl}/v2/matches/${74222}/live?token=${token}`)
+    axios.get(`${baseUrl}/v2/matches/${matchId}/live?token=${token}`)
     .then((res)=>{
       // setMatchInfo(res?.data?.response)
       setInningNumber(res?.data?.response?.latest_inning_number)
@@ -61,7 +62,13 @@ console.log('<<<LIveScore>>>>',liveScore)
                   </div>
                   <div className="col-2 d-flex justify-content-end">
                     <div className="shareBtn">
+                      <RWebShare 
+                      data={{text:'Share Match Details'
+                      ,url:'/',
+                      title:'CRICGRAM'}}
+                      >
                       <img src={shareIcon} alt="" />
+                      </RWebShare>
                     </div>
                   </div>
                   <div className="col-12 matchDes">
@@ -69,6 +76,7 @@ console.log('<<<LIveScore>>>>',liveScore)
                   </div>
                 </div>
               </div>
+              
               {/* timer for upcoming details */}
               {/* <div className="matchDetailCard mt-2">
                 <div className="row align-items-center">

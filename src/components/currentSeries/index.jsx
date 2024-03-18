@@ -1,36 +1,30 @@
-import React from 'react'
-import trophyIcom from 'assets/img/trophy.png'
-import arrowIcon from 'assets/img/arrow.svg'
+import React, { useEffect, useState } from 'react';
+import trophyIcom from 'assets/img/trophy.png';
+import arrowIcon from 'assets/img/arrow.svg';
+import axios from 'axios';
+import { baseUrl } from 'pages/home';
+import { token } from 'pages/home';
+
 
 
 const CurrentSeries = () => {
-  const data = [
-    {
-      id: 'cs1',
-      name: 'England tour of India',
-      url: '/'
-    },
-    {
-      id: 'cs2',
-      name: `Women's Premier League`,
-      url: '/'
-    },
-    {
-      id: 'cs3',
-      name: 'Indian Premier League',
-      url: '/'
-    },
-    {
-      id: 'cs4',
-      name: 'Sri Lanka tour of Bangladesh',
-      url: '/'
-    },
-    {
-      id: 'cs5',
-      name: 'Pakistan Super League',
-      url: '/'
-    },
-  ]
+
+  const [series,setSeries] = useState([]);
+
+  const handleSeries=()=>{
+    axios.get(`${baseUrl}/v2/competitions?token=${token}&per_page=5`)
+    .then((res)=>{
+      console.log('<<<res>>>',res?.data?.response)
+    setSeries(res?.data?.response?.items)
+    })
+    .catch((err)=>console.log(err))
+  }
+  useEffect(()=>{
+    handleSeries()
+  },[])
+
+
+
   return (
     <>
       <div className="commonHeading">
@@ -39,10 +33,10 @@ const CurrentSeries = () => {
       </div>
       <div className="row g-2">
         {
-          data?.map((item)=> (
-            <div className="col-12">
+          series?.map((item)=> (
+            <div className="col-12" key={item?.cid}>
               <div className="currentSeriesCard">
-                <span>{item?.name}</span>
+                <span>{item?.title}</span>
                 <img src={arrowIcon} alt="" />
               </div>
             </div>

@@ -1,11 +1,11 @@
 import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { Pagination } from 'swiper/modules';
 import banner1 from 'assets/img/banner/image4.png'
 import banner2 from 'assets/img/banner/image5.png'
 import banner3 from 'assets/img/banner/image1m.png'
-import banner4 from 'assets/img/banner/image2m.png'
+import banner4 from 'assets/img/banner/image2m.png';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 
 const banners = [
@@ -35,7 +35,12 @@ const HeroBanner = () => {
     <>
       <div className="heroBanner container-fluid mt-4">
         <div className="container px-0">
-          <Swiper pagination={true} modules={[Pagination]} className="mySwiper">
+          <Swiper 
+          modules={[Navigation, Pagination, Scrollbar, A11y]}
+          spaceBetween={50}
+          slidesPerView={1}
+          pagination={{ clickable: true }}
+          className="mySwiper">
             {
               banners?.map((item)=> (
                 <SwiperSlide key={item?.id} className={item?.type === 'desktop' ? 'd-none d-lg-block' : 'd-lg-none'}>

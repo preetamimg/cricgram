@@ -6,7 +6,7 @@ import arrowIcon from 'assets/img/arrow.svg'
 
 const RecentOver = ({overs}) => {
 
-  console.log(overs)
+  console.log('o-o-o-o-o--oo',overs)
   return (
     <>
       <div className="recentOvers mt-2">
@@ -25,7 +25,7 @@ const RecentOver = ({overs}) => {
         }}
           modules={[Navigation]}
         >
-              {overs?.slice(0,30)?.map((overs)=>(
+              {overs?.slice(0,31)?.map((overs)=>(
           <SwiperSlide key={overs.id}>
             <div className="overSliderInner d-flex align-items-center">
               {overs.event === 'overend' ?
