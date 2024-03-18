@@ -1,4 +1,5 @@
 import CurrentSeries from 'components/currentSeries';
+import NoDataFound from 'components/noData';
 import { RESPONSIVE_WIDTH } from 'constants';
 import React, { useState } from 'react'
 import Dropdown from 'react-bootstrap/Dropdown';
