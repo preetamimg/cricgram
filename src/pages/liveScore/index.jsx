@@ -4,9 +4,9 @@ import TimerComponent from 'components/timer/TimerComponent'
 import CurrentSeries from 'components/currentSeries'
 import RecentOver from 'components/recentOver'
 import Commentary from '../commentary/Commentary'
-import ScoreCard from './components/ScoreCard'
+import ScoreCard from '../scoreCard/ScoreCard'
 import AdsComp from 'components/ads'
-import Overs from './components/Overs'
+import Overs from '../overs/Overs'
 import { useNavigate } from 'react-router'
 
 const LiveScorePage = () => {

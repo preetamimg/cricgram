@@ -1,17 +1,40 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import shareIcon from 'assets/img/share.svg'
 import TimerComponent from 'components/timer/TimerComponent'
 import CurrentSeries from 'components/currentSeries'
 import RecentOver from 'components/recentOver'
 import Commentary from '../../pages/commentary/Commentary'
-import ScoreCard from '../../pages/liveScore/components/ScoreCard'
+import ScoreCard from '../../pages/scoreCard/ScoreCard'
 import AdsComp from 'components/ads'
-import Overs from '../../pages/liveScore/components/Overs'
-import { useNavigate } from 'react-router'
+import Overs from '../../pages/overs/Overs'
+import { useNavigate } from 'react-router';
+import { useLocation,useParams } from 'react-router-dom';
+import { ROUTE_CONST } from '../../constants';
 
-const MatchDetailsLayout = () => {
-  const [activeTab, setActiveTab] = useState('commentary')
-  const navigate = useNavigate();
+
+const tabObject={
+    [ROUTE_CONST.LIVE_SCORE]:"commentary",
+    [ROUTE_CONST.LIVE_SCORECARD]:"scoreCard",
+    [ROUTE_CONST.MATCH_SQUADS]:"teams",
+    [ROUTE_CONST.OVERS]:"overs",
+    // [ROUTE_CONST.RESULT]:"result"
+}
+
+const MatchDetailsLayout = ({ Content }) => {
+    const location =useLocation(); 
+    const pathName = `/${location.pathname.split("/")[1]}`;
+    console.log({ pathName });
+    const [activeTab, setActiveTab] = useState(tabObject[pathName]);
+
+    const { id,matchName } =useParams();
+
+    const navigate = useNavigate();
+
+
+    useEffect(()=>{
+        setActiveTab(tabObject[pathName]);
+    },[pathName]);
+  
 
   return (
     <>
@@ -106,20 +129,22 @@ const MatchDetailsLayout = () => {
               <RecentOver/>
               
                 <div className="commonTabs mt-2 mb-2 mb-md-3">
-                  <div onClick={()=>setActiveTab('commentary')} className={`tab ${activeTab === 'commentary' ? 'active' : ''}`}>commentary</div>
-                  <div onClick={()=>setActiveTab('scoreCard')} className={`tab ${activeTab === 'scoreCard' ? 'active' : ''}`}>score card</div>
-                  <div onClick={()=>navigate('/series?standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>standings</div>
-                  <div onClick={()=>setActiveTab('overs')} className={`tab ${activeTab === 'overs' ? 'active' : ''}`}>overs</div>
-                  <div onClick={()=>navigate('/series?stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>stats</div>
-                  <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>result</div>
+                  <div onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORE}/${id}/${matchName}`)} className={`tab ${activeTab === 'commentary' ? 'active' : ''}`}>Commentary</div>
+                  <div onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORECARD}/${id}/${matchName}`)} className={`tab ${activeTab === 'scoreCard' ? 'active' : ''}`}>Score card</div>
+                  <div onClick={()=>navigate(`${ROUTE_CONST.MATCH_SQUADS}/${id}/${matchName}`)} className={`tab ${activeTab === 'teams' ? 'active' : ''}`}>Teams</div>
+                  <div onClick={()=>navigate('/series?standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>Standings</div>
+                  <div onClick={()=>navigate('/series?stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>Stats</div>
+                  <div onClick={()=>navigate(`${ROUTE_CONST.OVERS}/${id}/${matchName}`)} className={`tab ${activeTab === 'overs' ? 'active' : ''}`}>Overs</div>
+                  {/* <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>Result</div> */}
                 </div>
 
-
-                {
+                {/* {
                   activeTab === 'commentary' ? <Commentary/> : 
                   activeTab === 'scoreCard' ? <ScoreCard/> : 
                   activeTab === 'overs' ? <Overs/> : ''
-                }
+                } */}
+
+                <Content />
 
             </div>
 
