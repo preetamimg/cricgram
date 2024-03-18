@@ -1,4 +1,5 @@
 import SquadCard from 'components/squadCard'
+import TopRankerCardLoader from 'components/topRankerCard/Loader';
 import React, { useState } from 'react'
 import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -78,6 +79,13 @@ const Squads = () => {
           batsman?.map((item)=> (
             <div className="col-6 col-lg-6 col-xl-4">
               <SquadCard category={'batsman'}/>
+            </div>
+          ))
+        }
+        {
+          batsman?.map((item)=> (
+            <div className="col-6 col-lg-6 col-xl-4">
+              <TopRankerCardLoader type={'squad'}/>
             </div>
           ))
         }

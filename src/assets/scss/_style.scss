@@ -1055,6 +1055,12 @@ body {
             }
           }
         }
+        &.tableLoader {
+          border-radius: 7px;
+          height: 40px;
+          @include skeleton();
+          background-image:	linear-gradient(-55deg, rgba($theme2, 0), rgba($theme2, 1), rgba($theme2, 0));
+        }
       }
     }
     & .fadedTxt {
@@ -1091,6 +1097,11 @@ body {
       & tr {
         & td {
           background-color: $theme2;
+          &.tableLoader {
+            border-radius: 7px;
+            height: 40px;
+            @include skeleton();
+          }
         }
       }
     }
@@ -1552,6 +1563,45 @@ body {
     color: $theme4;
     position: relative;
     z-index: 1;
+  }
+  &.loader {
+    @include skeleton();
+    &::before {
+      display: none;
+    }
+    &::after {
+      z-index: 9;
+    }
+    & .playerImg {
+      @include skeletonBg();
+    }
+    & .playerName {
+      @include skeletonBg();
+      height: 20px;
+      width: 150px;
+      border-radius: 4px;
+    }
+    & .playerCategory {
+      @include skeletonBg();
+      height: 14px;
+      width: 100px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    & .score {
+      @include skeletonBg();
+      height: 14px;
+      width: 80px;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+    & .scoreName {
+      @include skeletonBg();
+      height: 14px;
+      width: 50px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
   }
 }
 
