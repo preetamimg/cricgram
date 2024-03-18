@@ -264,6 +264,57 @@ body {
     margin-top: 8px;
     padding-top: 7px;
   }
+  &.loader {
+    @include skeleton();
+    & .matchStatus {
+      width: 50px;
+      @include skeletonBg();
+      height: 16px;
+    }
+    & .matchDate {
+	    @include skeletonBg();
+      margin-top: 5px;
+      width: 150px;
+      height: 13px;
+      border-radius: 4px;
+    }
+    & .matchTeam {
+      & .teamImg {
+	      @include skeletonBg();
+        height: 26px;
+        width: 26px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+      & .teamName {
+	      @include skeletonBg();
+        width: 100px;
+        height: 13px;
+        border-radius: 4px;
+      }
+    }
+    & .matchScore {
+      @include skeletonBg();
+      height: 13px;
+      width: 70px;
+      border-radius: 4px;
+    }
+    & .matchMsg {
+      @include skeletonBg();
+      height: 12px;
+      border-radius: 4px;
+    }
+    & .matchOptns {
+      border-top: none;
+      margin-top: 0;
+      & span {
+        @include skeletonBg();
+        height: 13px;
+        width: 70px;
+        border-radius: 4px;
+      }
+    }
+  }
 }
 
 .currentSeriesCard {
@@ -1805,3 +1856,6 @@ body {
     }
   }
 }
+
+
+
