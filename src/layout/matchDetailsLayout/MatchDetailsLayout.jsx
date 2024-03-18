@@ -3,15 +3,16 @@ import shareIcon from 'assets/img/share.svg'
 import TimerComponent from 'components/timer/TimerComponent'
 import CurrentSeries from 'components/currentSeries'
 import RecentOver from 'components/recentOver'
-import Commentary from '../commentary/Commentary'
-import ScoreCard from './components/ScoreCard'
+import Commentary from '../../pages/commentary/Commentary'
+import ScoreCard from '../../pages/liveScore/components/ScoreCard'
 import AdsComp from 'components/ads'
-import Overs from './components/Overs'
+import Overs from '../../pages/liveScore/components/Overs'
 import { useNavigate } from 'react-router'
 
-const LiveScorePage = () => {
+const MatchDetailsLayout = () => {
   const [activeTab, setActiveTab] = useState('commentary')
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   return (
     <>
     <div className="container-fluid my-4">
@@ -112,6 +113,8 @@ const LiveScorePage = () => {
                   <div onClick={()=>navigate('/series?stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>stats</div>
                   <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>result</div>
                 </div>
+
+
                 {
                   activeTab === 'commentary' ? <Commentary/> : 
                   activeTab === 'scoreCard' ? <ScoreCard/> : 
@@ -131,4 +134,4 @@ const LiveScorePage = () => {
   )
 }
 
-export default LiveScorePage
+export default MatchDetailsLayout;

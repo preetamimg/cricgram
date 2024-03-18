@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from 'assets/img/logo.png'
-import { ROUTE_CONST } from 'constants'
+import { ROUTE_CONST } from '../../constants';
 import hamburgerIcon from 'assets/img/hamburger.png'
 import MobileSidebar from './components/MobileSidebar'
 
@@ -12,7 +12,7 @@ const Header = () => {
     {
       id: 'nav1',
       name: 'Live SCORE',
-      url: '/'
+      url: ROUTE_CONST.LIVE_CRICKET_SCORES
     },
     {
       id: 'nav2',
