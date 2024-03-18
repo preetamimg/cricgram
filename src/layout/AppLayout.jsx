@@ -1,3 +1,4 @@
+import Footer from 'components/footer'
 import Header from 'components/header'
 import React from 'react'
 
@@ -8,6 +9,7 @@ const AppLayout = ({Component}) => {
       <div className="pageInner">
         <Component/>
       </div>
+      <Footer/>
     </>
   )
 }

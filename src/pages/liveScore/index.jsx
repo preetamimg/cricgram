@@ -7,9 +7,11 @@ import Commentary from './components/Commentary'
 import ScoreCard from './components/ScoreCard'
 import AdsComp from 'components/ads'
 import Overs from './components/Overs'
+import { useNavigate } from 'react-router'
 
 const LiveScorePage = () => {
   const [activeTab, setActiveTab] = useState('commentary')
+  const navigate = useNavigate()
   return (
     <>
     <div className="container-fluid my-4">
@@ -27,7 +29,7 @@ const LiveScorePage = () => {
                     </div>
                   </div>
                   <div className="col-12 matchDes">
-                    <span className='urlLink'>Ranji Trophy, 2024</span>| 10 Mar 2024, Sun, 9:30 AM IST | Wankhede Stadium, Mumbai
+                    <span onClick={()=>navigate('/series')} className='urlLink'>Ranji Trophy, 2024</span>| 10 Mar 2024, Sun, 9:30 AM IST | Wankhede Stadium, Mumbai
                   </div>
                 </div>
               </div>
@@ -105,9 +107,9 @@ const LiveScorePage = () => {
                 <div className="commonTabs mt-2 mb-2 mb-md-3">
                   <div onClick={()=>setActiveTab('commentary')} className={`tab ${activeTab === 'commentary' ? 'active' : ''}`}>commentary</div>
                   <div onClick={()=>setActiveTab('scoreCard')} className={`tab ${activeTab === 'scoreCard' ? 'active' : ''}`}>score card</div>
-                  <div onClick={()=>setActiveTab('standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>standings</div>
+                  <div onClick={()=>navigate('/series?standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>standings</div>
                   <div onClick={()=>setActiveTab('overs')} className={`tab ${activeTab === 'overs' ? 'active' : ''}`}>overs</div>
-                  <div onClick={()=>setActiveTab('stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>stats</div>
+                  <div onClick={()=>navigate('/series?stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>stats</div>
                   <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>result</div>
                 </div>
                 {

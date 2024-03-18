@@ -15,6 +15,9 @@ const Standings = () => {
 
   return (
     <>
+      
+      <div className="commonHeading mb-1">POINTS TABLE</div>
+      <div className="commonHeading text-capitalize">West Indies Test Championship Round</div>
       <div className="table-responsive">
         <table className='table commonTable mb-0'>
           <thead>
@@ -106,6 +109,8 @@ const Standings = () => {
           </tbody>
         </table>
       </div>
+      <div className="statsDetailTxt mt-3">Last Updated On 15 Mar 2024, 10:40 IST</div>
+      <div className="statsDetailTxt"><span>M:</span> Matches, <span>W:</span> Won, <span>L:</span> Lost, <span>T:</span> Tie, <span>N/R:</span> No Result, <span>PTS:</span> Points, <span>Net RR:</span> Net run rate, <span>Q:</span> Qualified</div>
     </>
   )
 }

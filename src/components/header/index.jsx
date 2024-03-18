@@ -1,29 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from 'assets/img/logo.png'
 import { ROUTE_CONST } from 'constants'
 import hamburgerIcon from 'assets/img/hamburger.png'
+import MobileSidebar from './components/MobileSidebar'
 
 const Header = () => {
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false)
+
   const navLinks = [
     {
       id: 'nav1',
-      name: 'fantasy cricket',
+      name: 'Live SCORE',
       url: '/'
     },
     {
       id: 'nav2',
-      name: 'cricket news',
+      name: 'About Us',
       url: '/'
     },
     {
       id: 'nav3',
-      name: 'players',
+      name: 'Contact Us',
       url: '/'
     },
     {
       id: 'nav4',
-      name: 'fantasy apps',
+      name: 'Disclaimer',
+      url: '/'
+    },
+    {
+      id: 'nav5',
+      name: 'Privacy Policy',
       url: '/'
     }
   ]
@@ -47,13 +55,14 @@ const Header = () => {
                     ))
                   }
                 </ul>
-                <button className='shadow-none border-0 menuBtn d-lg-none'>
+                <button onClick={()=>setShowMobileSidebar(true)} className='shadow-none border-0 menuBtn d-lg-none'>
                   <img src={hamburgerIcon} alt="" />
                 </button>
               </div>
             </div>
           </div>
         </div>
+        <MobileSidebar showMobileSidebar={showMobileSidebar} setShowMobileSidebar={setShowMobileSidebar} navLinks={navLinks}/>
     </>
   )
 }

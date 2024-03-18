@@ -1,15 +1,32 @@
 import AdsComp from 'components/ads'
 import CurrentSeries from 'components/currentSeries'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import shareIcon from 'assets/img/share.svg'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Stats from './components/Stats'
 import Standings from './components/Standings'
+import Home from './components/Home'
+import Fixtures from './components/Fixtures'
+import Teams from './components/Teams'
+import Squads from './components/Squads'
+import Archives from './components/Archives'
+import ReletedMatch from './components/ReletedMatch'
 
 const SeriesDetail = () => {
-  const [activeTab, setActiveTab] = useState('standings')
+  const [activeTab, setActiveTab] = useState('home')
+  const location = useLocation()
+
+  useEffect(()=> {
+    if(location.search.includes('standings')) {
+      setActiveTab('standings')
+    }
+    if(location.search.includes('stats')) {
+      setActiveTab('stats')
+    }
+  }, [location])
   return (
     <>
+      <ReletedMatch/>
       <div className="container-fluid my-4">
           <div className="container px-0">
             <div className="row">
@@ -54,8 +71,13 @@ const SeriesDetail = () => {
                   </div>
 
                   {
+                    activeTab === 'home' ? <Home/> :
+                    activeTab === 'fixtures' ? <Fixtures/> :
+                    activeTab === 'standings' ? <Standings/> : 
                     activeTab === 'stats' ? <Stats/> :
-                    activeTab === 'standings' ? <Standings/> : ''
+                    activeTab === 'teams' ? <Teams/> : 
+                    activeTab === 'squads' ? <Squads/> : 
+                    activeTab === 'archives' ? <Archives/> : ''
                   }
               </div>
               <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
