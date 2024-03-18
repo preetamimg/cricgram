@@ -10,4 +10,5 @@ export const ROUTE_CONST = {
 
 export const API_ROUTES = {
   GET_MATCHES_DATA:"getMatchData",   // /:category/:status  *required params
+  GET_SERIES_DATA:"getSeriesData",  //?limit=5
 }

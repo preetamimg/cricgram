@@ -6,7 +6,7 @@ import { useLocation } from "react-router";
 
 
 function App() {
-  const location = useLocation()
+  const location = useLocation();
 
   // scroll to top everytime url changes
   useEffect(() => {
