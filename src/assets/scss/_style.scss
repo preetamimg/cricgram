@@ -1,9 +1,15 @@
 body {
   background-color: $theme2;
+  height: 100dvh;
+  overflow: hidden;
+  & #root {
+    height: 100%;
+    overflow: hidden;
+  }
   & .pageInner {
-    padding-top: 50px;
+    padding-top: 20px;
     @include lg {
-      padding-top: 60px;
+      padding-top: 30px;
     }
   }
 }
@@ -400,7 +406,7 @@ body {
         border-radius: 6px;
         color: $theme4;
         &:is(:hover, .active) {
-          background-color: $theme3;
+          background-color: $theme1;
           color: white;
         }
       }
@@ -1026,6 +1032,15 @@ body {
         }
       }
   }
+  &.darkMode {
+    & tbody {
+      & tr {
+        & td {
+          background-color: $theme2;
+        }
+      }
+    }
+  }
 }
 
 .statsDetailTxt {
@@ -1620,6 +1635,121 @@ body {
         border-radius: 20px;
         background-color: $theme4;
         transform: scale(1);
+      }
+    }
+  }
+}
+
+
+
+.playerDetailCard {
+  background-color: $theme3;
+  padding: 15px;
+  border-radius: 10px;
+  & .pTitle {
+    font-size: 14px;
+    font-weight: 500;
+    color: $theme5;
+  }
+  & .pValue {
+    font-size: 14px;
+    font-weight: 500;
+    color: $theme4;
+  }
+  & .pTeam {
+    font-size: 14px;
+    font-weight: 500;
+    color: $theme4;
+    display: flex;
+    align-items: center;
+    & .pImg {
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 8px;
+      @include md {
+        height: 36px;
+        width: 36px;
+      }
+      & img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  & .playerTeams {
+    margin-top: 25px;
+    padding-top: 7px;
+    border-top: 1px solid rgba($theme5, 0.3);
+  }
+}
+
+.playerPerformanceCard {
+  background-color: $theme3;
+  padding: 15px;
+  border-radius: 10px;
+  & .cardTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase ;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+  }
+}
+
+.playerImgCard {
+  background-color: $theme3;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url(./../img/playerCardBg.png);
+  background-blend-mode: overlay;
+  padding: 15px;
+  border-radius: 10px;
+  position: relative;
+  & .pName {
+    font-size: 20px;
+    color: $theme4;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  & .pTeam {
+    font-size: 14px;
+    color: $theme4;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    & .pImg {
+      height: 30px;
+      width: 30px;
+      overflow: hidden;
+      border-radius: 50%;
+      margin-right: 8px;
+      & img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  & .playerImg {
+    height: 130px;
+    & img {
+      height: 130px;
+      width: 130px;
+      object-fit: contain;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+    @include md {
+      height: 200px;
+      & img {
+        height: 200px;
+        width: 200px;
       }
     }
   }
