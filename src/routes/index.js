@@ -6,6 +6,7 @@ import LiveScorePage from 'pages/liveScore'
 import AppLayout from 'layout/AppLayout'
 import PlayerDetail from 'pages/playerDetail'
 import SeriesDetail from 'pages/seriesDetail'
+import PageNotFound from 'pages/pageNotFound'
 
 const RouteComponent = () => {
   return (
@@ -15,6 +16,7 @@ const RouteComponent = () => {
         <Route path={ROUTE_CONST.LIVE_SCORE} element={<AppLayout Component={LiveScorePage}/>}/>
         <Route path={ROUTE_CONST.PLAYER_DETAIL} element={<AppLayout Component={PlayerDetail}/>}/>
         <Route path={ROUTE_CONST.SERIES_DETAIL} element={<AppLayout Component={SeriesDetail}/>}/>
+        <Route path={'*'} element={<PageNotFound/>}/>
       </Routes>
     </>
   )

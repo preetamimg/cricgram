@@ -1,36 +1,42 @@
 import CurrentSeries from 'components/currentSeries';
+import { RESPONSIVE_WIDTH } from 'constants';
 import React, { useState } from 'react'
 import Dropdown from 'react-bootstrap/Dropdown';
-import playerImg from 'assets/img/playerPlaceholder.webp'
+import { useMediaQuery } from 'utils/useMediaQuery';
+
+const data = [1,1,1,1]
+
+const matchType = [
+  {
+    id: 'type1',
+    name: 'All'
+  },
+  {
+    id: 'type2',
+    name: 'Test'
+  },    
+  {
+    id: 'type3',
+    name: 'ODI'
+  },    
+  {
+    id: 'type4',
+    name: 'T20'
+  },
+]
 
 const PlayerDetail = () => {
-  const data = [1,1,1,1]
-  const matchType = [
-    {
-      id: 'type1',
-      name: 'All'
-    },
-    {
-      id: 'type2',
-      name: 'Test'
-    },    
-    {
-      id: 'type3',
-      name: 'ODI'
-    },    
-    {
-      id: 'type4',
-      name: 'T20'
-    },
-  ]
   const [selectedType , setSelectedType] = useState(matchType?.[0]?.name)
+  const isMdScreen = useMediaQuery(RESPONSIVE_WIDTH.MD_SCREEN)
+
+
   return (
     <>
       <div className="container-fluid">
         <div className="container px-0">
           <div className="row">
             <div className="col-lg-4 col-xl-3">
-              <div className="playerImgCard mb-3">
+              <div className="playerImgCard mb-1 mb-lg-3">
                 <div className="pName">JOE CARTER</div>
                 <div className="pTeam">
                   <div className="pImg">
@@ -42,11 +48,15 @@ const PlayerDetail = () => {
                   <img src={'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png'} alt="" />
                 </div>
               </div>
-              <CurrentSeries/>
+              {
+                !isMdScreen ? <>
+                  <CurrentSeries/>
+                </> : ''
+              }
             </div>
             <div className="col-lg-8 col-xl-9 mt-3 mt-lg-0">
               <div className="playerDetailCard">
-                <div className="row mx-0 g-4 row-cols-2 row-cols-md-3 row-cols-xl-4">
+                <div className="row g-4 row-cols-2 row-cols-md-3 row-cols-xl-4">
                   <div className="col">
                     <div className="pTitle">Full Name</div>
                     <div className="pValue">Joe Carter</div>
@@ -80,7 +90,7 @@ const PlayerDetail = () => {
                     <div className="pValue">--</div>
                   </div>
                 </div>
-                <div className="row mx-0 playerTeams gy-3">
+                <div className="row playerTeams gy-3">
                   <div className="col-12">
                     <div className="commonHeading mb-0">Teams</div>
                   </div>
@@ -246,6 +256,13 @@ const PlayerDetail = () => {
                 </div>
               </div>
             </div>
+            {
+                isMdScreen ? <>
+                  <div className="col-12 mt-4">
+                    <CurrentSeries/>
+                  </div>
+                </> : ''
+              }
           </div>
         </div>
       </div>
