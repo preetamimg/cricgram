@@ -1754,3 +1754,54 @@ body {
     }
   }
 }
+
+
+.pageNotFound {
+  & .errorTxt {
+    font-size: 120px;
+    font-weight: 700;
+    background: -webkit-linear-gradient(311deg, $theme1 5%, red 53%, $theme1 91%);
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 4px transparent;
+    color: $theme2;
+    position: relative;
+    &::after {
+      content: "PAGE NOT FOUND";
+      position: absolute;
+      top: 65%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 30px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    @include md {
+      font-size: 220px;
+      &::after {
+        font-size: 50px;
+        top: 68%;
+      }
+    }
+  }
+  & .errorBtn {
+    text-decoration: none;
+    color: red;
+    border: 2px solid red;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 30px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 9;
+    text-transform: uppercase;
+    transition: 0.3s ease-in-out;
+    &:hover {
+      padding: 10px 40px;
+    }
+  }
+}
