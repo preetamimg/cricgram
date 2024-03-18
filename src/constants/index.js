@@ -8,6 +8,8 @@ export const ROUTE_CONST = {
   LIVE_SCORE: '/live-scores',
   LIVE_SCORECARD:"/live-scorecard",
   MATCH_SQUADS:"/match-squads",
+  OVERS:"/overs",
+  // RESULT:"/result",
   PLAYER_DETAIL: '/player',
   SERIES_DETAIL: '/series',
 }
