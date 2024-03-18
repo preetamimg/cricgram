@@ -144,17 +144,26 @@ const teamStats = [
 
 const Stats = () => {
   const [selectedStat, setSelectedStat] = useState(battingStats?.[0]?.name)
+  const [show, setShow] = useState(false)
+
+  const handleClick = ()=> {
+    setShow(true)
+  }
   return (
     <>
-      <div className="row g-3">
+    {
+      !show ? 
+      <>
+              <div className="row g-3">
         <div className="col-md-4 statsCard">
           <div className="statsHeading">Batting Stats</div>  
           <div className="statsData">
             <ul className="listUnstyled m-0 p-0">
               {
                 battingStats?.map((item)=> (
-                  <li key={item?.id}>
-                    <Link className='statsLink' to={item?.url}>{item?.name}</Link>
+                  <li key={item?.id} onClick={handleClick}>
+                    {/* <Link className='statsLink' to={item?.url}>{item?.name}</Link> */}
+                    <div className='statsLink'>{item?.name}</div>
                   </li>
                 ))
               }
@@ -168,8 +177,9 @@ const Stats = () => {
             <ul className="listUnstyled m-0 p-0">
               {
                 bowlingStats?.map((item)=> (
-                  <li key={item?.id}>
-                    <Link className='statsLink' to={item?.url}>{item?.name}</Link>
+                  <li key={item?.id} onClick={handleClick}>
+                    {/* <Link className='statsLink' to={item?.url}>{item?.name}</Link> */}
+                    <div className='statsLink'>{item?.name}</div>
                   </li>
                 ))
               }
@@ -183,8 +193,9 @@ const Stats = () => {
             <ul className="listUnstyled m-0 p-0">
               {
                 teamStats?.map((item)=> (
-                  <li key={item?.id}>
-                    <Link className='statsLink' to={item?.url}>{item?.name}</Link>
+                  <li key={item?.id} onClick={handleClick}>
+                    {/* <Link className='statsLink' to={item?.url}>{item?.name}</Link> */}
+                    <div className='statsLink'>{item?.name}</div>
                   </li>
                 ))
               }
@@ -192,7 +203,9 @@ const Stats = () => {
           </div>
         </div>
       </div>
-
+      </> :
+      <>
+      
       <div className="row align-items-center mt-3 mb-2 mb-sm-3">
         <div className="col-sm">
           <div className="commonHeading mb-0">RANJI TROPHY MOST RUNS</div>
@@ -218,6 +231,11 @@ const Stats = () => {
       </div>
 
       <StatsTable/>
+      </>
+    }
+
+
+
     </>
   )
 }

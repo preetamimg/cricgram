@@ -16,7 +16,7 @@ const Standings = () => {
   return (
     <>
       
-      <div className="commonHeading mb-2">POINTS TABLE</div>
+      <div className="commonHeading mb-1">POINTS TABLE</div>
       <div className="commonHeading text-capitalize">West Indies Test Championship Round</div>
       <div className="table-responsive">
         <table className='table commonTable mb-0'>
