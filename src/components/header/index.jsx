@@ -37,7 +37,7 @@ const Header = () => {
   ]
   return (
     <>
-        <div className="header container-fluid fixed-top">
+        <div className="header container-fluid">
           <div className="container px-0">
             <div className="row align-items-center">
               <div className="col-auto">
