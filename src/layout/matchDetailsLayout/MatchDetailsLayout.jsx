@@ -42,7 +42,7 @@ const MatchDetailsLayout = ({ Content }) => {
         <div className="container px-0">
           <div className="row">
             <div className="col-lg-8 col-xl-9">
-              <div className="matchDetailCard">
+              <div className="matchDetailCard"> {/* add loading class here for loader*/}
                 <div className="row align-items-start">
                   <div className="col-10 matchTeams">
                     Mumbai vs Vidarbha, Final - Live Cricket Score
@@ -66,7 +66,7 @@ const MatchDetailsLayout = ({ Content }) => {
                   </div>
                 </div>
               </div> */}
-              <div className="matchDetailCard mt-2">
+              <div className="matchDetailCard loading mt-2 "> {/* add loading class here for loader*/}
                 <div className="row align-items-center">
                   <div className="col-12 teamAndMatchs">
                     <div className="row mb-2">

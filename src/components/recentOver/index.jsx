@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import arrowIcon from 'assets/img/arrow.svg'
 
+const loadingArray = [1,1,1,1]
 const RecentOver = () => {
+  const [isLoading, setIsLoading] = useState(true)
   return (
     <>
       <div className="recentOvers mt-2">
@@ -23,86 +25,108 @@ const RecentOver = () => {
         }}
           modules={[Navigation]}
         >
-          <SwiperSlide>
-            <div className="overSliderInner d-flex align-items-center">
-              <div className="overDetail">
-                <span>5</span>
-                <span>Ov</span>
+          {
+            isLoading ? <>
+              {
+                loadingArray?.map((item)=> (
+                  <SwiperSlide>
+                    <div className="overSliderInner loading d-flex align-items-center">
+                      <div className="overDetail"></div>
+                      <div className="d-flex gap-2 overBoxParent">
+                        <div className="overBox"></div>
+                        <div className="overBox"></div>
+                        <div className="overBox"></div>
+                        <div className="overBox"></div>
+                        <div className="overBox"></div>
+                        <div className="overBox"></div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))
+              }
+            </> : <>
+            <SwiperSlide>
+              <div className="overSliderInner d-flex align-items-center">
+                <div className="overDetail">
+                  <span>5</span>
+                  <span>Ov</span>
+                </div>
+                <div className="d-flex gap-2 overBoxParent">
+                  <div className="overBox zero">0</div>
+                  <div className="overBox zero">0</div>
+                  <div className="overBox">1</div>
+                  <div className="overBox">2</div>
+                  <div className="overBox four">4</div>
+                  <div className="overBox zero">0</div>
+                </div>
               </div>
-              <div className="d-flex gap-2 overBoxParent">
-                <div className="overBox zero">0</div>
-                <div className="overBox zero">0</div>
-                <div className="overBox">1</div>
-                <div className="overBox">2</div>
-                <div className="overBox four">4</div>
-                <div className="overBox zero">0</div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="overSliderInner d-flex align-items-center">
+                <div className="overDetail">
+                  <span>4</span>
+                  <span>Ov</span>
+                </div>
+                <div className="d-flex gap-2 overBoxParent">
+                  <div className="overBox four">4</div>
+                  <div className="overBox">1</div>
+                  <div className="overBox">2</div>
+                  <div className="overBox zero">0</div>
+                  <div className="overBox">1</div>
+                  <div className="overBox wicket">w</div>
+                </div>
               </div>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="overSliderInner d-flex align-items-center">
-              <div className="overDetail">
-                <span>4</span>
-                <span>Ov</span>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="overSliderInner d-flex align-items-center">
+                <div className="overDetail">
+                  <span>3</span>
+                  <span>Ov</span>
+                </div>
+                <div className="d-flex gap-2 overBoxParent">
+                  <div className="overBox zero">0</div>
+                  <div className="overBox zero">0</div>
+                  <div className="overBox">1</div>
+                  <div className="overBox">2</div>
+                  <div className="overBox four">4</div>
+                  <div className="overBox zero">0</div>
+                </div>
               </div>
-              <div className="d-flex gap-2 overBoxParent">
-                <div className="overBox four">4</div>
-                <div className="overBox">1</div>
-                <div className="overBox">2</div>
-                <div className="overBox zero">0</div>
-                <div className="overBox">1</div>
-                <div className="overBox wicket">w</div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="overSliderInner d-flex align-items-center">
+                <div className="overDetail">
+                  <span>2</span>
+                  <span>Ov</span>
+                </div>
+                <div className="d-flex gap-2 overBoxParent">
+                  <div className="overBox six">6</div>
+                  <div className="overBox">2</div>
+                  <div className="overBox zero">0</div>
+                  <div className="overBox zero">0</div>
+                  <div className="overBox">1</div>
+                  <div className="overBox zero">0</div>
+                </div>
               </div>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="overSliderInner d-flex align-items-center">
-              <div className="overDetail">
-                <span>3</span>
-                <span>Ov</span>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="overSliderInner d-flex align-items-center">
+                <div className="overDetail">
+                  <span>1</span>
+                  <span>Ov</span>
+                </div>
+                <div className="d-flex gap-2 overBoxParent">
+                  <div className="overBox zero">0</div>
+                  <div className="overBox zero">0</div>
+                  <div className="overBox">1</div>
+                  <div className="overBox">2</div>
+                  <div className="overBox four">4</div>
+                  <div className="overBox zero">0</div>
+                </div>
               </div>
-              <div className="d-flex gap-2 overBoxParent">
-                <div className="overBox zero">0</div>
-                <div className="overBox zero">0</div>
-                <div className="overBox">1</div>
-                <div className="overBox">2</div>
-                <div className="overBox four">4</div>
-                <div className="overBox zero">0</div>
-              </div>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="overSliderInner d-flex align-items-center">
-              <div className="overDetail">
-                <span>2</span>
-                <span>Ov</span>
-              </div>
-              <div className="d-flex gap-2 overBoxParent">
-                <div className="overBox six">6</div>
-                <div className="overBox">2</div>
-                <div className="overBox zero">0</div>
-                <div className="overBox zero">0</div>
-                <div className="overBox">1</div>
-                <div className="overBox zero">0</div>
-              </div>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="overSliderInner d-flex align-items-center">
-              <div className="overDetail">
-                <span>1</span>
-                <span>Ov</span>
-              </div>
-              <div className="d-flex gap-2 overBoxParent">
-                <div className="overBox zero">0</div>
-                <div className="overBox zero">0</div>
-                <div className="overBox">1</div>
-                <div className="overBox">2</div>
-                <div className="overBox four">4</div>
-                <div className="overBox zero">0</div>
-              </div>
-            </div>
-          </SwiperSlide>
+            </SwiperSlide>
+            </>
+          }
         </Swiper>
           </div>
           <div className="overNavBtn overNext">

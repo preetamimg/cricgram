@@ -642,6 +642,34 @@ body {
     font-weight: 500;
     color: $theme4;
   }
+  &.loading {
+    @include skeleton();
+    & .matchTeams {
+      @include skeletonBg();
+      height: 30px;
+      border-radius: 6px;
+    }
+    & .matchDes {
+      @include skeletonBg();
+      height: 14px;
+      border-radius: 4px;
+      max-width: 40%;
+    }
+    & .mStatus {
+      @include skeletonBg();
+      height: 24px;
+      width: 54px;
+      &::after {
+        display: none;
+      }
+    }
+    & .whoPlaying {
+      @include skeletonBg();
+      height: 16px;
+      border-radius: 4px;
+      width: 30%;
+    }
+  }
 }
 
 .tymBox {
@@ -753,6 +781,19 @@ body {
   }
   .overBoxParent, .swiper-slide {
     width: fit-content;
+  }
+  & .loading {
+    @include skeleton();
+    & .overDetail {
+      height: 30px;
+      width: 25px;
+      margin-right: 8px;
+      border-radius: 5px;
+      @include skeletonBg();
+    }
+    & .overBox {
+      @include skeletonBg();
+    }
   }
 }
 

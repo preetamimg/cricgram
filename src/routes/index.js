@@ -15,6 +15,7 @@ import Commentary from 'pages/commentary/Commentary';
 import ScoreCard from 'pages/scoreCard/ScoreCard';
 import Overs from 'pages/overs/Overs';
 import Teams from 'pages/teams/Teams';
+import PageNotFound from 'pages/pageNotFound';
 
 const RouteComponent = () => {
   return (
@@ -34,6 +35,7 @@ const RouteComponent = () => {
 
         <Route path={ROUTE_CONST.PLAYER_DETAIL} element={<AppLayout LayoutComponent={PlayerDetail}/>}/>
         <Route path={ROUTE_CONST.SERIES_DETAIL} element={<AppLayout LayoutComponent={SeriesDetail}/>}/>
+        <Route path={'*'} element={<PageNotFound/>}/>
       </Routes>
     </>
   )
