@@ -8,7 +8,7 @@ import HeroBanner from "components/heroBanner";
 import AdsComp from "components/ads";
 import { getAPI } from "utils/services";
 import { API_ROUTES, ROUTE_CONST } from "../../constants";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const venue = [
   {
@@ -68,10 +68,13 @@ const series = [
   },
 ];
 
-const Home = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [status, setStatus] = useState(searchParams.get("status") || "Completed");
-  const [category, setCategory] = useState("international");
+const tabObject={
+    [ROUTE_CONST.CRICKET_MATCH_RESULTS]:"Completed",
+    [ROUTE_CONST.CRICKET_UPCOMING_MATCHES_SCHEDULE]:"Scheduled",
+    [ROUTE_CONST.LIVE_CRICKET_SCORES]:"live"
+}
+
+const HomeLayout = ({ Content }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -80,15 +83,22 @@ const Home = () => {
   const [selectedVenue, setSelectedVenue] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedSeries, setSelectedSeries] = useState("");
-
-
-  const navigate =useNavigate();
+  
+  const { pathname } = useLocation()
+  
+  const [status, setStatus] = useState(tabObject[pathname]);
+  const [category, setCategory] = useState("international");
+  
+  
+  const navigate = useNavigate();
 
   const handleClearFilter = () => {
     setSelectedVenue("");
     setSelectedTeam("");
     setSelectedSeries("");
   };
+
+
 
   const getMatches = async () => {
     setIsLoading(true);
@@ -137,6 +147,10 @@ const Home = () => {
       getMoreMatches();
     }
   }, [currentPage]); //eslint-disable-line
+
+  useEffect(()=>{
+    setStatus(tabObject[pathname]);
+  },[pathname]);
 
   const handleLoadMore = () => {
     setCurrentPage((prev) => prev + 1);
@@ -331,34 +345,18 @@ const Home = () => {
                   </Accordion>
                 </div>
               </div>
+              {/* Content-------------------------------------------------------------------> */}
+                
+                <Content 
+                    isLoading={isLoading} 
+                    matchListData={matchListData} 
+                    pageCount={pageCount} 
+                    currentPage={currentPage} 
+                    loadMoreLoading={loadMoreLoading} 
+                    handleLoadMore={handleLoadMore} 
+                />
 
-              {!isLoading ? (
-                matchListData.length ? (
-                  <>
-                    {" "}
-                    <div className="row row-cols-1 row-cols-xl-2 g-3">
-                      {matchListData?.map((item) => (
-                        <MatchCard data={item} key={item?._id} />
-                      ))}
-                    </div>
-                    {(pageCount === currentPage) || (pageCount === 0) ? null : (
-                      <div className="mt-3 d-flex justify-content-center">
-                        {!loadMoreLoading ? <div
-                          className="commonBtn"
-                          style={{ maxWidth: "150px" }}
-                          onClick={handleLoadMore}
-                        >
-                          Load more
-                        </div>:<div style={{ color: "white" }}>Loading.....{ console.log("FIIIIIIIIIk") }</div>}
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div style={{ color: "white" }}> No data </div>
-                )
-              ) : (
-                <div style={{ color: "white" }}>Loading.....</div>
-              )}
+              {/* Content-------------------------------------------------------------------> */}
             </div>
             <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
               <CurrentSeries />
@@ -371,4 +369,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeLayout;

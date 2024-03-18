@@ -9,7 +9,7 @@ const MatchCard = ({ data }) => {
   return (
     <>
       <div className="col">
-        <div className="matchCard" onClick={()=>navigate(ROUTE_CONST.LIVE_SCORE)}>
+        <div className="matchCard" onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORE}/${data?.real_matchkey}/${data.short_name.replaceAll(" ","-")}-${data.seiresName.replaceAll(" ","-")}`)}>
           <div className="row mx-0 gx-0">
             {/* live, notLive, lunch */}
             {data.status_str==="live" ? <div className="col-12 matchStatus notLive">live</div> : ""}
