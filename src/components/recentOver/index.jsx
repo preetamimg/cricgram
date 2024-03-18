@@ -4,7 +4,9 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import arrowIcon from 'assets/img/arrow.svg'
 
-const RecentOver = () => {
+const RecentOver = ({overs}) => {
+
+  console.log(overs)
   return (
     <>
       <div className="recentOvers mt-2">
@@ -23,30 +25,41 @@ const RecentOver = () => {
         }}
           modules={[Navigation]}
         >
-          <SwiperSlide>
+              {overs?.slice(0,30)?.map((overs)=>(
+          <SwiperSlide key={overs.id}>
             <div className="overSliderInner d-flex align-items-center">
+              {overs.event === 'overend' ?
               <div className="overDetail">
-                <span>5</span>
+                <span>{overs.over}</span>
                 <span>Ov</span>
               </div>
+              :
+              null
+              }
+              {overs.event !== 'overend' ? 
               <div className="d-flex gap-2 overBoxParent">
-                <div className="overBox zero">0</div>
-                <div className="overBox zero">0</div>
+                
+                <div className={`overBox ${overs?.run == '0' ? 'zero' : 'overBox' || overs?.run == '4' ? 'four' : 'overBox' }`}>{overs?.run}</div>
+                 {/* <div className="overBox zero">0</div>
                 <div className="overBox">1</div>
                 <div className="overBox">2</div>
                 <div className="overBox four">4</div>
-                <div className="overBox zero">0</div>
+                <div className="overBox zero">0</div> */}
               </div>
+              :
+              null
+}
             </div>
           </SwiperSlide>
-          <SwiperSlide>
+              ))} 
+          {/* <SwiperSlide>
             <div className="overSliderInner d-flex align-items-center">
               <div className="overDetail">
                 <span>4</span>
                 <span>Ov</span>
               </div>
               <div className="d-flex gap-2 overBoxParent">
-                <div className="overBox four">4</div>
+                <div className="overBox  four">4</div>
                 <div className="overBox">1</div>
                 <div className="overBox">2</div>
                 <div className="overBox zero">0</div>
@@ -102,7 +115,7 @@ const RecentOver = () => {
                 <div className="overBox zero">0</div>
               </div>
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
         </Swiper>
           </div>
           <div className="overNavBtn overNext">

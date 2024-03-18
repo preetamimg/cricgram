@@ -11,12 +11,12 @@ import { baseUrl } from 'pages/home';
 import { token } from 'pages/home';
 import {useLocation} from 'react-router-dom';
 import moment from 'moment';
-import { max } from 'moment/moment';
 
 const LiveScorePage = () => {
   const [activeTab, setActiveTab] = useState('commentary');
   const [MatchInfo,setMatchInfo]=useState({});
   const [InningNumber,setInningNumber] = useState(1);
+  const [liveScore,setLiveScore]= useState({});
 
 
   const locate = useLocation();
@@ -31,10 +31,22 @@ const LiveScorePage = () => {
       setInningNumber(res?.data?.response?.latest_inning_number)
     })
     .catch((err)=> console.log(err))
+
+    axios.get(`${baseUrl}/v2/matches/${74222}/live?token=${token}`)
+    .then((res)=>{
+      // setMatchInfo(res?.data?.response)
+      setInningNumber(res?.data?.response?.latest_inning_number)
+      setLiveScore(res?.data?.response)
+      console.log('<<<>>>>',res?.data?.response)
+      })
+    .catch((err)=> console.log(err))
+    
   },[])
+  
 
-
-
+console.log('<<<MatchINfo>>>>',MatchInfo)
+console.log('<<<InningNumber>>>>',InningNumber)
+console.log('<<<LIveScore>>>>',liveScore)
 
   return (
     <>
@@ -72,12 +84,12 @@ const LiveScorePage = () => {
                     <div className="row mb-2">
                       <div className="col d-flex align-items-center gap-2 gap-md-3 overflow-hidden">
                         <div className="mStatus">
-                          {MatchInfo.live}
+                         {liveScore?.status_str} {MatchInfo.live}
                         </div>
                         <div className="whoPlaying">{MatchInfo?.result}</div>
                       </div>
                       <div className="col-auto d-none d-md-block">
-                        <div className="runRate">Current Run Rate : 5.76</div>
+                        <div className="runRate">Current Run Rate : {liveScore?.live_score?.runrate}</div>
                       </div>
                     </div>
                   </div>
@@ -120,13 +132,15 @@ const LiveScorePage = () => {
                   <div className="col-12 mt-2 teamAndMatchs d-md-none">
                     <div className="row">
                       <div className="col-auto">
-                        <div className="runRate">Current Run Rate : 5.76</div>
+                        <div className="runRate">Current Run Rate : {liveScore?.live_score?.runrate}</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <RecentOver/>
+              <RecentOver
+              overs={liveScore?.commentaries}
+              />
               
                 <div className="commonTabs mt-2 mb-2 mb-md-3">
                   <div onClick={()=>setActiveTab('commentary')} className={`tab ${activeTab === 'commentary' ? 'active' : ''}`}>commentary</div>
@@ -137,8 +151,8 @@ const LiveScorePage = () => {
                   <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>result</div>
                 </div>
                 {
-                  activeTab === 'commentary' ? <Commentary Inning={InningNumber} matchId={matchId}/> : 
-                  activeTab === 'scoreCard' ? <ScoreCard/> : ''
+                  activeTab === 'commentary' ? <Commentary Inning={InningNumber} matchId={matchId} toss={MatchInfo?.toss?.text}/> : 
+                  activeTab === 'scoreCard' ? <ScoreCard   matchId={matchId}/> : ''
 
                 }
 

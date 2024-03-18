@@ -79,6 +79,7 @@ const series = [
 const Home = () => {
   const [category, setCategory] = useState('live');
   const [subCategory, setSubCategory] = useState('international');
+  const [DataSubCategory, setDataSubCategory] = useState([]);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [selectedTeam, setSelectedTeam] = useState('');
   const [selectedSeries, setSelectedSeries] = useState('');
@@ -99,15 +100,19 @@ const Home = () => {
       console.log(res?.data?.response)
       setMatches(res?.data?.response?.items)
       setPageCount(res?.data?.response.total_pages)
-
+      setDataSubCategory(res?.data?.response?.items)
     })
     .catch((err)=>console.log(err))
-  },[status,page])
     
+  },[status,page])
+  
+  const handleMatches=(category)=>{
+    console.log(subCategory)
+    setMatches(DataSubCategory?.filter((match)=>match?.competition?.category === category))
+  }
 
 
-
-  console.log('<<<<Matches>>>>>',matches)
+  console.log('<<<<Matches>>>>>',matches,subCategory)
   return (
     <>
       <HeroBanner/>
@@ -139,9 +144,18 @@ const Home = () => {
                 <div className="row gx-2 gx-md-3 mb-3">
                   <div className="col filterTabCol">
                     <div className="commonTabs commonInnerTabs">
-                      <div onClick={()=>setSubCategory('international')} className={`tab ${subCategory === 'international' ? 'active' : ''}`}>international</div>
-                      <div onClick={()=>setSubCategory('league')} className={`tab ${subCategory === 'league' ? 'active' : ''}`}>league</div>
-                      <div onClick={()=>setSubCategory('domestic')} className={`tab ${subCategory === 'domestic' ? 'active' : ''}`}>domestic</div>
+                      <div onClick={()=>{
+                        setSubCategory('international')
+                        handleMatches('international')
+                        }} className={`tab ${subCategory === 'international' ? 'active' : ''}`}>international</div>
+                      <div onClick={()=>{
+                        setSubCategory('league')
+                        handleMatches('league')
+                        }} className={`tab ${subCategory === 'league' ? 'active' : ''}`}>league</div>
+                      <div onClick={()=>{
+                        setSubCategory('domestic')
+                        handleMatches('domestic')
+                        }} className={`tab ${subCategory === 'domestic' ? 'active' : ''}`}>domestic</div>
                     </div>
                   </div>
                   <div className="col-auto">
