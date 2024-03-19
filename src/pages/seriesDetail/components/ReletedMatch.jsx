@@ -260,7 +260,7 @@ const ReletedMatch = () => {
   ];
   return (
     <>
-      <div className="container-fluid mt-4 relatedMatchesSlider">
+      <div className="container-fluid relatedMatchesSlider">
         <div className="container px-0 position-relative">
           <Swiper 
             navigation={{

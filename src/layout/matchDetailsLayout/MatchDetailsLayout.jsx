@@ -63,7 +63,7 @@ const MatchDetailsLayout = ({ Content }) => {
         <div className="container px-0">
           <div className="row">
             <div className="col-lg-8 col-xl-9">
-              <div className="matchDetailCard">
+              <div className="matchDetailCard"> {/* add loading class here for loader*/}
                 <div className="row align-items-start">
                   <div className="col-10 matchTeams">
                     {/* Mumbai vs Vidarbha, Final - Live Cricket Score */}
@@ -88,7 +88,7 @@ const MatchDetailsLayout = ({ Content }) => {
                   </div>
                 </div>
               </div> */}
-              <div className="matchDetailCard mt-2">
+              <div className="matchDetailCard mt-2 "> {/* add loading class here for loader*/}
                 <div className="row align-items-center">
                   <div className="col-12 teamAndMatchs">
                     <div className="row mb-2">
@@ -109,7 +109,9 @@ const MatchDetailsLayout = ({ Content }) => {
                         <tr>
                           <td className='ps-0'>
                             <div className="flex align-items-center teamName">
-                              <img src="https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-43_a162.png&w=40&q=75" alt="" />
+                              <div className="teamNameImg">
+                                <img src="https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-43_a162.png&w=40&q=75" alt="" />
+                              </div>
                             </div>
                           </td>
                           <td className='ps-0'>
@@ -124,7 +126,9 @@ const MatchDetailsLayout = ({ Content }) => {
                         <tr>
                           <td className='ps-0'>
                             <div className="flex align-items-center teamName">
-                              <img src="https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-42_85a2.png&w=40&q=75" alt="" />
+                              <div className="teamNameImg">
+                                <img src="https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-42_85a2.png&w=40&q=75" alt="" />
+                              </div>
                             </div>
                           </td>
                           <td className='ps-0'>

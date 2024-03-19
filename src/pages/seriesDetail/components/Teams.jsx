@@ -1,4 +1,5 @@
 import TeamCard from 'components/teamCard'
+import TopRankerCardLoader from 'components/topRankerCard/Loader'
 import React from 'react'
 
 const Teams = () => {
@@ -10,6 +11,13 @@ const Teams = () => {
           data?.map((item)=> (
             <div className="col-6 col-lg-4 col-xl-3">
               <TeamCard/>
+            </div>
+          ))
+        }
+        {
+          data?.map((item)=> (
+            <div className="col-6 col-lg-4 col-xl-3">
+              <TopRankerCardLoader type={'team'}/>
             </div>
           ))
         }
