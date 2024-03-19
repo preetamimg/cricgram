@@ -11,7 +11,7 @@ export const ROUTE_CONST = {
   OVERS:"/overs",
   // RESULT:"/result",
   PLAYER_DETAIL: '/player',
-  SERIES_DETAIL: '/series',
+  CRICKET_SERIES: '/cricket-series',
 }
 
 

@@ -158,8 +158,8 @@ const MatchDetailsLayout = ({ Content }) => {
                   <div onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORE}/${id}/${matchName}`)} className={`tab ${activeTab === 'commentary' ? 'active' : ''}`}>Commentary</div>
                   <div onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORECARD}/${id}/${matchName}`)} className={`tab ${activeTab === 'scoreCard' ? 'active' : ''}`}>Score card</div>
                   <div onClick={()=>navigate(`${ROUTE_CONST.MATCH_SQUADS}/${id}/${matchName}`)} className={`tab ${activeTab === 'teams' ? 'active' : ''}`}>Teams</div>
-                  <div onClick={()=>navigate('/series?standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>Standings</div>
-                  <div onClick={()=>navigate('/series?stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>Stats</div>
+                  <div onClick={()=>window.open(`${ROUTE_CONST.CRICKET_SERIES}/${matchData?.seriesData?.series_key}/${matchData?.seriesData?.name.replaceAll(" ","-")}?tab=standings`,"_blank")} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>Standings</div>
+                  <div onClick={()=>window.open(`${ROUTE_CONST.CRICKET_SERIES}/${matchData?.seriesData?.series_key}/${matchData?.seriesData?.name.replaceAll(" ","-")}?tab=stats`,"_blank")} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>Stats</div>
                   <div onClick={()=>navigate(`${ROUTE_CONST.OVERS}/${id}/${matchName}`)} className={`tab ${activeTab === 'overs' ? 'active' : ''}`}>Overs</div>
                   {/* <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>Result</div> */}
                 </div>

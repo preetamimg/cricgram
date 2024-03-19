@@ -2,7 +2,7 @@ import AdsComp from 'components/ads'
 import CurrentSeries from 'components/currentSeries'
 import React, { useEffect, useState } from 'react'
 import shareIcon from 'assets/img/share.svg'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import Stats from './components/Stats'
 import Standings from './components/Standings'
 import Home from './components/Home'
@@ -13,17 +13,26 @@ import Archives from './components/Archives'
 import ReletedMatch from './components/ReletedMatch'
 
 const SeriesDetail = () => {
-  const [activeTab, setActiveTab] = useState('home')
+  const [ searchParams,setSearchParams ] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "home");
   const location = useLocation()
 
-  useEffect(()=> {
-    if(location.search.includes('standings')) {
-      setActiveTab('standings')
-    }
-    if(location.search.includes('stats')) {
-      setActiveTab('stats')
-    }
-  }, [location])
+  // useEffect(()=> {
+  //   if(location.search.includes('standings')) {
+  //     setActiveTab('standings')
+  //   }
+  //   if(location.search.includes('stats')) {
+
+  //     setActiveTab('stats')
+  //   }
+  // }, [location]);
+
+
+  useEffect(()=>{
+    searchParams.set('tab', activeTab);
+    setSearchParams(searchParams);
+  },[activeTab]);
+
   return (
     <>
       <ReletedMatch/>
