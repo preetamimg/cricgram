@@ -9,7 +9,9 @@ import AdsComp from 'components/ads'
 import Overs from '../../pages/overs/Overs'
 import { useNavigate } from 'react-router';
 import { useLocation,useParams } from 'react-router-dom';
-import { ROUTE_CONST } from '../../constants';
+import { API_ROUTES, ROUTE_CONST } from '../../constants';
+import { getAPI } from 'utils/services';
+import { formatDate } from 'utils/helpers';
 
 
 const tabObject={
@@ -23,18 +25,37 @@ const tabObject={
 const MatchDetailsLayout = ({ Content }) => {
     const location =useLocation(); 
     const pathName = `/${location.pathname.split("/")[1]}`;
-    console.log({ pathName });
     const [activeTab, setActiveTab] = useState(tabObject[pathName]);
+    
+    const [ matchData,setMatchData ]=useState({});
+    const [ isLoading,setIsLoading ]=useState(false);
 
     const { id,matchName } =useParams();
 
     const navigate = useNavigate();
 
+    const getMatchData = async()=>{
+        setIsLoading(true);
+        try {
+            const res= await getAPI(`${API_ROUTES.GET_MATCH_INFO}/${id}`);
+            console.log({ res });
+            setMatchData(res.data.data[0]);
+        } catch (error) {
+            console.log({ error });
+        }finally{
+            setIsLoading(false);
+        }
+    }
+
 
     useEffect(()=>{
         setActiveTab(tabObject[pathName]);
     },[pathName]);
-  
+
+
+    useEffect(()=>{
+        getMatchData();
+    },[]);//eslint-disable-line
 
   return (
     <>
@@ -45,7 +66,8 @@ const MatchDetailsLayout = ({ Content }) => {
               <div className="matchDetailCard"> {/* add loading class here for loader*/}
                 <div className="row align-items-start">
                   <div className="col-10 matchTeams">
-                    Mumbai vs Vidarbha, Final - Live Cricket Score
+                    {/* Mumbai vs Vidarbha, Final - Live Cricket Score */}
+                    {matchData?.name}
                   </div>
                   <div className="col-2 d-flex justify-content-end">
                     <div className="shareBtn">
@@ -53,7 +75,7 @@ const MatchDetailsLayout = ({ Content }) => {
                     </div>
                   </div>
                   <div className="col-12 matchDes">
-                    <span onClick={()=>navigate('/series')} className='urlLink'>Ranji Trophy, 2024</span>| 10 Mar 2024, Sun, 9:30 AM IST | Wankhede Stadium, Mumbai
+                    <span onClick={()=>navigate('/series')} className='urlLink'>{matchData?.seriesData?.name}</span>| {formatDate(matchData.start_date)} | Wankhede Stadium, Mumbai
                   </div>
                 </div>
               </div>
@@ -138,14 +160,11 @@ const MatchDetailsLayout = ({ Content }) => {
                   {/* <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>Result</div> */}
                 </div>
 
-                {/* {
-                  activeTab === 'commentary' ? <Commentary/> : 
-                  activeTab === 'scoreCard' ? <ScoreCard/> : 
-                  activeTab === 'overs' ? <Overs/> : ''
-                } */}
 
-                <Content />
-
+            {/* Content--------------------------------------------------------------------------------> */}
+                <Content matchData={matchData}  />
+            {/* Content--------------------------------------------------------------------------------> */}
+            
             </div>
 
             <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
