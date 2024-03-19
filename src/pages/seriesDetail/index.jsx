@@ -9,8 +9,9 @@ import Home from './components/Home'
 import Fixtures from './components/Fixtures'
 import Teams from './components/Teams'
 import Squads from './components/Squads'
-import Archives from './components/Archives'
+// import Archives from './components/Archives'
 import ReletedMatch from './components/ReletedMatch'
+import { shareUrl } from 'utils/helpers'
 
 const SeriesDetail = () => {
   const [ searchParams,setSearchParams ] = useSearchParams();
@@ -58,8 +59,8 @@ const SeriesDetail = () => {
                         </li>
                       </ul>
                     </div>
-                    <div className="col-2 d-flex justify-content-end">
-                      <div className="shareBtn">
+                    <div className="col-2 d-flex justify-content-end" onClick={()=>shareUrl(`${location.pathname}?tab=${activeTab}`)} >
+                      <div className="shareBtn" >
                         <img src={shareIcon} alt="" />
                       </div>
                     </div>
@@ -76,17 +77,15 @@ const SeriesDetail = () => {
                     <div onClick={()=>setActiveTab('stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>stats</div>
                     <div onClick={()=>setActiveTab('teams')} className={`tab ${activeTab === 'teams' ? 'active' : ''}`}>teams</div>
                     <div onClick={()=>setActiveTab('squads')} className={`tab ${activeTab === 'squads' ? 'active' : ''}`}>squads</div>
-                    <div onClick={()=>setActiveTab('archives')} className={`tab ${activeTab === 'archives' ? 'active' : ''}`}>archives</div>
                   </div>
 
                   {
-                    activeTab === 'home' ? <Home/> :
+                    activeTab === 'home' ? <Home /> :
                     activeTab === 'fixtures' ? <Fixtures/> :
                     activeTab === 'standings' ? <Standings/> : 
                     activeTab === 'stats' ? <Stats/> :
                     activeTab === 'teams' ? <Teams/> : 
-                    activeTab === 'squads' ? <Squads/> : 
-                    activeTab === 'archives' ? <Archives/> : ''
+                    activeTab === 'squads' ? <Squads/> : "" 
                   }
               </div>
               <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
@@ -100,4 +99,4 @@ const SeriesDetail = () => {
   )
 }
 
-export default SeriesDetail
+export default SeriesDetail;

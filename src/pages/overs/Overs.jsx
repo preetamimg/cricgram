@@ -1,9 +1,11 @@
-import OverCard from 'components/overCard'
-import React from 'react'
+import NoDataFound from 'components/noData';
+import OverCard from 'components/overCard';
+import React from 'react';
 
-const Overs = () => {
-  const overs = [1,1,1,1]
-  return (
+const Overs = ({ matchData }) => {
+  const overs = [1,1,1,1];
+  
+  return (matchData.status_str !=="Scheduled" ?(
     <>
       <div className="commentaryTabs mb-3">
         <div className="commentaryTab active">
@@ -56,8 +58,8 @@ const Overs = () => {
           <OverCard/>
         ))
       }
-    </>
+    </>):<NoDataFound />
   )
-}
+};
 
-export default Overs
+export default Overs;
