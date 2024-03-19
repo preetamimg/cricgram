@@ -554,13 +554,20 @@ body {
       }
     }
     & .teamName {
-      & img {
+
+      & .teamNameImg {
         height: 35px;
         width: 35px;
-        object-fit: contain;
+        border-radius: 50px;
+        overflow: hidden;
         @include md {
           height: 45px;
           width: 45px;
+        }
+        & img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
         }
       }
       & span {
@@ -668,6 +675,53 @@ body {
       height: 16px;
       border-radius: 4px;
       width: 30%;
+    }
+    & .teamName {
+      & .teamNameImg {
+        @include skeletonBg();
+      }
+      & span {
+        @include skeletonBg();
+        height: 20px;
+        width: 40px;
+        display: flex;
+        border-radius: 4px;
+      }
+    }
+    & .scoreDetail {
+      @include skeletonBg();
+      height: 20px;
+      width: 100px;
+      display: flex;
+      border-radius: 4px;
+    }
+    & .previewTxt {
+      @include skeletonBg();
+      height: 16px;
+      width: 100%;
+      border-radius: 4px;
+      position: relative;
+      margin-bottom: 40px;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        width: 70%;
+        @include skeletonBg();
+        height: 16px;
+        left: 0;
+        border-radius: 4px;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        top: 40px;
+        width: 35%;
+        @include skeletonBg();
+        height: 16px;
+        left: 0;
+        border-radius: 4px;
+      }
     }
   }
 }
@@ -903,6 +957,24 @@ body {
     color: $theme4;
     font-weight: 500;
   }
+  &.loading {
+    @include skeleton();
+    & .over {
+      @include skeletonBg();
+      height: 20px;
+      border-radius: 4px;
+      width: 40px;
+    }
+    & .run {
+      @include skeletonBg();
+    }
+    & .commentryTxt {
+      @include skeletonBg();
+      height: 16px;
+      border-radius: 4px;
+      width: 40%;
+    }
+  }
 }
 
 .commentryOver {
@@ -932,6 +1004,29 @@ body {
     font-size: 14px;
     color: $theme4;
     font-weight: 700;
+  }
+  &.loading {
+    @include skeleton();
+    &::after {
+      background-image:	linear-gradient(-55deg, rgba($theme6, 0), rgba($theme6, 0), rgba($theme6, 1), rgba($theme6, 0), rgba($theme6, 0));
+    }
+    & .commentryOverCol {
+      & .smallTxt {
+        background-color: rgba($theme5, 0.3);
+        height: 15px;
+        margin-bottom: 4px;
+        border-radius: 4px;
+        width: 70%;
+        margin-inline: auto;
+      }
+      & .bigTxt {
+        background-color: rgba($theme5, 0.3);
+        height: 18px;
+        border-radius: 4px;
+        width: 40%;
+        margin-inline: auto;
+      }
+    }
   }
 }
 
@@ -970,6 +1065,28 @@ body {
         &:hover {
           color: white;
         }
+      }
+    }
+  }
+  &:not(.fallOfWic) {
+    &.loading {
+      @include skeleton();
+      & .value {
+        &:not(.key) {
+          height: 20px;
+          width: 30%;
+          @include skeletonBg();
+        }
+      }
+    }
+  }
+  &.fallOfWic {
+    &.loading {
+      @include skeleton();
+      & .key {
+          height: 20px;
+          width: 30%;
+          @include skeletonBg();
       }
     }
   }
@@ -1100,7 +1217,8 @@ body {
           border-radius: 7px;
           height: 40px;
           @include skeleton();
-          background-image:	linear-gradient(-55deg, rgba($theme2, 0), rgba($theme2, 1), rgba($theme2, 0));
+          @include skeletonBg();
+          // background-image:	linear-gradient(-55deg, rgba($theme2, 0), rgba($theme2, 1), rgba($theme2, 0));
         }
       }
     }

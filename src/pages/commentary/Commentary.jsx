@@ -3,6 +3,15 @@ import fourImg from 'assets/img/four.svg'
 import sixImg from 'assets/img/six.svg'
 import wicketImg from 'assets/img/wicket.svg'
 
+const commentryOverLoading = [
+  [
+    1,1,1,1,1,1
+  ],
+  [
+    1,1,1,1,1,1
+  ]
+]
+
 const commentryOvers = [1,1,1]
 const Commentary = () => {
   return (
@@ -30,13 +39,9 @@ const Commentary = () => {
                   <td>4</td>
                   <td>0</td>
                 </tr>
+                {/* loading td */}
                 <tr>
-                  <td>Salome Sunday</td>
-                  <td>37</td>
-                  <td>48</td>
-                  <td>77.08</td>
-                  <td>4</td>
-                  <td>0</td>
+                  <td colSpan={6} className='tableLoader'></td>
                 </tr>
               </tbody>
             </table>
@@ -62,20 +67,16 @@ const Commentary = () => {
                   <td>4</td>
                   <td>0</td>
                 </tr>
+                {/* loading td */}
                 <tr>
-                  <td>Salome Sunday</td>
-                  <td>37</td>
-                  <td>48</td>
-                  <td>77.08</td>
-                  <td>4</td>
-                  <td>0</td>
+                  <td colSpan={6} className='tableLoader'></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
         <div className="col-xl-5 col-xxl-4">
-          <div className="fallOfWickets h-100">
+          <div className="fallOfWickets h-100">{/* loading class here */}
             <div className="title">KEY STATS</div>
             <div className="d-flex justify-content-between keyValueDiv">
               <div className="key value text-nowrap"> <span>Partnership :</span></div>
@@ -165,6 +166,49 @@ const Commentary = () => {
       </div>
       <div className="mt-3">
         <div className="commonHeading">2 <sup>nd</sup> innings</div>
+        {/* loader */}
+        {
+          commentryOverLoading?.map((item, index)=> (
+            <ul className='list-unstyled m-0 p-0'>
+              {
+                item?.map((abc)=> (
+                  <li className='d-flex align-items-center commentryLine loading'>
+                    <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+                      <div className="over"></div>
+                      <div className="run"></div>
+                    </div>
+                    <div className="commentryTxt"></div>
+                  </li>
+                ))
+              }
+                {/* over description */}
+                <li className='d-flex align-items-center commentryOver loading'>
+                  <div className="row row-cols-xxl-5 g-3 w-100 justify-content-between mx-0">
+                    <div className="col-6 col-xl-auto col-xxl commentryOverCol d-none d-xl-block">
+                      <div className="smallTxt text-center"></div>
+                      <div className="bigTxt text-center"></div>
+                    </div>
+                    <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
+                      <div className="smallTxt text-lg-center"></div>
+                      <div className="bigTxt d-flex gap-1 justify-content-lg-center"></div>
+                    </div>
+                    <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
+                      <div className="smallTxt text-end text-lg-center"></div>
+                      <div className="bigTxt text-end text-lg-center"></div>
+                    </div>
+                    <div className="col-6 col-xl-auto col-xxl commentryOverCol">
+                      <div className="smallTxt text-end text-lg-center"></div>
+                      <div className="bigTxt text-end text-lg-center"></div>
+                    </div>
+                    <div className="col-6 col-xl-auto col-xxl commentryOverCol">
+                      <div className="smallTxt text-end text-lg-center"></div>
+                      <div className="bigTxt text-end text-lg-center"></div>
+                    </div>
+                  </div>
+                </li>
+            </ul>
+          ))
+        }
         {
           commentryOvers?.map((item)=> (
             <ul key={item} className='list-unstyled m-0 p-0'>
