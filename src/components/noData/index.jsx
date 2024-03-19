@@ -12,4 +12,4 @@ const NoDataFound = () => {
   )
 }
 
-export default NoDataFound
+export default NoDataFound;

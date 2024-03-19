@@ -12,9 +12,12 @@ const commentryOverLoading = [
   ]
 ]
 
-const commentryOvers = [1,1,1]
-const Commentary = () => {
-  return (
+const commentryOvers = [1,1,1];
+
+const Commentary = ({ matchData }) => {
+  
+
+  return (matchData.status_str !== "Scheduled" ?(
     <>
       <div className="row g-3 mb-3">
         <div className="xol-xl-7 col-xxl-8">
@@ -299,7 +302,58 @@ const Commentary = () => {
       <div className="mt-3 d-flex justify-content-center">
         <div className="commonBtn" style={{maxWidth: '150px'}}>Load more</div>
       </div>
-    </>
+    </>):( <> 
+      <div className="commonHeading mt-3">MATCH INFO</div>
+      <div className="fallOfWickets fallOfWic py-0">
+        {" "}
+        {/* add loading class here */}
+        <div className="row keyValueDiv">
+          <div className="col-4 value">SERIES</div>
+          <div className="col-8 key value">
+            {" "}
+            <span>Ranji Trophy</span>
+          </div>
+        </div>
+        <div className="row keyValueDiv">
+          <div className="col-4 value">DATE & TIME</div>
+          <div className="col-8 key value">
+            {" "}
+            <span>10 Mar 2024, Sun, 9:30 AM IST</span>
+          </div>
+        </div>
+        <div className="row keyValueDiv">
+          <div className="col-4 value">TOSS</div>
+          <div className="col-8 key value">
+            {" "}
+            <span>Vidarbha elected to bowl</span>
+          </div>
+        </div>
+        <div className="row keyValueDiv">
+          <div className="col-4 value">VENUE</div>
+          <div className="col-8 key value">
+            {" "}
+            <span>Wankhede Stadium, Mumbai</span>
+          </div>
+        </div>
+        <div className="row keyValueDiv">
+          <div className="col-4 value">UMPIRES</div>
+          <div className="col-8 key value">
+            {" "}
+            <span>
+              Khalidhussen A Saiyed (India), K N Ananthapadmanabhan (India),
+              Virender Sharma(India, TV)
+            </span>
+          </div>
+        </div>
+        <div className="row keyValueDiv">
+          <div className="col-4 value">MATCH REFEREE</div>
+          <div className="col-8 key value">
+            {" "}
+            <span>Manu Nayar (India)</span>
+          </div>
+        </div>
+      </div>
+    </>)
   )
 }
 

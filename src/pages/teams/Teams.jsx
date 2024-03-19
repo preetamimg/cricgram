@@ -1,29 +1,35 @@
 import React from 'react'
 import playerPoster from 'assets/img/playerPlaceholder.webp'
-import batsmanIcon from 'assets/img/batsman.svg'
+import batsmanIcon from 'assets/img/batsman.svg';
+import allRounderIcon  from "assets/img/allRounder.png";
+import bowler  from "assets/img/bowler.svg"; 
 
 const players = [1,1,1,1,1,1,1,1,1,1,1];
 
 
-const Teams = () => {
+const Teams = ({ matchData }) => {
+console.log({matchData  });
   return (
     <>
       <div className="commonHeading mt-3">PLAYING XI</div>
       <div className="fallOfWickets my-2">
         <div className="row mx-0 playerCardWrapper">
           <div className="col-6 ps-0 pe-md-4">
-            <div className="title">Mumbai</div>
+            <div className="title">{matchData?.teamaname}</div>
             <ul className="list-unstyled m-0 p-0">
               {
-                players?.map((item)=> (
+                matchData?.teamAPlayer?.map((item)=> (
                   <li className='playerCard'>
                     <div className="playerImg">
                       <img src={playerPoster} alt="" />
                     </div>
                     <div className="playerDes">
-                      <div className="playerName">Prithvi Shaw</div>
+                      <div className="playerName">{item?.player_name}</div>
                       <div className="playerIcon">
-                        <img src={batsmanIcon} alt="" />
+                      {item.role==="bat" ? <img src={batsmanIcon} alt="" />:""}
+                      {item.role==="all" ? <img src={allRounderIcon} alt="" />:""}
+                      {item.role==="bowl" ? <img src={bowler} alt="" />:""}
+                      {item.role==="wk" ? <div className="captian">WK</div>:""}
                         {/* <div className="captian">C</div> */}
                       </div>
                     </div>
@@ -33,18 +39,21 @@ const Teams = () => {
             </ul>
           </div>
           <div className="col-6 pe-0 ps-md-4">
-            <div className="title text-end">Vidarbha</div>
+            <div className="title text-end">{matchData?.teambname}</div>
             <ul className="list-unstyled m-0 p-0">
             {
-                players?.map((item)=> (
+                matchData?.teamBPlayer?.map((item)=> (
                   <li className='playerCard reverse'>
                     <div className="playerImg">
                       <img src={playerPoster} alt="" />
                     </div>
                     <div className="playerDes">
-                      <div className="playerName">Prithvi Shaw</div>
+                      <div className="playerName">{item.player_name}</div>
                       <div className="playerIcon">
-                        <img src={batsmanIcon} alt="" />
+                        {item.role==="bat" ? <img src={batsmanIcon} alt="" />:""}
+                        {item.role==="all" ? <img src={allRounderIcon} alt="" />:""}
+                        {item.role==="bowl" ? <img src={bowler} alt="" />:""}
+                        {item.role==="wk" ? <div className="captian">WK</div>:""}
                         {/* <div className="captian">C</div> */}
                       </div>
                     </div>
@@ -65,7 +74,7 @@ const Teams = () => {
                       <img src={playerPoster} alt="" />
                     </div>
                     <div className="playerDes">
-                      <div className="playerName">Prithvi Shaw</div>
+                      <div className="playerName">Prithvi Shaw1</div>
                       <div className="playerIcon">
                         <img src={batsmanIcon} alt="" />
                         {/* <div className="captian">C</div> */}
@@ -85,7 +94,7 @@ const Teams = () => {
                       <img src={playerPoster} alt="" />
                     </div>
                     <div className="playerDes">
-                      <div className="playerName">Prithvi Shaw</div>
+                      <div className="playerName">Prithvi Shaw0</div>
                       <div className="playerIcon">
                         <img src={batsmanIcon} alt="" />
                         {/* <div className="captian">C</div> */}

@@ -9,12 +9,12 @@ const TimerComponent = ({targetTime}) => {
     const difference = targ - now;
     
     if (difference < 0) {
-      return {
+      return [{
         days: '00',
         hours: '00',
         minutes : '00',
         seconds: '00'
-      };
+      }];
     }
 
     const days = String(Math.floor(difference / (1000 * 60 * 60 * 24))).padStart(2, '0');

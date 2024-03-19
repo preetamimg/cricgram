@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router';
 import { useLocation,useParams } from 'react-router-dom';
 import { API_ROUTES, ROUTE_CONST } from '../../constants';
 import { getAPI } from 'utils/services';
-import { formatDate } from 'utils/helpers';
+import { formatDate, shareUrl } from 'utils/helpers';
 
 
 const tabObject={
@@ -69,26 +69,29 @@ const MatchDetailsLayout = ({ Content }) => {
                     {/* Mumbai vs Vidarbha, Final - Live Cricket Score */}
                     {matchData?.name}
                   </div>
-                  <div className="col-2 d-flex justify-content-end">
+                  <div className="col-2 d-flex justify-content-end" onClick={()=>shareUrl(location.pathname)} >
                     <div className="shareBtn">
                       <img src={shareIcon} alt="" />
                     </div>
                   </div>
                   <div className="col-12 matchDes">
-                    <span onClick={()=>navigate('/series')} className='urlLink'>{matchData?.seriesData?.name}</span>| {formatDate(matchData.start_date)} | Wankhede Stadium, Mumbai
+                    <span onClick={()=>navigate('/series')} className='urlLink'>{matchData?.seriesData?.name}</span>| {formatDate(matchData?.start_date)} | {matchData?.stadiumName}
                   </div>
                 </div>
               </div>
+
               {/* timer for upcoming details */}
-              {/* <div className="matchDetailCard mt-2">
+              {(matchData?.start_date && matchData.status_str ==="Scheduled") ? <div className="matchDetailCard mt-2">
                 <div className="row align-items-center">
                   <div className="col-12 py-4">
                     <div className="startTxt">Match Starts In</div>
-                    <TimerComponent targetTime={"2024-03-18T10:50:25.844Z"}/>
+                    <TimerComponent targetTime={matchData?.start_date}/>
                   </div>
                 </div>
-              </div> */}
-              <div className="matchDetailCard mt-2 "> {/* add loading class here for loader*/}
+              </div>:""}
+
+                {/* add loading class here for loader (below) */}
+              {matchData.status_str !=="Scheduled" ? <div className="matchDetailCard mt-2 "> 
                 <div className="row align-items-center">
                   <div className="col-12 teamAndMatchs">
                     <div className="row mb-2">
@@ -151,11 +154,11 @@ const MatchDetailsLayout = ({ Content }) => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <RecentOver/>
+              </div>:null}
+              {matchData.status_str !=="Scheduled" ? <RecentOver/>:""}
               
                 <div className="commonTabs mt-2 mb-2 mb-md-3">
-                  <div onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORE}/${id}/${matchName}`)} className={`tab ${activeTab === 'commentary' ? 'active' : ''}`}>Commentary</div>
+                  <div onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORE}/${id}/${matchName}`)} className={`tab ${activeTab === 'commentary' ? 'active' : ''}`}>{matchData.status_str !=="Scheduled"?"Commentary":"Overview"}</div>
                   <div onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORECARD}/${id}/${matchName}`)} className={`tab ${activeTab === 'scoreCard' ? 'active' : ''}`}>Score card</div>
                   <div onClick={()=>navigate(`${ROUTE_CONST.MATCH_SQUADS}/${id}/${matchName}`)} className={`tab ${activeTab === 'teams' ? 'active' : ''}`}>Teams</div>
                   <div onClick={()=>window.open(`${ROUTE_CONST.CRICKET_SERIES}/${matchData?.seriesData?.series_key}/${matchData?.seriesData?.name.replaceAll(" ","-")}?tab=standings`,"_blank")} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>Standings</div>
