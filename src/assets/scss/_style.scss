@@ -554,13 +554,20 @@ body {
       }
     }
     & .teamName {
-      & img {
+
+      & .teamNameImg {
         height: 35px;
         width: 35px;
-        object-fit: contain;
+        border-radius: 50px;
+        overflow: hidden;
         @include md {
           height: 45px;
           width: 45px;
+        }
+        & img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
         }
       }
       & span {
@@ -641,6 +648,81 @@ body {
     font-size: 14px;
     font-weight: 500;
     color: $theme4;
+  }
+  &.loading {
+    @include skeleton();
+    & .matchTeams {
+      @include skeletonBg();
+      height: 30px;
+      border-radius: 6px;
+    }
+    & .matchDes {
+      @include skeletonBg();
+      height: 14px;
+      border-radius: 4px;
+      max-width: 40%;
+    }
+    & .mStatus {
+      @include skeletonBg();
+      height: 24px;
+      width: 54px;
+      &::after {
+        display: none;
+      }
+    }
+    & .whoPlaying {
+      @include skeletonBg();
+      height: 16px;
+      border-radius: 4px;
+      width: 30%;
+    }
+    & .teamName {
+      & .teamNameImg {
+        @include skeletonBg();
+      }
+      & span {
+        @include skeletonBg();
+        height: 20px;
+        width: 40px;
+        display: flex;
+        border-radius: 4px;
+      }
+    }
+    & .scoreDetail {
+      @include skeletonBg();
+      height: 20px;
+      width: 100px;
+      display: flex;
+      border-radius: 4px;
+    }
+    & .previewTxt {
+      @include skeletonBg();
+      height: 16px;
+      width: 100%;
+      border-radius: 4px;
+      position: relative;
+      margin-bottom: 40px;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        width: 70%;
+        @include skeletonBg();
+        height: 16px;
+        left: 0;
+        border-radius: 4px;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        top: 40px;
+        width: 35%;
+        @include skeletonBg();
+        height: 16px;
+        left: 0;
+        border-radius: 4px;
+      }
+    }
   }
 }
 
@@ -754,6 +836,19 @@ body {
   .overBoxParent, .swiper-slide {
     width: fit-content;
   }
+  & .loading {
+    @include skeleton();
+    & .overDetail {
+      height: 30px;
+      width: 25px;
+      margin-right: 8px;
+      border-radius: 5px;
+      @include skeletonBg();
+    }
+    & .overBox {
+      @include skeletonBg();
+    }
+  }
 }
 
 .commentaryTabs {
@@ -862,6 +957,24 @@ body {
     color: $theme4;
     font-weight: 500;
   }
+  &.loading {
+    @include skeleton();
+    & .over {
+      @include skeletonBg();
+      height: 20px;
+      border-radius: 4px;
+      width: 40px;
+    }
+    & .run {
+      @include skeletonBg();
+    }
+    & .commentryTxt {
+      @include skeletonBg();
+      height: 16px;
+      border-radius: 4px;
+      width: 40%;
+    }
+  }
 }
 
 .commentryOver {
@@ -891,6 +1004,29 @@ body {
     font-size: 14px;
     color: $theme4;
     font-weight: 700;
+  }
+  &.loading {
+    @include skeleton();
+    &::after {
+      background-image:	linear-gradient(-55deg, rgba($theme6, 0), rgba($theme6, 0), rgba($theme6, 1), rgba($theme6, 0), rgba($theme6, 0));
+    }
+    & .commentryOverCol {
+      & .smallTxt {
+        background-color: rgba($theme5, 0.3);
+        height: 15px;
+        margin-bottom: 4px;
+        border-radius: 4px;
+        width: 70%;
+        margin-inline: auto;
+      }
+      & .bigTxt {
+        background-color: rgba($theme5, 0.3);
+        height: 18px;
+        border-radius: 4px;
+        width: 40%;
+        margin-inline: auto;
+      }
+    }
   }
 }
 
@@ -929,6 +1065,28 @@ body {
         &:hover {
           color: white;
         }
+      }
+    }
+  }
+  &:not(.fallOfWic) {
+    &.loading {
+      @include skeleton();
+      & .value {
+        &:not(.key) {
+          height: 20px;
+          width: 30%;
+          @include skeletonBg();
+        }
+      }
+    }
+  }
+  &.fallOfWic {
+    &.loading {
+      @include skeleton();
+      & .key {
+          height: 20px;
+          width: 30%;
+          @include skeletonBg();
       }
     }
   }
@@ -1055,6 +1213,13 @@ body {
             }
           }
         }
+        &.tableLoader {
+          border-radius: 7px;
+          height: 40px;
+          @include skeleton();
+          @include skeletonBg();
+          // background-image:	linear-gradient(-55deg, rgba($theme2, 0), rgba($theme2, 1), rgba($theme2, 0));
+        }
       }
     }
     & .fadedTxt {
@@ -1091,6 +1256,11 @@ body {
       & tr {
         & td {
           background-color: $theme2;
+          &.tableLoader {
+            border-radius: 7px;
+            height: 40px;
+            @include skeleton();
+          }
         }
       }
     }
@@ -1552,6 +1722,45 @@ body {
     color: $theme4;
     position: relative;
     z-index: 1;
+  }
+  &.loader {
+    @include skeleton();
+    &::before {
+      display: none;
+    }
+    &::after {
+      z-index: 9;
+    }
+    & .playerImg {
+      @include skeletonBg();
+    }
+    & .playerName {
+      @include skeletonBg();
+      height: 20px;
+      width: 150px;
+      border-radius: 4px;
+    }
+    & .playerCategory {
+      @include skeletonBg();
+      height: 14px;
+      width: 100px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    & .score {
+      @include skeletonBg();
+      height: 14px;
+      width: 80px;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+    & .scoreName {
+      @include skeletonBg();
+      height: 14px;
+      width: 50px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
   }
 }
 

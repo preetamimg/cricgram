@@ -45,6 +45,9 @@ const StatsTable = () => {
                 </tr>
               ))
             }
+            <tr>
+              <td colSpan={13} className='tableLoader'></td>
+            </tr>
           </tbody>
         </table>
       </div>

@@ -201,6 +201,9 @@ const PlayerDetail = () => {
                           </tr>
                         ))
                       }
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>

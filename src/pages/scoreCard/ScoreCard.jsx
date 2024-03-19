@@ -36,6 +36,9 @@ const ScoreCard = () => {
                   </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <td colSpan={7} className='tableLoader'></td>
+                  </tr>
                   <tr>
                     <td className='text-nowrap'>Atharva Taide</td>
                     <td className='fadedTxt text-nowrap'>lbw b SZ Mulani</td>
@@ -341,7 +344,7 @@ const ScoreCard = () => {
 
       {/* info section */}
       <div className="commonHeading mt-3">MATCH INFO</div>
-      <div className="fallOfWickets py-0">
+      <div className="fallOfWickets fallOfWic py-0">  {/* add loading class here */}
             <div className="row keyValueDiv">
               <div className="col-4 value">SERIES</div>
               <div className="col-8 key value"> <span>Ranji Trophy</span></div>
@@ -367,7 +370,7 @@ const ScoreCard = () => {
               <div className="col-8 key value"> <span>Manu Nayar (India)</span></div>
             </div>
       </div>
-      <div className="fallOfWickets py-0 mt-3">
+      <div className="fallOfWickets fallOfWic py-0 mt-3"> {/* add loading class here */}
             <div className="row keyValueDiv">
               <div className="col-7 col-sm-4 value">WEATHER REPORT</div>
               <div className="col-5 col-sm-8 key value"> <span>Clear Sky</span></div>
@@ -388,7 +391,7 @@ const ScoreCard = () => {
 
       {/* match preview */}
       <div className="commonHeading mt-3">PREVIEW</div>
-      <div className="matchDetailCard">
+      <div className="matchDetailCard"> {/* add loading class here */}
         <div className="previewTxt">
           Mumbai will take on Vidarbha in the Final of the Ranji Trophy. This match will be played at the iconic Wankhede Stadium in Mumbai. Vidarbha secured qualification to the final with a 62-run victory over Madhya Pradesh in the semi-final. On the other hand, Mumbai qualified for the final by picking up a victory over Tamil Nadu, winning the semi-final matchup by an innings and 70 runs, courtesy of an all-round performance by Shardul Thakur. Vidarbha will look to secure its third Ranji Trophy title while Mumbai has a chance of winning a record 42nd title.
         </div>

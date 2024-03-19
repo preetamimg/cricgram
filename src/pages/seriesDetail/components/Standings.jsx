@@ -106,6 +106,9 @@ const Standings = () => {
                 </>
               ))
             }
+            <tr>
+              <td colSpan={10} className='tableLoader'></td>
+            </tr>
           </tbody>
         </table>
       </div>
