@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CurrentSeries from "components/currentSeries";
-import MatchCard from "components/matchCard";
 import filterIcon from "assets/img/filter.svg";
 import Accordion from "react-bootstrap/Accordion";
 import Dropdown from "react-bootstrap/Dropdown";
 import HeroBanner from "components/heroBanner";
-import AdsComp from "components/ads";
+// import AdsComp from "components/ads";
 import { getAPI } from "utils/services";
 import { API_ROUTES, ROUTE_CONST } from "../../constants";
 import { useLocation, useNavigate } from "react-router-dom";
