@@ -22,10 +22,11 @@ const MatchCard = ({
   teamBName,
   TeamBscore,
   result,
-  subtitle
+  subtitle,
 }) => {
   const navigate = useNavigate();
   console.log(key)
+  // console.log('data',data)
   return (
     <>
       <div className="col">

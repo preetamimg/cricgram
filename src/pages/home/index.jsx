@@ -9,11 +9,9 @@ import AdsComp from 'components/ads';
 import axios from 'axios';
 import {GrPrevious} from 'react-icons/gr';
 import {GrNext} from 'react-icons/gr';
+import { API_ENDPOINT, BASE_URL, TOKEN } from '../../constants';
 import './home.css';
 
-
-export const baseUrl =  'https://rest.entitysport.com';
-export const token = '9bc9724b47db0e6b59048efb19729181';
 
 
 // const arr = [1,1,1,1,1,1,1]
@@ -95,7 +93,7 @@ const Home = () => {
   }
 
   useEffect(()=>{
-    axios.get(`${baseUrl}/v2/matches/?status=${status}&token=${token}&per_page=10&&paged=${page}`)
+    axios.get(`${BASE_URL}${API_ENDPOINT.MATCHES}/?status=${status}&token=${TOKEN}&per_page=10&&paged=${page}`)
     .then((res)=> {
       console.log(res?.data?.response)
       setMatches(res?.data?.response?.items)
@@ -281,7 +279,7 @@ const Home = () => {
         </div>
               </div>
               <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
-                <CurrentSeries/>
+                <CurrentSeries />
                 <AdsComp/>
               </div>
             </div>

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import axios from 'axios';
-import { baseUrl } from 'pages/home';
-import { token } from 'pages/home';
+import { API_ENDPOINT, BASE_URL, TOKEN } from '../../../constants';
 
 const ScoreCard = ({matchId}) => {
 
@@ -12,7 +11,7 @@ const ScoreCard = ({matchId}) => {
 
 
 useEffect(()=>{
-  axios.get(`${baseUrl}/v2/matches/${matchId}/scorecard?token=${token}`)
+  axios.get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.SCORECARD}?token=${TOKEN}`)
   .then((res)=>{
     console.log(res?.data?.response?.innings)
     setScoreCard(res?.data?.response?.innings)

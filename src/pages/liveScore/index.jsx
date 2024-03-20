@@ -7,11 +7,11 @@ import Commentary from './components/Commentary';
 import ScoreCard from './components/ScoreCard';
 import AdsComp from 'components/ads';
 import axios from 'axios';
-import { baseUrl } from 'pages/home';
-import { token } from 'pages/home';
 import {useLocation} from 'react-router-dom';
 import {RWebShare} from 'react-web-share';
 import moment from 'moment';
+import { BASE_URL } from 'constants';
+import { API_ENDPOINT, TOKEN } from '../../constants';
 
 const LiveScorePage = () => {
   const [activeTab, setActiveTab] = useState('commentary');
@@ -25,7 +25,7 @@ const LiveScorePage = () => {
   console.log(matchId);
 
   useEffect(()=>{
-    axios.get(`${baseUrl}/v2/matches/${matchId}/info?token=${token}`)
+    axios.get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.INFO}?token=${TOKEN}`)
     .then((res)=>{
       console.log(res?.data?.response)
       setMatchInfo(res?.data?.response)
@@ -33,7 +33,7 @@ const LiveScorePage = () => {
     })
     .catch((err)=> console.log(err))
 
-    axios.get(`${baseUrl}/v2/matches/${matchId}/live?token=${token}`)
+    axios.get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.LIVE}?token=${TOKEN}`)
     .then((res)=>{
       // setMatchInfo(res?.data?.response)
       setInningNumber(res?.data?.response?.latest_inning_number)

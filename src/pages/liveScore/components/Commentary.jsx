@@ -3,9 +3,8 @@ import fourImg from "assets/img/four.svg";
 import sixImg from "assets/img/six.svg";
 import wicketImg from "assets/img/wicket.svg";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
-import { baseUrl } from "pages/home";
-import { token } from "pages/home";
+import { useLocation } from "react-router-dom"
+import { API_ENDPOINT, BASE_URL, TOKEN } from "../../../constants";
 
 const Commentary = ({ Inning, toss }) => {
   const locate = useLocation();
@@ -25,11 +24,12 @@ const Commentary = ({ Inning, toss }) => {
   const [FilterInning1, setFilterInning1] = useState([]);
   const [FilterInning2, setFilterInning2] = useState([]);
   
-  const ref = useRef({});
+  const batsmenRef = useRef({});
+  const bowlerRef  = useRef({});
 
   const handleLiveApi = () => {
     axios
-      .get(`${baseUrl}/v2/matches/${matchId}/live?token=${token}`)
+      .get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.LIVE}?token=${TOKEN}`)
       .then((res) => {
         console.log("<<<oopppoos>>>>", res?.data?.response);
         setInnings(res?.data?.response);
@@ -40,7 +40,7 @@ const Commentary = ({ Inning, toss }) => {
 
   const handleScoreCardApi = () => {
     axios
-      .get(`${baseUrl}/v2/matches/${matchId}/scorecard?token=${token}`)
+      .get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.SCORECARD}?token=${TOKEN}`)
       .then((res) => {
         console.log(res?.data?.response);
         setLatestInnning(res?.data?.response?.latest_inning_number);
@@ -48,17 +48,15 @@ const Commentary = ({ Inning, toss }) => {
       })
       .catch((err) => console.log(err));
   };
-  const obj = {};
 
 
   const handleCommentryApi = () => {
     axios
       .get(
-        `${baseUrl}/v2/matches/${matchId}/innings/${InningCommentry}/commentary?token=${token}`
+        `${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.INNINGS}/${InningCommentry}/commentary?token=${TOKEN}`
       )
       .then((res) => {
         console.log(res?.data?.response);
-        setLatestInnning(res?.data?.response?.latest_inning_number);
         console.log(
           "res?.data?.response?.commentaries",
           res?.data?.response?.inning?.number
@@ -72,11 +70,22 @@ const Commentary = ({ Inning, toss }) => {
         setCommentary(data);
         res?.data?.response?.inning?.batsmen?.forEach((item)=>{
           console.log('item',item)
-          console.log('test',ref[item.batsman_id])
-          ref[item.batsman_id]=item.name
-          ref[item.runs]= item.run
-          ref[item.balls]=item.balls_faced
-          return ref
+          console.log('test',batsmenRef[item.batsman_id])
+          batsmenRef[item.batsman_id]=item.name
+          batsmenRef[item.runs]= item.run
+          batsmenRef[item.balls]=item.balls_faced
+          return batsmenRef
+        })
+
+
+        res?.data?.response?.inning?.bowlers?.forEach((item)=>{
+          console.log('item',item)
+          bowlerRef[item.bowler_id]=item.name
+          bowlerRef[item.runs_conceded]= item.runs_conceded
+          bowlerRef[item.maidens]=item.maidens
+          bowlerRef[item.overs]=item.overs
+          bowlerRef[item.wickets]=item.wickets
+          return bowlerRef
         })
       })
       .catch((err) => console.log(err));
@@ -85,7 +94,7 @@ const Commentary = ({ Inning, toss }) => {
   const Inning1Api = () => {
     axios
       .get(
-        `${baseUrl}/v2/matches/${matchId}/innings/1/commentary?token=${token}`
+        `${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.INNINGS}/1/${API_ENDPOINT.COMMENTRY}?token=${TOKEN}`
       )
       .then((res) => {
         console.log(res?.data?.response);
@@ -97,7 +106,7 @@ const Commentary = ({ Inning, toss }) => {
   const Inning2Api = () => {
     axios
       .get(
-        `${baseUrl}/v2/matches/${matchId}/innings/2/commentary?token=${token}`
+        `${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.INNINGS}/2/${API_ENDPOINT.COMMENTRY}?token=${TOKEN}`
       )
       .then((res) => {
         console.log(res?.data?.response?.inning?.number);
@@ -108,22 +117,22 @@ const Commentary = ({ Inning, toss }) => {
 
   const handleFilterCommentary = () => {
     if (FilterTabs === "Fours") {
-      const fourDatainning1 = inning1.filter((data) => data.four === true);
-      const fourDatainning2 = inning2.filter((data) => data.four === true);
+      const fourDatainning1 = inning1?.filter((data) => data.four === true);
+      const fourDatainning2 = inning2?.filter((data) => data.four === true);
       console.log("<<<<four>>>>", fourDatainning1, fourDatainning2);
       // setCommentaryFilter(fourDatainning2);
       setFilterInning1(fourDatainning1);
       setFilterInning2(fourDatainning2);
     } else if (FilterTabs === "sixes") {
-      const sixDatainning1 = inning1.filter((data) => data.six === true);
-      const sixDatainning2 = inning2.filter((data) => data.six === true);
+      const sixDatainning1 = inning1?.filter((data) => data.six === true);
+      const sixDatainning2 = inning2?.filter((data) => data.six === true);
       setFilterInning1(sixDatainning1);
       setFilterInning2(sixDatainning2);
     } else if (FilterTabs === "wicket") {
-      const wicketDatainning1 = inning1.filter(
+      const wicketDatainning1 = inning1?.filter(
         (data) => data.event === "wicket"
       );
-      const wicketDatainning2 = inning2.filter(
+      const wicketDatainning2 = inning2?.filter(
         (data) => data.event === "wicket"
       );
       setFilterInning1(wicketDatainning1);
@@ -147,13 +156,14 @@ const Commentary = ({ Inning, toss }) => {
 
   console.log("<<<<<INnning commentry---->", commentary, { InningCommentry });
   console.log("<<INNING1>>>", inning1);
-  console.log("<<INNING2>>>", inning2);
-  console.log('obj',obj)
+  console.log("<<KETSTATS>>>", keyStats);
+  console.log('Innings',Innings)
 
   return (
     <>
       <div className="row g-3 mb-3">
         <div className="xol-xl-7 col-xxl-8">
+          {Innings?.batsmen?.length !== 0 ? 
           <div className="table-responsive">
             <table className="table commonTable">
               <thead>
@@ -180,6 +190,9 @@ const Commentary = ({ Inning, toss }) => {
               </tbody>
             </table>
           </div>
+          : null}
+
+          {Innings?.bowlers?.length !== 0 ? 
           <div className="table-responsive">
             <table className="table commonTable mb-0">
               <thead>
@@ -206,21 +219,31 @@ const Commentary = ({ Inning, toss }) => {
               </tbody>
             </table>
           </div>
+          : null}
         </div>
         <div className="col-xl-5 col-xxl-4">
           <div className="fallOfWickets h-100">
             <div className="title">KEY STATS</div>
+
+            {keyStats?.live_inning?.current_partnership?.runs ?
+           ( 
+            <>
+            {keyStats?.live_inning?.current_partnership?.runs ? 
             <div className="d-flex justify-content-between keyValueDiv">
               <div className="key value text-nowrap">
                 {" "}
                 <span>Partnership :</span>
               </div>
               <div className="value text-end">
-                {keyStats?.live_inning?.current_partnership?.runs}(
-                {keyStats?.live_inning?.current_partnership?.balls})
+                
+               {`${keyStats?.live_inning?.current_partnership?.runs}(`}
+                {`${keyStats?.live_inning?.current_partnership?.balls})`}
               </div>
             </div>
+            : null}
 
+
+            {keyStats?.live_inning?.last_five_overs ?
             <div className="d-flex justify-content-between keyValueDiv">
               <div className="key value text-nowrap">
                 {" "}
@@ -230,7 +253,11 @@ const Commentary = ({ Inning, toss }) => {
                 {keyStats?.live_inning?.last_five_overs}
               </div>
             </div>
+            : null}
 
+
+
+            {keyStats?.live_inning?.last_wicket?.name ? 
             <div className="d-flex justify-content-between keyValueDiv">
               <div className="key value text-nowrap">
                 {" "}
@@ -243,7 +270,9 @@ const Commentary = ({ Inning, toss }) => {
                 {keyStats?.live_inning?.last_wicket?.how_out}
               </div>
             </div>
+            : null}
 
+          {toss ? 
             <div className="d-flex justify-content-between keyValueDiv">
               <div className="key value text-nowrap">
                 {" "}
@@ -251,12 +280,16 @@ const Commentary = ({ Inning, toss }) => {
               </div>
               <div className="value text-end">{toss}</div>
             </div>
-          </div>
+            :null}
+            </>
+          ):  (<h4 className='text-white'>{keyStats?.game_state_str}</h4>)}        
+       </div>
         </div>
         <div className="col-12">
+            {Fows?.length !== 0 ? 
           <div className="fallOfWickets">
             <div className="title">FALL OF WICKETS</div>
-            {latestInning === 1 ? (
+            (latestInning === 1 ? (
               <>
                 {!Fows?.[0] ? null : (
                   <div className="d-flex">
@@ -286,8 +319,9 @@ const Commentary = ({ Inning, toss }) => {
                   </div>
                 )}
               </>
-            )}
+            ))
           </div>
+                : null    }
         </div>
       </div>
       <div className="commentaryTabs">
@@ -407,7 +441,7 @@ const Commentary = ({ Inning, toss }) => {
 
         {FilterTabs === 'All' || FilterTabs === '1st' || FilterTabs === '2nd' ?
           <ul className="list-unstyled m-0 p-0">
-            {commentaryFilter.length === 0 ||
+            {commentaryFilter?.length === 0 ||
               FilterTabs === "1st" || FilterTabs === "2nd"
               ? commentary?.map((item) => {
                 if (item.event === "wicket") {
@@ -430,7 +464,32 @@ const Commentary = ({ Inning, toss }) => {
                       <div className="commentryTxt">{item?.commentary}</div>
                     </li>
                   );
-                } else if (item.event === "overend") {
+                }  else if (item.event === "ball" || item.event === "wicket") {
+                  return (
+                    <li
+                      key={item?.event_id}
+                      className="d-flex align-items-center commentryLine"
+                    >
+                      <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+                        <div className="over">
+                          {item?.over}.{item?.ball}
+                        </div>
+                        {item.event === "wicket" ? (
+                          <div className="run">W</div>
+                        ) : (
+                          <div
+                            className={`run ${item.event === "wicket" ? "bg-danger" : "run"
+                              }`}
+                          >
+                            {item?.run}
+                          </div>
+                        )}
+                      </div>
+                      <div className="commentryTxt">{item?.commentary}</div>
+                    </li>
+                  );
+                }else if (item.event === "overend") {
+                  console.log('overeeee',item)
                   return (
                     <li
                       key={item?.event_id}
@@ -461,47 +520,23 @@ const Commentary = ({ Inning, toss }) => {
                         </div>
                         <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                           <div className="d-flex justify-content-between align-items-center">
-                            <div className="smallTxt">{ref[item?.bats?.[0]?.batsman_id]}</div>
+                            <div className="smallTxt">{batsmenRef[item?.bats?.[0]?.batsman_id]}</div>
                             <div className="bigTxt">{item?.bats?.[0]?.runs}({item?.bats?.[0]?.balls_faced})</div>
                           </div>
                           <div className="d-flex justify-content-between align-items-center">
-                            <div className="smallTxt">{ref[item?.bats?.[1]?.batsman_id]}</div>
-                            <div className="bigTxt">{item?.batsmen?.[1]?.runs}({item?.bowlers?.[1]?.balls_faced})</div>
+                            <div className="smallTxt">{batsmenRef[item?.bats?.[1]?.batsman_id]}</div>
+                            <div className="bigTxt">{item?.bats?.[1]?.runs}({item?.bats?.[1]?.balls_faced})</div>
                           </div>
                         </div>
                         <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                           <div className="smallTxt text-end text-lg-center">
-                          {item?.bowls?.[1]?.runs} Urmila Chatterjee
+                          {bowlerRef[item?.bowls?.[0]?.bowler_id]}
                           </div>
                           <div className="bigTxt text-end text-lg-center">
-                            4-0-22-1
+                          {bowlerRef[item?.bowls?.[0]?.overs]}-{bowlerRef[item?.bowls?.[0]?.maidens]}-{bowlerRef[item?.bowls?.[0]?.runs_conceded]}-{bowlerRef[item?.bowls?.[0]?.wickets]}
                           </div>
                         </div>
                       </div>
-                    </li>
-                  );
-                } else if (item.event === "ball" || item.event === "wicket") {
-                  return (
-                    <li
-                      key={item?.event_id}
-                      className="d-flex align-items-center commentryLine"
-                    >
-                      <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                        <div className="over">
-                          {item?.over}.{item?.ball}
-                        </div>
-                        {item.event === "wicket" ? (
-                          <div className="run">W</div>
-                        ) : (
-                          <div
-                            className={`run ${item.event === "wicket" ? "bg-danger" : "run"
-                              }`}
-                          >
-                            {item?.run}
-                          </div>
-                        )}
-                      </div>
-                      <div className="commentryTxt">{item?.commentary}</div>
                     </li>
                   );
                 }
@@ -558,20 +593,20 @@ const Commentary = ({ Inning, toss }) => {
                         </div>
                         <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                           <div className="d-flex justify-content-between align-items-center">
-                            <div className="smallTxt">Shivani Bishnoi</div>
-                            <div className="bigTxt">5(10)</div>
+                            <div className="smallTxt">{batsmenRef[item?.bats?.[0]?.batsman_id]}</div>
+                            <div className="bigTxt">{item?.bats?.[0]?.runs}({item?.bats?.[0]?.balls_faced})</div>
                           </div>
                           <div className="d-flex justify-content-between align-items-center">
-                            <div className="smallTxt">Maina Narah</div>
-                            <div className="bigTxt">13(16)</div>
+                            <div className="smallTxt">{batsmenRef[item?.bats?.[1]?.batsman_id]}</div>
+                            <div className="bigTxt">{item?.bats?.[1]?.runs}({item?.bats?.[1]?.balls_faced})</div>
                           </div>
                         </div>
                         <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                           <div className="smallTxt text-end text-lg-center">
-                            Urmila Chatterjee
+                          {bowlerRef[item?.bowls?.[0]?.bowler_id]}
                           </div>
                           <div className="bigTxt text-end text-lg-center">
-                            4-0-22-1
+                          {bowlerRef[item?.bowls?.[0]?.overs]}-{bowlerRef[item?.bowls?.[0]?.maidens]}-{bowlerRef[item?.bowls?.[0]?.runs_conceded]}-{bowlerRef[item?.bowls?.[0]?.wickets]}
                           </div>
                         </div>
                       </div>
@@ -644,7 +679,8 @@ const Commentary = ({ Inning, toss }) => {
           </ul>
           :
           <ul className="list-unstyled m-0 p-0">
-            {FilterInning1.map((item) => {
+            {FilterInning1?.length == 0 ? null:
+            (FilterInning1?.map((item) => {
               if (item.four === true) {
                 return (<li
                   key={item?.event_id}
@@ -727,24 +763,25 @@ const Commentary = ({ Inning, toss }) => {
                       </div>
                       <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                         <div className="d-flex justify-content-between align-items-center">
-                          <div className="smallTxt">Shivani Bishnoi</div>
-                          <div className="bigTxt">5(10)</div>
+                          <div className="smallTxt">{batsmenRef[item?.bats?.[0]?.batsman_id]}</div>
+                          <div className="bigTxt">{item?.bats?.[0]?.runs}({item?.bats?.[0]?.balls_faced})</div>
                         </div>
                         <div className="d-flex justify-content-between align-items-center">
-                          <div className="smallTxt">Maina Narah</div>
-                          <div className="bigTxt">13(16)</div>
+                          <div className="smallTxt">{batsmenRef[item?.bats?.[1]?.batsman_id]}</div>
+                          <div className="bigTxt">{item?.bats?.[1]?.runs}({item?.bats?.[1]?.balls_faced})</div>
                         </div>
                       </div>
                       <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                         <div className="smallTxt text-end text-lg-center">
-                          Urmila Chatterjee
+                        {bowlerRef[item?.bowls?.[0]?.bowler_id]}
                         </div>
                         <div className="bigTxt text-end text-lg-center">
-                          4-0-22-1
+                        {bowlerRef[item?.bowls?.[0]?.overs]}-{bowlerRef[item?.bowls?.[0]?.maidens]}-{bowlerRef[item?.bowls?.[0]?.runs_conceded]}-{bowlerRef[item?.bowls?.[0]?.wickets]}
                         </div>
                       </div>
                     </div>
-                  </li>)
+                  </li>
+                )
               } else if (item.event === 'ball' || item.event === 'wicket') {
                 return (<li
                   key={item?.event_id}
@@ -763,11 +800,13 @@ const Commentary = ({ Inning, toss }) => {
                   <div className="commentryTxt">{item?.commentary}</div>
                 </li>)
               }
-            })}
+            }))
+          }
             <div className="">
               <div className="name text-white m-3">2 <sup>nd</sup>Innings</div>
             </div>
-            {FilterInning2.map((item) => {
+            {FilterInning2?.length == 0 ? null : 
+            (FilterInning2?.map((item) => {
               if (item.four === true) {
                 return (<li
                   key={item?.event_id}
@@ -850,24 +889,25 @@ const Commentary = ({ Inning, toss }) => {
                       </div>
                       <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                         <div className="d-flex justify-content-between align-items-center">
-                          <div className="smallTxt">Shivani Bishnoi</div>
-                          <div className="bigTxt">5(10)</div>
+                          <div className="smallTxt">{batsmenRef[item?.bats?.[0]?.batsman_id]}</div>
+                          <div className="bigTxt">{item?.bats?.[0]?.runs}({item?.bats?.[0]?.balls_faced})</div>
                         </div>
                         <div className="d-flex justify-content-between align-items-center">
-                          <div className="smallTxt">Maina Narah</div>
-                          <div className="bigTxt">13(16)</div>
+                          <div className="smallTxt">{batsmenRef[item?.bats?.[1]?.batsman_id]}</div>
+                          <div className="bigTxt">{item?.bats?.[1]?.runs}({item?.bats?.[1]?.balls_faced})</div>
                         </div>
                       </div>
                       <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                         <div className="smallTxt text-end text-lg-center">
-                          Urmila Chatterjee
+                        {bowlerRef[item?.bowls?.[0]?.bowler_id]}
                         </div>
                         <div className="bigTxt text-end text-lg-center">
-                          4-0-22-1
+                        {bowlerRef[item?.bowls?.[0]?.overs]}-{bowlerRef[item?.bowls?.[0]?.maidens]}-{bowlerRef[item?.bowls?.[0]?.runs_conceded]}-{bowlerRef[item?.bowls?.[0]?.wickets]}
                         </div>
                       </div>
                     </div>
-                  </li>);
+                  </li>
+                );
               } else if (item.event === 'ball' || item.event === 'wicket') {
                 return (<li
                   key={item?.event_id}
@@ -886,7 +926,8 @@ const Commentary = ({ Inning, toss }) => {
                   <div className="commentryTxt">{item?.commentary}</div>
                 </li>)
               }
-            })}
+            }))
+          }
           </ul>
         }
       </div>
