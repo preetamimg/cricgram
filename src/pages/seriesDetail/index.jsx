@@ -15,7 +15,7 @@ import { shareUrl } from 'utils/helpers'
 
 const SeriesDetail = () => {
   const [ searchParams,setSearchParams ] = useSearchParams();
-  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "home");
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "Home");
   const location = useLocation()
 
   // useEffect(()=> {
@@ -32,7 +32,7 @@ const SeriesDetail = () => {
   useEffect(()=>{
     searchParams.set('tab', activeTab);
     setSearchParams(searchParams);
-  },[activeTab]);
+  },[activeTab]);//eslint-disable-line
 
   return (
     <>
@@ -55,7 +55,7 @@ const SeriesDetail = () => {
                           <Link to={'/'}>Ranji Trophy</Link>
                         </li>
                         <li>
-                          <Link className='active' to={'/'}>Stats</Link>
+                          <Link className='active' to={'/'}>{activeTab}</Link>
                         </li>
                       </ul>
                     </div>
@@ -71,21 +71,21 @@ const SeriesDetail = () => {
                 </div>
                 
                   <div className="commonTabs mt-2 mb-2 mb-md-3">
-                    <div onClick={()=>setActiveTab('home')} className={`tab ${activeTab === 'home' ? 'active' : ''}`}>home</div>
-                    <div onClick={()=>setActiveTab('fixtures')} className={`tab ${activeTab === 'fixtures' ? 'active' : ''}`}>fixtures</div>
-                    <div onClick={()=>setActiveTab('standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>standings</div>
-                    <div onClick={()=>setActiveTab('stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>stats</div>
-                    <div onClick={()=>setActiveTab('teams')} className={`tab ${activeTab === 'teams' ? 'active' : ''}`}>teams</div>
-                    <div onClick={()=>setActiveTab('squads')} className={`tab ${activeTab === 'squads' ? 'active' : ''}`}>squads</div>
+                    <div onClick={()=>setActiveTab('Home')} className={`tab ${activeTab === 'Home' ? 'active' : ''}`}>home</div>
+                    <div onClick={()=>setActiveTab('Fixtures')} className={`tab ${activeTab === 'Fixtures' ? 'active' : ''}`}>fixtures</div>
+                    <div onClick={()=>setActiveTab('Standings')} className={`tab ${activeTab === 'Standings' ? 'active' : ''}`}>standings</div>
+                    <div onClick={()=>setActiveTab('Stats')} className={`tab ${activeTab === 'Stats' ? 'active' : ''}`}>stats</div>
+                    <div onClick={()=>setActiveTab('Teams')} className={`tab ${activeTab === 'Teams' ? 'active' : ''}`}>teams</div>
+                    <div onClick={()=>setActiveTab('Squads')} className={`tab ${activeTab === 'Squads' ? 'active' : ''}`}>squads</div>
                   </div>
 
                   {
-                    activeTab === 'home' ? <Home /> :
-                    activeTab === 'fixtures' ? <Fixtures/> :
-                    activeTab === 'standings' ? <Standings/> : 
-                    activeTab === 'stats' ? <Stats/> :
-                    activeTab === 'teams' ? <Teams/> : 
-                    activeTab === 'squads' ? <Squads/> : "" 
+                    activeTab === 'Home' ? <Home /> :
+                    activeTab === 'Fixtures' ? <Fixtures/> :
+                    activeTab === 'Standings' ? <Standings/> : 
+                    activeTab === 'Stats' ? <Stats/> :
+                    activeTab === 'Teams' ? <Teams/> : 
+                    activeTab === 'Squads' ? <Squads/> : "" 
                   }
               </div>
               <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
