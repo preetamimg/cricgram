@@ -3,15 +3,15 @@ import playerPoster from "assets/img/playerPlaceholder.webp";
 import batsmanIcon from "assets/img/batsman.svg";
 import allRounderIcon from "assets/img/allRounder.png";
 import bowler from "assets/img/bowler.svg";
+import NoDataFound from "components/noData";
 
 const players = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 const Teams = ({ matchData }) => {
-  console.log({ matchData });
   return (
     <>
       <div className="commonHeading mt-3">PLAYING XI</div>
-      <div className="fallOfWickets my-2">
+      {matchData?.playing11_status===1? <div className="fallOfWickets my-2">
         <div className="row mx-0 playerCardWrapper">
           <div className="col-6 ps-0 pe-md-4">
             <div className="title">{matchData?.teamaname}</div>
@@ -191,7 +191,7 @@ const Teams = ({ matchData }) => {
             </ul>
           </div>
         </div>
-      </div>
+      </div>:<NoDataFound title={"Yet to be announced"} />}
     </>
   );
 };

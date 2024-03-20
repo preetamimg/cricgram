@@ -12,7 +12,6 @@ const commentryOverLoading = [
 const commentryOvers = [1, 1, 1];
 
 const Commentary = ({ matchData }) => {
-  console.log({ matchData });
 
   return matchData.status_str !== "Scheduled" ? (
     <>

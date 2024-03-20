@@ -1,32 +1,43 @@
-import AdsComp from 'components/ads'
-import CurrentSeries from 'components/currentSeries'
-import React, { useEffect, useState } from 'react'
-import shareIcon from 'assets/img/share.svg'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
-import Stats from './components/Stats'
-import Standings from './components/Standings'
-import Home from './components/Home'
-import Fixtures from './components/Fixtures'
-import Teams from './components/Teams'
-import Squads from './components/Squads'
+import React, { useEffect, useState } from 'react';
+import AdsComp from 'components/ads';
+import CurrentSeries from 'components/currentSeries';
+import shareIcon from 'assets/img/share.svg';
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
+import Stats from './components/Stats';
+import Standings from './components/Standings';
+import Home from './components/Home';
+import Fixtures from './components/Fixtures';
+import Teams from './components/Teams';
+import Squads from './components/Squads';
 // import Archives from './components/Archives'
-import ReletedMatch from './components/ReletedMatch'
-import { shareUrl } from 'utils/helpers'
+import ReletedMatch from './components/ReletedMatch';
+import { shareUrl } from 'utils/helpers';
+import { getAPI } from 'utils/services';
+import { API_ROUTES, } from '../../constants';
 
 const SeriesDetail = () => {
   const [ searchParams,setSearchParams ] = useSearchParams();
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "Home");
   const location = useLocation()
+  const { id,seriesName } = useParams();
 
-  // useEffect(()=> {
-  //   if(location.search.includes('standings')) {
-  //     setActiveTab('standings')
-  //   }
-  //   if(location.search.includes('stats')) {
+  const [ seriesData,setSeriesData ] =useState({});
+  const [ matchList,setMatchList ] = useState([]);
 
-  //     setActiveTab('stats')
-  //   }
-  // }, [location]);
+  const getSeriesData =async()=>{
+    try {
+      const res = await getAPI(`${API_ROUTES.SERIES_MATCHES}/${id}`);
+
+      setMatchList(res?.data?.data);
+      setSeriesData(res?.data?.seriesDetails)
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  useEffect(()=>{
+    getSeriesData();
+  },[]);
 
 
   useEffect(()=>{
@@ -36,7 +47,7 @@ const SeriesDetail = () => {
 
   return (
     <>
-      <ReletedMatch/>
+      <ReletedMatch data={matchList} />
       <div className="container-fluid my-4">
           <div className="container px-0">
             <div className="row">
@@ -49,10 +60,10 @@ const SeriesDetail = () => {
                           <Link to={'/'}>Home</Link>
                         </li>
                         <li>
-                          <Link to={'/'}>Domestic Cricket</Link>
+                          <Link to={'/'}>{seriesData?.category}</Link>
                         </li>
                         <li>
-                          <Link to={'/'}>Ranji Trophy</Link>
+                          <Link to={'/'}>{seriesData?.name}</Link>
                         </li>
                         <li>
                           <Link className='active' to={'/'}>{activeTab}</Link>
@@ -65,7 +76,7 @@ const SeriesDetail = () => {
                       </div>
                     </div>
                     <div className="col-12 matchTeams">
-                      Ranji Trophy 2024 Stats
+                      {seriesData?.name} {seriesData?.season} Stats
                     </div>
                   </div>
                 </div>
@@ -80,17 +91,17 @@ const SeriesDetail = () => {
                   </div>
 
                   {
-                    activeTab === 'Home' ? <Home /> :
-                    activeTab === 'Fixtures' ? <Fixtures/> :
-                    activeTab === 'Standings' ? <Standings/> : 
-                    activeTab === 'Stats' ? <Stats/> :
-                    activeTab === 'Teams' ? <Teams/> : 
-                    activeTab === 'Squads' ? <Squads/> : "" 
+                    activeTab === 'Home' ? <Home id={id} tab={activeTab} seriesName={seriesName} /> :
+                    activeTab === 'Fixtures' ? <Fixtures id={id} tab={activeTab} seriesName={seriesName} /> :
+                    activeTab === 'Standings' ? <Standings id={id} tab={activeTab} seriesName={seriesName} /> : 
+                    activeTab === 'Stats' ? <Stats id={id} tab={activeTab} seriesName={seriesName} /> :
+                    activeTab === 'Teams' ? <Teams id={id} tab={activeTab} seriesName={seriesName} /> : 
+                    activeTab === 'Squads' ? <Squads id={id} tab={activeTab} seriesName={seriesName}  /> : "" 
                   }
               </div>
               <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
                 <CurrentSeries/>
-                <AdsComp/>
+                {/* <AdsComp/> */}
               </div>
             </div>
           </div>

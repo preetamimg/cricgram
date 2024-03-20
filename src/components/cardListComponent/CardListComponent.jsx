@@ -11,7 +11,7 @@ const CardListComponent = ({
   loadMoreLoading,
   handleLoadMore,
 }) => {
-  console.log({ loadMoreLoading });
+  
   return !isLoading ? (
     matchListData.length ? (
       <>

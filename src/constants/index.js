@@ -26,7 +26,9 @@ export const RESPONSIVE_WIDTH = {
 
 
 export const API_ROUTES = {
-  GET_MATCHES_DATA:"getMatchData",          // /:category/:status  *required params
-  GET_SERIES_DATA:"getSeriesData",         //?limit=5
-  GET_MATCH_INFO:"getMatchInfo"           //  /:real_matchKey 
+  GET_MATCHES_DATA:"getMatchData",                     // /:category/:status  *required params
+  GET_SERIES_DATA:"getSeriesData",                    //?limit=5
+  GET_MATCH_INFO:"getMatchInfo",                     //  /:real_matchKey
+  SERIES_GET_MATCH_DATA:"/series/getmatchData",      // :series_key
+  SERIES_MATCHES:"series/matches",                    // :series_key
 }

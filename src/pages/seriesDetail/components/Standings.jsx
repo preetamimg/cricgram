@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
-import arrowIcons from 'assets/img/arrow.svg'
+import React, { useEffect, useState } from 'react';
+import arrowIcons from 'assets/img/arrow.svg';
+import { API_ROUTES } from '../../../constants';
+import { getAPI } from 'utils/services';
 
-const Standings = () => {
-  const data = [1,1,1,1,1]
+const Standings = ({ id,tab,seriesName }) => {
+  const [data,setData] = useState([1,2,2,2,2]);
+  const [ isLoading,setIsLoading ] = useState(false);
+  // const data = [1,1,1,1,1]
   const [activeTableIndex, setActiveTableIndex] = useState(null)
 
   const handleTableAccordian = (index)=> {
@@ -12,6 +16,23 @@ const Standings = () => {
       setActiveTableIndex(index)
     }
   }
+
+
+  const getSeriesData =async()=>{
+    setIsLoading(true);
+    try {
+      const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`);
+      setData(res?.data?.data?.[0]?.teams);
+    } catch (error) {
+      console.log({ error });
+    }finally{
+      setIsLoading(false);
+    }
+  }; 
+
+  useEffect(()=>{
+    getSeriesData();
+  },[]);//eslint-disable-line
 
   return (
     <>
@@ -106,13 +127,29 @@ const Standings = () => {
                 </>
               ))
             }
+            {isLoading ?<> <tr>
+              <td colSpan={10} className='tableLoader'></td>
+            </tr>
             <tr>
               <td colSpan={10} className='tableLoader'></td>
             </tr>
+            <tr>
+              <td colSpan={10} className='tableLoader'></td>
+            </tr>
+            <tr>
+              <td colSpan={10} className='tableLoader'></td>
+            </tr>
+            <tr>
+              <td colSpan={10} className='tableLoader'></td>
+            </tr>
+            <tr>
+              <td colSpan={10} className='tableLoader'></td>
+            </tr>
+            </>:null}
           </tbody>
         </table>
       </div>
-      <div className="statsDetailTxt mt-3">Last Updated On 15 Mar 2024, 10:40 IST</div>
+      {/* <div className="statsDetailTxt mt-3">Last Updated On 15 Mar 2024, 10:40 IST</div> */}
       <div className="statsDetailTxt"><span>M:</span> Matches, <span>W:</span> Won, <span>L:</span> Lost, <span>T:</span> Tie, <span>N/R:</span> No Result, <span>PTS:</span> Points, <span>Net RR:</span> Net run rate, <span>Q:</span> Qualified</div>
     </>
   )
