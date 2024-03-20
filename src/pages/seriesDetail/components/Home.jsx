@@ -1,28 +1,64 @@
-import TopRankerCard from 'components/topRankerCard'
-import TopRankerCardLoader from 'components/topRankerCard/Loader'
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import TopRankerCard from 'components/topRankerCard';
+import TopRankerCardLoader from 'components/topRankerCard/Loader';
+import { API_ROUTES } from '../../../constants';
+import { getAPI } from 'utils/services';
 
 
-const Home = () => {
-  const data = [1,1,1,1]
-  
+const Home = ({ id,tab,seriesName }) => {
+  const [data,setData] = useState([1,2,3,4,5,]);
+  const [ isLoading,setIsLoading ] = useState(false);
+
+
+  const getSeriesData =async()=>{
+    setIsLoading(true);
+    try {
+      const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`);
+      console.log({ res }); 
+      // setData(res.data.data[0]);
+    } catch (error) {
+      console.log({ error });
+    }finally{
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(()=>{
+    getSeriesData();
+  },[]);
+
   return (
     <>
       <div className="row g-3">
-        {
+        {!isLoading ?
           data?.map((item)=> (
             <div className="col-6 col-lg-4 col-xl-3">
               <TopRankerCard/>
             </div>
           ))
-        }
-        {
-          data?.map((item)=> (
+        :null}
+        {isLoading ?
+          <>
             <div className="col-6 col-lg-4 col-xl-3">
               <TopRankerCardLoader/>
             </div>
-          ))
-        }
+            <div className="col-6 col-lg-4 col-xl-3">
+              <TopRankerCardLoader/>
+            </div>
+            <div className="col-6 col-lg-4 col-xl-3">
+              <TopRankerCardLoader/>
+            </div>
+            <div className="col-6 col-lg-4 col-xl-3">
+              <TopRankerCardLoader/>
+            </div>
+            <div className="col-6 col-lg-4 col-xl-3">
+              <TopRankerCardLoader/>
+            </div>
+            <div className="col-6 col-lg-4 col-xl-3">
+              <TopRankerCardLoader/>
+            </div>
+          </>
+        :null}
       </div>
     </>
   )

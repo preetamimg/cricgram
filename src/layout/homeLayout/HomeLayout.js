@@ -106,7 +106,6 @@ const HomeLayout = ({ Content }) => {
         `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20`
       );
 
-      console.log({ res });
 
       setMatchListData(res?.data?.data);
       setPageCount(res?.data?.pageCount);
@@ -125,7 +124,6 @@ const HomeLayout = ({ Content }) => {
         `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20`
       );
 
-      console.log({ res });
 
       setMatchListData((prev) => [...prev, ...res.data.data]);
       setPageCount(res?.data?.pageCount);
