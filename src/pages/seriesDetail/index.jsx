@@ -28,8 +28,6 @@ const SeriesDetail = () => {
     try {
       const res = await getAPI(`${API_ROUTES.SERIES_MATCHES}/${id}`);
 
-      console.log({ mainres:res });
-
       setMatchList(res?.data?.data);
       setSeriesData(res?.data?.seriesDetails)
     } catch (error) {

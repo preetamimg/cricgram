@@ -22,7 +22,6 @@ const Squads = ({ id, tab, seriesName }) => {
       const res = await getAPI(
         `${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`
       );
-      console.log({ res });
       setData(res?.data?.data?.[0]?.Squads);
     } catch (error) {
       console.log({ error });

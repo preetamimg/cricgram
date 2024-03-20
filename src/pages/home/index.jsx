@@ -97,8 +97,6 @@ const Home = () => {
         `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20`
       );
 
-      console.log({ res });
-
       setMatchListData(res?.data?.data);
       setPageCount(res?.data?.pageCount);
     } catch (error) {
@@ -115,8 +113,6 @@ const Home = () => {
       const res = await getAPI(
         `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20`
       );
-
-      console.log({ res });
 
       setMatchListData((prev) => [...prev, ...res.data.data]);
       setPageCount(res?.data?.pageCount);
@@ -349,7 +345,7 @@ const Home = () => {
                           onClick={handleLoadMore}
                         >
                           Load more
-                        </div>:<div style={{ color: "white" }}>Loading.....{ console.log("FIIIIIIIIIk") }</div>}
+                        </div>:<div style={{ color: "white" }}>Loading.....</div>}
                       </div>
                     )}
                   </>

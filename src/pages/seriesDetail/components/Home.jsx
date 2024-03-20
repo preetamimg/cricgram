@@ -14,7 +14,6 @@ const Home = ({ id,tab,seriesName }) => {
     setIsLoading(true);
     try {
       const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`);
-      console.log({ res }); 
       // setData(res.data.data[0]);
     } catch (error) {
       console.log({ error });

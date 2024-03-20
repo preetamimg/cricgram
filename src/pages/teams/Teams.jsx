@@ -8,7 +8,6 @@ import NoDataFound from "components/noData";
 const players = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 const Teams = ({ matchData }) => {
-  console.log({ matchData });
   return (
     <>
       <div className="commonHeading mt-3">PLAYING XI</div>

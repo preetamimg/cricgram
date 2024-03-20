@@ -37,7 +37,7 @@ const MatchDetailsLayout = ({ Content }) => {
     setIsLoading(true);
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO}/${id}`);
-      console.log({ res });
+      
       setMatchData(res.data.data[0]);
     } catch (error) {
       console.log({ error });
