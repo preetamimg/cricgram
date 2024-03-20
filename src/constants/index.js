@@ -12,6 +12,7 @@ export const ROUTE_CONST = {
   // RESULT:"/result",
   PLAYER_DETAIL: '/player',
   CRICKET_SERIES: '/cricket-series',
+  PRIVACY_POLICY: '/privacy-policy'
 }
 
 

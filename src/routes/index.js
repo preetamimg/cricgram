@@ -16,6 +16,7 @@ import ScoreCard from 'pages/scoreCard/ScoreCard';
 import Overs from 'pages/overs/Overs';
 import Teams from 'pages/teams/Teams';
 import PageNotFound from 'pages/pageNotFound';
+import PrivacyPolicy from 'pages/privacyPolicy';
 
 const RouteComponent = () => {
   return (
@@ -37,6 +38,7 @@ const RouteComponent = () => {
 
         <Route path={`${ROUTE_CONST.CRICKET_SERIES}/:id/:seriesName`} element={<AppLayout LayoutComponent={SeriesDetail}/>}/>
         <Route path={'*'} element={<PageNotFound/>}/>
+        <Route path={ROUTE_CONST.PRIVACY_POLICY} element={<AppLayout LayoutComponent={PrivacyPolicy}/>}/>
       </Routes>
     </>
   )
