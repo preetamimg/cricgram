@@ -1,4 +1,3 @@
-import Standings from "seriesDetail/components/Standings";
 
 
 export const ROUTE_CONST = {
@@ -24,6 +23,7 @@ export  const API_ENDPOINT = {
  STATS:'stats',
  STANDINGS:'standings',
  TEAMS:'teams',
- SQUADS:'squads'
+ SQUADS:'squads',
+ PLAYERS:'players',
 }
 

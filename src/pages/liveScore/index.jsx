@@ -7,7 +7,7 @@ import Commentary from './components/Commentary';
 import ScoreCard from './components/ScoreCard';
 import AdsComp from 'components/ads';
 import axios from 'axios';
-import {useLocation} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {RWebShare} from 'react-web-share';
 import moment from 'moment';
 import { BASE_URL } from 'constants';
@@ -19,13 +19,10 @@ const LiveScorePage = () => {
   const [InningNumber,setInningNumber] = useState(1);
   const [liveScore,setLiveScore]= useState({});
 
-
-  const locate = useLocation();
-  const matchId=  locate?.state;
-  console.log(matchId);
+  const {mid} = useParams();
 
   useEffect(()=>{
-    axios.get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.INFO}?token=${TOKEN}`)
+    axios.get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.INFO}?token=${TOKEN}`)
     .then((res)=>{
       console.log(res?.data?.response)
       setMatchInfo(res?.data?.response)
@@ -33,7 +30,7 @@ const LiveScorePage = () => {
     })
     .catch((err)=> console.log(err))
 
-    axios.get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.LIVE}?token=${TOKEN}`)
+    axios.get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.LIVE}?token=${TOKEN}`)
     .then((res)=>{
       // setMatchInfo(res?.data?.response)
       setInningNumber(res?.data?.response?.latest_inning_number)
@@ -159,8 +156,8 @@ console.log('<<<LIveScore>>>>',liveScore)
                   <div onClick={()=>setActiveTab('result')} className={`tab ${activeTab === 'result' ? 'active' : ''}`}>result</div>
                 </div>
                 {
-                  activeTab === 'commentary' ? <Commentary Inning={InningNumber} matchId={matchId} toss={MatchInfo?.toss?.text}/> : 
-                  activeTab === 'scoreCard' ? <ScoreCard   matchId={matchId}/> : ''
+                  activeTab === 'commentary' ? <Commentary Inning={InningNumber} matchId={mid} toss={MatchInfo?.toss?.text}/> : 
+                  activeTab === 'scoreCard' ? <ScoreCard   matchId={mid}/> : ''
 
                 }
 

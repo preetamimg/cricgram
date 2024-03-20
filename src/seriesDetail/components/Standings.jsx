@@ -38,7 +38,7 @@ const Standings = () => {
       
       <div className="commonHeading mb-1">POINTS TABLE</div>
       <div className="commonHeading text-capitalize">{standing?.[0]?.round?.name}</div>
-      {standing?.[0]?.length > 0 ?
+      {standing.length > 0 ?
       <div className="table-responsive">
         <table className='table commonTable mb-0'>
           <thead>

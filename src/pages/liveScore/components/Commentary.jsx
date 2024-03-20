@@ -3,13 +3,12 @@ import fourImg from "assets/img/four.svg";
 import sixImg from "assets/img/six.svg";
 import wicketImg from "assets/img/wicket.svg";
 import axios from "axios";
-import { useLocation } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { API_ENDPOINT, BASE_URL, TOKEN } from "../../../constants";
 
 const Commentary = ({ Inning, toss }) => {
-  const locate = useLocation();
-  const matchId = locate?.state;
-  console.log(matchId);
+  
+  const {mid} = useParams();
 
   const [commentary, setCommentary] = useState([]);
   const [Innings, setInnings] = useState([]);
@@ -29,7 +28,7 @@ const Commentary = ({ Inning, toss }) => {
 
   const handleLiveApi = () => {
     axios
-      .get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.LIVE}?token=${TOKEN}`)
+      .get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.LIVE}?token=${TOKEN}`)
       .then((res) => {
         console.log("<<<oopppoos>>>>", res?.data?.response);
         setInnings(res?.data?.response);
@@ -40,7 +39,7 @@ const Commentary = ({ Inning, toss }) => {
 
   const handleScoreCardApi = () => {
     axios
-      .get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.SCORECARD}?token=${TOKEN}`)
+      .get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.SCORECARD}?token=${TOKEN}`)
       .then((res) => {
         console.log(res?.data?.response);
         setLatestInnning(res?.data?.response?.latest_inning_number);
@@ -53,7 +52,7 @@ const Commentary = ({ Inning, toss }) => {
   const handleCommentryApi = () => {
     axios
       .get(
-        `${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.INNINGS}/${InningCommentry}/commentary?token=${TOKEN}`
+        `${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.INNINGS}/${InningCommentry}/commentary?token=${TOKEN}`
       )
       .then((res) => {
         console.log(res?.data?.response);
@@ -94,7 +93,7 @@ const Commentary = ({ Inning, toss }) => {
   const Inning1Api = () => {
     axios
       .get(
-        `${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.INNINGS}/1/${API_ENDPOINT.COMMENTRY}?token=${TOKEN}`
+        `${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.INNINGS}/1/${API_ENDPOINT.COMMENTRY}?token=${TOKEN}`
       )
       .then((res) => {
         console.log(res?.data?.response);
@@ -106,7 +105,7 @@ const Commentary = ({ Inning, toss }) => {
   const Inning2Api = () => {
     axios
       .get(
-        `${BASE_URL}${API_ENDPOINT.MATCHES}/${matchId}/${API_ENDPOINT.INNINGS}/2/${API_ENDPOINT.COMMENTRY}?token=${TOKEN}`
+        `${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.INNINGS}/2/${API_ENDPOINT.COMMENTRY}?token=${TOKEN}`
       )
       .then((res) => {
         console.log(res?.data?.response?.inning?.number);

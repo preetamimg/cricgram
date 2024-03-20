@@ -73,6 +73,8 @@ TeamSquads()
             </Dropdown>
           </div>
       </div>
+      {selectedSquad ?  
+      <div>
               <div className="commonHeading">WICKET KEEPER</div>
               <div className="row g-3 mb-4">
             {wicketKeeper?.players?.map((item)=> {
@@ -129,6 +131,9 @@ TeamSquads()
               }
              })}
               </div>
+
+              </div>
+              : <h4 className='text-white text-center'>Please Select Your Team</h4>}
               </>
         
      

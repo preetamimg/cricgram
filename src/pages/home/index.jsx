@@ -76,7 +76,7 @@ const series = [
 
 const Home = () => {
   const [category, setCategory] = useState('live');
-  const [subCategory, setSubCategory] = useState('international');
+  const [subCategory, setSubCategory] = useState('');
   const [DataSubCategory, setDataSubCategory] = useState([]);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [selectedTeam, setSelectedTeam] = useState('');
@@ -102,7 +102,7 @@ const Home = () => {
     })
     .catch((err)=>console.log(err))
     
-  },[status,page])
+  },[status,page,category])
   
   const handleMatches=(category)=>{
     console.log(subCategory)
@@ -110,7 +110,7 @@ const Home = () => {
   }
 
 
-  console.log('<<<<Matches>>>>>',matches,subCategory)
+  console.log('<<<<Matches>>>>>',matches,subCategory,category)
   return (
     <>
       <HeroBanner/>
@@ -261,9 +261,9 @@ const Home = () => {
                     ))
                     )
                   :
-                  <h1>
+                  <h4 className='text-white text-center'>
                     NO MATCHES FOUND!!
-                  </h1>}
+                  </h4>}
                 </div>
                   {/* pagination */}
         <div className='pagination'>

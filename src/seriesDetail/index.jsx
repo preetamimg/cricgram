@@ -1,38 +1,49 @@
-import AdsComp from 'components/ads'
-import CurrentSeries from 'components/currentSeries'
-import React, { useEffect, useState } from 'react'
-import shareIcon from 'assets/img/share.svg'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
-import Stats from './components/Stats'
-import Standings from './components/Standings'
-import Home from './components/Home'
-import Fixtures from './components/Fixtures'
-import Teams from './components/Teams'
-import Squads from './components/Squads'
-import Archives from './components/Archives'
-import ReletedMatch from './components/ReletedMatch'
+import AdsComp from 'components/ads';
+import CurrentSeries from 'components/currentSeries';
+import React, { useEffect, useState } from 'react';
+import shareIcon from 'assets/img/share.svg';
+import { Link, useSearchParams } from 'react-router-dom';
+import Stats from './components/Stats';
+import Standings from './components/Standings';
+import Home from './components/Home';
+import Fixtures from './components/Fixtures';
+import Teams from './components/Teams';
+import Squads from './components/Squads';
+import {RWebShare} from 'react-web-share';
+import Archives from './components/Archives';
+import ReletedMatch from './components/ReletedMatch';
+import axios from 'axios';
+import { BASE_URL } from 'constants';
+import { API_ENDPOINT, TOKEN } from '../constants';
+import {useParams} from 'react-router-dom';
 
 const SeriesDetail = () => {
   const [ searchParams,setSearchParams ] = useSearchParams();
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "home");
-  const location = useLocation();
+  const [SeriesTitle,setSeriesTitle]= useState({});
+  // const locate = useLocation();
+
+  const {cid} = useParams();
   
 
-  // useEffect(()=> {
-  //   if(location.search.includes('standings')) {
-  //     setActiveTab('standings')
-  //   }
-  //   if(location.search.includes('stats')) {
-
-  //     setActiveTab('stats')
-  //   }
-  // }, [location]);
+  const SeriesInfoAPi=()=>{
+    axios.get(`${BASE_URL}${API_ENDPOINT.COMPETITIONS}/${cid}?token=${TOKEN}`)
+    .then((res)=>{
+      console.log(res?.data?.response)
+      setSeriesTitle(res.data?.response)
+    })
+    .catch((err)=>console.log(err))
+  }
 
 
   useEffect(()=>{
     searchParams.set('tab', activeTab);
     setSearchParams(searchParams);
+    SeriesInfoAPi();
   },[activeTab]);
+
+
+  console.log('<<<<SeriesTitle>>>',SeriesTitle)
 
   return (
     <>
@@ -49,34 +60,40 @@ const SeriesDetail = () => {
                           <Link to={'/'}>Home</Link>
                         </li>
                         <li>
-                          <Link to={'/'}>Domestic Cricket</Link>
+                          <Link to={'/'}>{SeriesTitle?.game_format}</Link>
                         </li>
                         <li>
-                          <Link to={'/'}>Ranji Trophy</Link>
+                          <Link to={'/'}>{SeriesTitle?.title}</Link>
                         </li>
                         <li>
-                          <Link className='active' to={'/'}>Stats</Link>
+                          <Link className='active' to={'/'}>{activeTab}</Link>
                         </li>
                       </ul>
                     </div>
                     <div className="col-2 d-flex justify-content-end">
                       <div className="shareBtn">
-                        <img src={shareIcon} alt="" />
+                      <RWebShare 
+                      data={{text:'Share Match Details'
+                      ,url:'/',
+                      title:'CRICGRAM'}}
+                      >
+                      <img src={shareIcon} alt="" />
+                      </RWebShare>
                       </div>
                     </div>
                     <div className="col-12 matchTeams">
-                      Ranji Trophy 2024 Stats
+                    {SeriesTitle?.title}
                     </div>
                   </div>
                 </div>
                 
                   <div className="commonTabs mt-2 mb-2 mb-md-3">
-                    <div onClick={()=>setActiveTab('home')} className={`tab ${activeTab === 'home' ? 'active' : ''}`}>home</div>
-                    <div onClick={()=>setActiveTab('fixtures')} className={`tab ${activeTab === 'fixtures' ? 'active' : ''}`}>fixtures</div>
-                    <div onClick={()=>setActiveTab('standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>standings</div>
-                    <div onClick={()=>setActiveTab('stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>stats</div>
-                    <div onClick={()=>setActiveTab('teams')} className={`tab ${activeTab === 'teams' ? 'active' : ''}`}>teams</div>
-                    <div onClick={()=>setActiveTab('squads')} className={`tab ${activeTab === 'squads' ? 'active' : ''}`}>squads</div>
+                    <div onClick={()=>setActiveTab('home')} className={`tab ${activeTab === 'home' ? 'active' : ''}`}>Home</div>
+                    <div onClick={()=>setActiveTab('fixtures')} className={`tab ${activeTab === 'fixtures' ? 'active' : ''}`}>Fixtures</div>
+                    <div onClick={()=>setActiveTab('standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>Standings</div>
+                    <div onClick={()=>setActiveTab('stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>Stats</div>
+                    <div onClick={()=>setActiveTab('teams')} className={`tab ${activeTab === 'teams' ? 'active' : ''}`}>Teams</div>
+                    <div onClick={()=>setActiveTab('squads')} className={`tab ${activeTab === 'squads' ? 'active' : ''}`}>Squads</div>
                   </div>
 
                   {
