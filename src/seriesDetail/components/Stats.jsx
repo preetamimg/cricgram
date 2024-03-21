@@ -1,7 +1,10 @@
 import StatsTable from 'components/statsTable'
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useParams,Link } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown';
+import axios from 'axios';
+import { BASE_URL } from 'constants';
+import { API_ENDPOINT, TOKEN } from '../../constants';
 
 const battingStats = [
   {
@@ -142,13 +145,29 @@ const teamStats = [
   }
 ]
 
-const Stats = () => {
+const Stats = ({ show ,setShow }) => {
   const [selectedStat, setSelectedStat] = useState(battingStats?.[0]?.name)
-  const [show, setShow] = useState(false)
 
-  const handleClick = ()=> {
-    setShow(true)
+  const {cid} = useParams();
+  const [stats,setStats] = useState([]);
+  const [statsType,setStatsType]=useState('');
+
+  const handleStatsApi =()=>{
+    axios.get(`${BASE_URL}${API_ENDPOINT.COMPETITIONS}/${cid}/${API_ENDPOINT.STATS}?token=${TOKEN}`)
+    .then((res)=>{
+      console.log(res)
+      setStats(res?.data?.response?.stat_types)
+    })
+    .catch((err)=>console.log(err))
   }
+
+ 
+
+  useEffect(()=>{
+    handleStatsApi()
+  },[])
+
+
   return (
     <>
     {
@@ -159,30 +178,132 @@ const Stats = () => {
           <div className="statsHeading">Batting Stats</div>  
           <div className="statsData">
             <ul className="listUnstyled m-0 p-0">
-              {
-                battingStats?.map((item)=> (
-                  <li key={item?.id} onClick={handleClick}>
-                    {/* <Link className='statsLink' to={item?.url}>{item?.name}</Link> */}
-                    <div className='statsLink'>{item?.name}</div>
+                  <li key={stats?.[0]?.id} onClick={()=>{
+                    setStatsType('batting_highest_average')
+                    setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_highest_average}</div>
+                    </li>
+                    <li onClick={()=>{
+                      setStatsType('batting_highest_strikerate')
+                      setShow(true)
+                      }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_highest_strikerate}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('batting_highest_strikerate_innings')
+                      setShow(true)
+                      }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_highest_strikerate_innings}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('batting_most_run4')
+                      setShow(true)
+                      }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_most_run4}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('batting_most_run4_innings')
+                      setShow(true)
+                      }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_most_run4_innings}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('batting_most_run6')
+                      setShow(true)
+                      }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_most_run6}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('batting_most_run6_innings')
+                      setShow(true)}}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_most_run6_innings}</div></li>
+
+                    <li onClick={()=>{
+                      setStatsType('batting_most_run50')
+                      setShow(true)
+                      }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_most_run50}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('batting_most_run100')
+                      setShow(true)
+                      }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_most_run100}</div>
+                    </li>
+                    <li onClick={()=>{
+                      setStatsType('batting_most_runs')
+                      setShow(true)
+                      }}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_most_runs}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('batting_most_runs_innings')
+                      setShow(true)}}>
+                    <div className='statsLink'>{stats?.[0]?.types?.batting_most_runs_innings}</div>
                   </li>
-                ))
-              }
             </ul>
+              
+              
           </div>
         </div>
         
         <div className="col-md-4 statsCard">
           <div className="statsHeading">Bowling Stats</div>  
           <div className="statsData">
-            <ul className="listUnstyled m-0 p-0">
-              {
-                bowlingStats?.map((item)=> (
-                  <li key={item?.id} onClick={handleClick}>
-                    {/* <Link className='statsLink' to={item?.url}>{item?.name}</Link> */}
-                    <div className='statsLink'>{item?.name}</div>
+          <ul className="listUnstyled m-0 p-0">
+                  <li key={stats?.[1]?.id} onClick={()=>{
+                    setStatsType('bowling_best_averages')
+                    setShow(true)
+                  }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_best_averages}</div>
+                    </li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_best_bowling_figures')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_best_bowling_figures}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_best_economy_rates')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_best_economy_rates}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_best_economy_rates_innings')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_best_economy_rates_innings}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_best_strike_rates')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_best_strike_rates}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_best_strike_rates_innings')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_best_strike_rates_innings}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_five_wickets')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_five_wickets}</div></li>
+
+                    <li onClick={()=>{
+                      setStatsType('bowling_four_wickets')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_four_wickets}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_maidens')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_maidens}</div>
+                    </li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_most_runs_conceded_innings')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_most_runs_conceded_innings}</div></li>
+                    <li onClick={()=>{
+                      setStatsType('bowling_top_wicket_takers')
+                      setShow(true)
+                    }}>
+                    <div className='statsLink'>{stats?.[1]?.types?.bowling_top_wicket_takers}</div>
                   </li>
-                ))
-              }
             </ul>
           </div>
         </div>
@@ -191,46 +312,45 @@ const Stats = () => {
           <div className="statsHeading">Team Stats</div>  
           <div className="statsData">
             <ul className="listUnstyled m-0 p-0">
-              {
-                teamStats?.map((item)=> (
-                  <li key={item?.id} onClick={handleClick}>
-                    {/* <Link className='statsLink' to={item?.url}>{item?.name}</Link> */}
-                    <div className='statsLink'>{item?.name}</div>
+             
+                    <li onClick={()=>{
+                      setShow(true)
+                      setStatsType('team_total_run50')
+                    }}>
+                     <div className='statsLink'>{stats?.[2]?.types?.team_total_run50}</div>
+                     </li>
+                     <li onClick={()=>{
+                      setShow(show)
+                      setStatsType('team_total_run100')
+                     }}>
+                     <div className='statsLink'>{stats?.[2]?.types?.team_total_run100}</div></li>
+                     <li onClick={()=>{
+                      setShow(show)
+                      setStatsType('team_total_runs')
+                     }}>
+                     <div className='statsLink'>{stats?.[2]?.types?.team_total_runs}</div>
+                     </li>
+                     <li onClick={()=>{
+                      setShow(show)
+                      setStatsType('team_total_wickets')
+                     }}>
+                     <div className='statsLink'>{stats?.[2]?.types?.team_total_wickets}</div>
                   </li>
-                ))
-              }
-            </ul>
-          </div>
-        </div>
+                
+               
+             </ul>
+           </div> 
+         </div> 
       </div>
       </> :
       <>
       
-      <div className="row align-items-center mt-3 mb-2 mb-sm-3">
-        <div className="col-sm">
-          <div className="commonHeading mb-0">RANJI TROPHY MOST RUNS</div>
-        </div>
-        <div className="col-md col-sm-6 customDropdown lightMode mt-2 mt-sm-0">
-          <Dropdown>
-            <Dropdown.Toggle id="venue">
-              <div className="innerTxt">
-                {selectedStat}
-              </div>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-                {
-                  battingStats?.map((item)=> (
-                    <Dropdown.Item as="button" onClick={()=>setSelectedStat(item?.name)} className={`dropdownItem ${selectedStat?.trim()?.toLowerCase() === item?.name?.trim()?.toLowerCase() ? 'active' : ''}`} key={item?.id}>
-                      {item?.name}
-                    </Dropdown.Item>
-                  ))
-                }
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-      </div>
-
-      <StatsTable/>
+        
+      <StatsTable
+    statTypes = {statsType}
+      />
+      
+      
       </>
     }
 

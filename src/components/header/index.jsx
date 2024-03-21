@@ -8,7 +8,7 @@ const Header = () => {
   const navLinks = [
     {
       id: 'nav1',
-      name: 'fantasy cricket',
+      name: 'Live Score',
       url: '/'
     },
     {
@@ -16,16 +16,7 @@ const Header = () => {
       name: 'cricket news',
       url: '/'
     },
-    {
-      id: 'nav3',
-      name: 'players',
-      url: '/'
-    },
-    {
-      id: 'nav4',
-      name: 'fantasy apps',
-      url: '/'
-    }
+    
   ]
   return (
     <>

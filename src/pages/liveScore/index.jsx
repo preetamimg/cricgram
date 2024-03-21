@@ -103,8 +103,8 @@ console.log('<<<LIveScore>>>>',liveScore)
                       <tbody>
                         <tr>
                           <td className='ps-0'>
-                            <div className="flex align-items-center teamName">
-                              <img src={MatchInfo?.teama?.logo_url} alt="" />
+                            <div className="flex align-items-center teamName rounded-circle overflow-hidden" style={{height: '40px', width: '40px'}}>
+                              <img className='h-100 w-100 object-fit-cover' src={MatchInfo?.teama?.logo_url} alt="" />
                             </div>
                           </td>
                           <td className='ps-0'>
@@ -118,8 +118,8 @@ console.log('<<<LIveScore>>>>',liveScore)
                         </tr>
                         <tr>
                           <td className='ps-0'>
-                            <div className="flex align-items-center teamName">
-                              <img src={MatchInfo?.teamb?.logo_url} alt="" />
+                            <div className="flex align-items-center teamName rounded-circle overflow-hidden" style={{height: '40px', width: '40px'}}>
+                              <img className='h-100 w-100 object-fit-cover' src={MatchInfo?.teamb?.logo_url} alt="" />
                             </div>
                           </td>
                           <td className='ps-0'>

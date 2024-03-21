@@ -1,4 +1,4 @@
-import { ROUTE_CONST } from 'constants';
+import { ROUTE_CONST } from '../../constants';
 import moment from 'moment';
 import React from 'react';
 import { useNavigate} from 'react-router-dom';
@@ -7,6 +7,8 @@ import { useNavigate} from 'react-router-dom';
 const MatchCard = ({
   key,
   ID,
+  title,
+  Cid,
   live,
   match,
   StartDate,
@@ -30,7 +32,7 @@ const MatchCard = ({
   return (
     <>
       <div className="col">
-        <div className="matchCard" onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORE}/${ID}`)}>
+        <div className="matchCard" onClick={()=>navigate(`${ROUTE_CONST.LIVE_SCORE}/${ID}/${title}/${Cid}`)}>
           <div className="row mx-0 gx-0">
             {/* live, notLive, lunch */}
             <div className="col-12 matchStatus live">{live}</div>

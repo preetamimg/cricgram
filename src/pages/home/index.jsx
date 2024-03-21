@@ -76,7 +76,7 @@ const series = [
 
 const Home = () => {
   const [category, setCategory] = useState('live');
-  const [subCategory, setSubCategory] = useState('');
+  const [subCategory, setSubCategory] = useState('international');
   const [DataSubCategory, setDataSubCategory] = useState([]);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [selectedTeam, setSelectedTeam] = useState('');
@@ -240,8 +240,10 @@ const Home = () => {
                   (matches?.map((item)=>(
                       <MatchCard
                       key={item?.match_id}
+                      Cid={item?.competition?.cid}
                       ID={item?.match_id}
                       live={item?.live}
+                      title={item?.title}
                       match={item?.subtitle}
                       StartDate={item?.date_start_ist}
                       endDate={item?.date_end_ist}

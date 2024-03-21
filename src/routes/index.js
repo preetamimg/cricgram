@@ -12,9 +12,9 @@ const RouteComponent = () => {
     <>
       <Routes>
         <Route path={ROUTE_CONST.HOME_PAGE} element={<AppLayout Component={Home}/>}/>
-        <Route path={`${ROUTE_CONST.LIVE_SCORE}/:mid`} element={<AppLayout Component={LiveScorePage}/>}/>
+        <Route path={`${ROUTE_CONST.LIVE_SCORE}/:mid/:matchtitle/:Cid`} element={<AppLayout Component={LiveScorePage}/>}/>
         <Route path={ROUTE_CONST.PLAYER_DETAIL} element={<AppLayout Component={PlayerDetail}/>}/>
-        <Route path={`${ROUTE_CONST.SERIES_DETAIL}/:cid`} element={<AppLayout Component={SeriesDetail}/>}/>
+        <Route path={`${ROUTE_CONST.SERIES_DETAIL}/:cid/:competitiontitle`} element={<AppLayout Component={SeriesDetail}/>}/>
       </Routes>
     </>
   )

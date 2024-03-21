@@ -14,7 +14,7 @@ import Archives from './components/Archives';
 import ReletedMatch from './components/ReletedMatch';
 import axios from 'axios';
 import { BASE_URL } from 'constants';
-import { API_ENDPOINT, TOKEN } from '../constants';
+import { API_ENDPOINT, ROUTE_CONST, TOKEN } from '../constants';
 import {useParams} from 'react-router-dom';
 
 const SeriesDetail = () => {
@@ -22,7 +22,7 @@ const SeriesDetail = () => {
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "home");
   const [SeriesTitle,setSeriesTitle]= useState({});
   // const locate = useLocation();
-
+  const [show, setShow] = useState(false);
   const {cid} = useParams();
   
 
@@ -57,7 +57,7 @@ const SeriesDetail = () => {
                     <div className="col-10 matchBreadcrum">
                       <ul className="list-unstyled m-0 p-0">
                         <li>
-                          <Link to={'/'}>Home</Link>
+                          <Link to={ROUTE_CONST.HOME_PAGE}>Home</Link>
                         </li>
                         <li>
                           <Link to={'/'}>{SeriesTitle?.game_format}</Link>
@@ -91,7 +91,13 @@ const SeriesDetail = () => {
                     <div onClick={()=>setActiveTab('home')} className={`tab ${activeTab === 'home' ? 'active' : ''}`}>Home</div>
                     <div onClick={()=>setActiveTab('fixtures')} className={`tab ${activeTab === 'fixtures' ? 'active' : ''}`}>Fixtures</div>
                     <div onClick={()=>setActiveTab('standings')} className={`tab ${activeTab === 'standings' ? 'active' : ''}`}>Standings</div>
-                    <div onClick={()=>setActiveTab('stats')} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>Stats</div>
+                    <div onClick={()=>setActiveTab((prev)=>{
+                     if(prev==="stats"){
+                      setShow(false)
+                      return 'stats'
+                     }
+                     return 'stats'
+                      })} className={`tab ${activeTab === 'stats' ? 'active' : ''}`}>Stats</div>
                     <div onClick={()=>setActiveTab('teams')} className={`tab ${activeTab === 'teams' ? 'active' : ''}`}>Teams</div>
                     <div onClick={()=>setActiveTab('squads')} className={`tab ${activeTab === 'squads' ? 'active' : ''}`}>Squads</div>
                   </div>
@@ -100,7 +106,7 @@ const SeriesDetail = () => {
                     activeTab === 'home' ? <Home/> :
                     activeTab === 'fixtures' ? <Fixtures/> :
                     activeTab === 'standings' ? <Standings/> : 
-                    activeTab === 'stats' ? <Stats/> :
+                    activeTab === 'stats' ? <Stats show={show} setShow={setShow} /> :
                     activeTab === 'teams' ? <Teams/> : 
                     activeTab === 'squads' ? <Squads/> : 
                     activeTab === 'archives' ? <Archives/> : ''

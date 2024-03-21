@@ -35,7 +35,7 @@ const CurrentSeries = () => {
       <div className="row g-2" >
         {
           series?.map((item)=> (
-            <div className="col-12" key={item?.cid} onClick={()=>navigate(`${ROUTE_CONST.SERIES_DETAIL}/${item?.cid}`)}>
+            <div className="col-12" key={item?.cid} onClick={()=>navigate(`${ROUTE_CONST.SERIES_DETAIL}/${item?.cid}/${item?.title}`)}> 
               <div className="currentSeriesCard">
                 <span>{item?.title}</span>
                 <img src={arrowIcon} alt="" />

@@ -32,7 +32,7 @@ const ReletedMatch = () => {
  
   return (
     <>
-      <div className="container-fluid relatedMatchesSlider">
+      <div className="container-fluid relatedMatchesSlider mt-5">
         <div className="container px-0 position-relative">
           <Swiper 
             navigation={{
@@ -74,7 +74,7 @@ const ReletedMatch = () => {
                    live={item?.live}
                    match={item?.match_number}
                    StartDate={item?.date_start}
-                   endDate={item?.date_endt}
+                   endDate={item?.date_end_ist}
                    venue={item?.venue?.location}
                    stadium={item?.venue?.name}
                    teamALogo={item?.teama?.logo_url}

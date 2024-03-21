@@ -11,7 +11,7 @@ const Commentary = ({ Inning, toss }) => {
   const {mid} = useParams();
 
   const [commentary, setCommentary] = useState([]);
-  const [Innings, setInnings] = useState([]);
+  const [Innings, setInnings] = useState(0);
   const [keyStats, setKeyStats] = useState([]);
   const [Fows, setFows] = useState([]);
   const [InningCommentry, setInningCommentry] = useState(1);
@@ -20,6 +20,7 @@ const Commentary = ({ Inning, toss }) => {
   const [latestInning, setLatestInnning] = useState(0);
   const [inning1, setInning1] = useState([]);
   const [inning2, setInning2] = useState([]);
+  const [table,setTable]= useState([]);
   const [FilterInning1, setFilterInning1] = useState([]);
   const [FilterInning2, setFilterInning2] = useState([]);
   
@@ -31,7 +32,8 @@ const Commentary = ({ Inning, toss }) => {
       .get(`${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.LIVE}?token=${TOKEN}`)
       .then((res) => {
         console.log("<<<oopppoos>>>>", res?.data?.response);
-        setInnings(res?.data?.response);
+        setInnings(res?.data?.response?.live_inning_number);
+        setTable(res?.data?.response);
         setKeyStats(res?.data?.response);
       })
       .catch((err) => console.log(err));
@@ -52,7 +54,7 @@ const Commentary = ({ Inning, toss }) => {
   const handleCommentryApi = () => {
     axios
       .get(
-        `${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.INNINGS}/${InningCommentry}/commentary?token=${TOKEN}`
+        `${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.INNINGS}/${Inning}/${API_ENDPOINT.COMMENTRY}?token=${TOKEN}`
       )
       .then((res) => {
         console.log(res?.data?.response);
@@ -156,13 +158,13 @@ const Commentary = ({ Inning, toss }) => {
   console.log("<<<<<INnning commentry---->", commentary, { InningCommentry });
   console.log("<<INNING1>>>", inning1);
   console.log("<<KETSTATS>>>", keyStats);
-  console.log('Innings',Innings)
+  console.log('Innings',Innings?.bowlers)
 
   return (
     <>
       <div className="row g-3 mb-3">
         <div className="xol-xl-7 col-xxl-8">
-          {Innings?.batsmen?.length !== 0 ? 
+          {table?.batsmen?.length !== 0 ? 
           <div className="table-responsive">
             <table className="table commonTable">
               <thead>
@@ -176,7 +178,7 @@ const Commentary = ({ Inning, toss }) => {
                 </tr>
               </thead>
               <tbody>
-                {Innings?.batsmen?.map((batsmen) => (
+                {table?.batsmen?.map((batsmen) => (
                   <tr>
                     <td>{batsmen?.name}</td>
                     <td>{batsmen?.runs}</td>
@@ -191,7 +193,7 @@ const Commentary = ({ Inning, toss }) => {
           </div>
           : null}
 
-          {Innings?.bowlers?.length !== 0 ? 
+          {table?.bowlers?.length !== 0 ? 
           <div className="table-responsive">
             <table className="table commonTable mb-0">
               <thead>
@@ -205,7 +207,8 @@ const Commentary = ({ Inning, toss }) => {
                 </tr>
               </thead>
               <tbody>
-                {Innings?.bowlers?.map((bowlers) => (
+                {table?.bowlers?.map((bowlers) => (
+                  
                   <tr>
                     <td>{bowlers?.name}</td>
                     <td>{bowlers?.overs}</td>
@@ -288,7 +291,7 @@ const Commentary = ({ Inning, toss }) => {
             {Fows?.length !== 0 ? 
           <div className="fallOfWickets">
             <div className="title">FALL OF WICKETS</div>
-            (latestInning === 1 ? (
+            {latestInning ? (
               <>
                 {!Fows?.[0] ? null : (
                   <div className="d-flex">
@@ -318,9 +321,9 @@ const Commentary = ({ Inning, toss }) => {
                   </div>
                 )}
               </>
-            ))
+            )}
           </div>
-                : null    }
+                : <h5 className='text-white text-center'>NO FALL DOWNS</h5>   }
         </div>
       </div>
       <div className="commentaryTabs">
@@ -434,7 +437,7 @@ const Commentary = ({ Inning, toss }) => {
       <div className="mt-3">
 
         <div className="commonHeading">
-          {InningCommentry} <sup>{InningCommentry === 1 ? "st" : "nd"}</sup>{" "}
+          {InningCommentry} <sup>{Inning === 1 ? "st" : "nd"}</sup>{" "}
           innings
         </div>
 
@@ -443,6 +446,7 @@ const Commentary = ({ Inning, toss }) => {
             {commentaryFilter?.length === 0 ||
               FilterTabs === "1st" || FilterTabs === "2nd"
               ? commentary?.map((item) => {
+                console.log('2222')
                 if (item.event === "wicket") {
                   console.log("SSSSSSSSSSSSSSSS");
                   return (
@@ -463,31 +467,7 @@ const Commentary = ({ Inning, toss }) => {
                       <div className="commentryTxt">{item?.commentary}</div>
                     </li>
                   );
-                }  else if (item.event === "ball" || item.event === "wicket") {
-                  return (
-                    <li
-                      key={item?.event_id}
-                      className="d-flex align-items-center commentryLine"
-                    >
-                      <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                        <div className="over">
-                          {item?.over}.{item?.ball}
-                        </div>
-                        {item.event === "wicket" ? (
-                          <div className="run">W</div>
-                        ) : (
-                          <div
-                            className={`run ${item.event === "wicket" ? "bg-danger" : "run"
-                              }`}
-                          >
-                            {item?.run}
-                          </div>
-                        )}
-                      </div>
-                      <div className="commentryTxt">{item?.commentary}</div>
-                    </li>
-                  );
-                }else if (item.event === "overend") {
+                }  else if (item.event === "overend") {
                   console.log('overeeee',item)
                   return (
                     <li
@@ -538,9 +518,34 @@ const Commentary = ({ Inning, toss }) => {
                       </div>
                     </li>
                   );
+                }else if (item.event === "ball" || item.event === "wicket") {
+                  return (
+                    <li
+                      key={item?.event_id}
+                      className="d-flex align-items-center commentryLine"
+                    >
+                      <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+                        <div className="over">
+                          {item?.over}.{item?.ball}
+                        </div>
+                        {item.event === "wicket" ? (
+                          <div className="run">W</div>
+                        ) : (
+                          <div
+                            className={`run ${item.event === "wicket" ? "bg-danger" : "run"
+                              }`}
+                          >
+                            {item?.run}
+                          </div>
+                        )}
+                      </div>
+                      <div className="commentryTxt">{item?.commentary}</div>
+                    </li>
+                  );
                 }
               })
               : commentaryFilter?.map((item) => {
+                console.log('11111')
                 if (item.event === "wicket") {
                   console.log("SSSSSSSSSSSSSSSS");
                   return (
@@ -649,7 +654,7 @@ const Commentary = ({ Inning, toss }) => {
                       <div className="commentryTxt">{item?.commentary}</div>
                     </li>
                   );
-                } else if (item.event === "ball") {
+                } else if (item.event === "ball" || item.event === "wicket") {
                   return (
                     <li
                       key={item?.event_id}
@@ -680,6 +685,7 @@ const Commentary = ({ Inning, toss }) => {
           <ul className="list-unstyled m-0 p-0">
             {FilterInning1?.length == 0 ? null:
             (FilterInning1?.map((item) => {
+              console.log('33333')
               if (item.four === true) {
                 return (<li
                   key={item?.event_id}
@@ -806,6 +812,7 @@ const Commentary = ({ Inning, toss }) => {
             </div>
             {FilterInning2?.length == 0 ? null : 
             (FilterInning2?.map((item) => {
+              console.log('44444')
               if (item.four === true) {
                 return (<li
                   key={item?.event_id}
