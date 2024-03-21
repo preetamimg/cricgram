@@ -110,9 +110,12 @@ const Commentary = ({ Inning, toss }) => {
         `${BASE_URL}${API_ENDPOINT.MATCHES}/${mid}/${API_ENDPOINT.INNINGS}/2/${API_ENDPOINT.COMMENTRY}?token=${TOKEN}`
       )
       .then((res) => {
+        if(res === 'Invalid inning.'){
+          setFilterInning1(res?.response)
+        }else{
         console.log(res?.data?.response?.inning?.number);
         setInning2(res?.data?.response?.commentaries);
-      })
+      }})
       .catch((err) => console.log(err));
   };
 
@@ -140,6 +143,9 @@ const Commentary = ({ Inning, toss }) => {
       setFilterInning2(wicketDatainning2);
     } else if (FilterTabs === "All") {
       setCommentaryFilter(commentary);
+    }else if(inning2 === 'Invalid inning.'){
+      setFilterInning2(inning2)
+      return <h5>No Data Found</h5>
     }
   };
 
@@ -391,6 +397,7 @@ const Commentary = ({ Inning, toss }) => {
           onClick={() => {
             setInningCommentry(1);
             setFilterTabs("1st");
+            Inning1Api();
           }}
         >
           <div className="d-flex justify-content-between">
@@ -415,6 +422,7 @@ const Commentary = ({ Inning, toss }) => {
           onClick={() => {
             setInningCommentry(2);
             setFilterTabs("2nd");
+            Inning2Api();
           }}
         >
           <div className="d-flex justify-content-between">
@@ -437,7 +445,8 @@ const Commentary = ({ Inning, toss }) => {
       <div className="mt-3">
 
         <div className="commonHeading">
-          {InningCommentry} <sup>{Inning === 1 ? "st" : "nd"}</sup>{" "}
+          {Inning === 1 ? '1' : InningCommentry}
+          {Inning === 1 ? <sup>st</sup> : <> <sup>{InningCommentry === 1 ? "st" : "nd"}</sup>{" "}</>}
           innings
         </div>
 

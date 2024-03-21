@@ -38,8 +38,18 @@ const RecentOver = ({overs}) => {
               }
               {overs.event !== 'overend' ? 
               <div className="d-flex gap-2 overBoxParent">
-                
-                <div className={`overBox ${overs?.run == '0' ? 'zero' : 'overBox' || overs?.run == '4' ? 'four' : 'overBox' }`}>{overs?.run}</div>
+              
+              
+               {overs.event === 'ball' ? 
+               (overs?.run !== '4' || overs?.run !== '6' ?  
+                <div className={`overBox ${overs?.run == '0' ? 'zero' : 'overbox'}`}>{overs?.run}</div>
+                :
+                <div className={`overBox ${overs?.run == '4' ? 'style_run__B_j1q bg-success border-success text-white rounded-pill mx-1 mx-xl-2 px-1' : 'overbox'}`}>{overs?.run === '4' ? '4': '6'}</div>
+               )
+                : 
+                <div className={`overBox ${overs?.event === 'wicket' ? 'style_run__WLVpW rounded-pill bg-danger border-danger text-white text-uppercase text-center' : 'overbox'}`}>W</div>
+                }
+
                  {/* <div className="overBox zero">0</div>
                 <div className="overBox">1</div>
                 <div className="overBox">2</div>

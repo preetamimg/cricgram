@@ -12,6 +12,8 @@ import {RWebShare} from 'react-web-share';
 import moment from 'moment';
 import { BASE_URL } from 'constants';
 import { API_ENDPOINT, TOKEN } from '../../constants';
+import Standings from '../../seriesDetail/components/Standings';
+import Stats from 'seriesDetail/components/Stats';
 
 const LiveScorePage = () => {
   const [activeTab, setActiveTab] = useState('commentary');
@@ -157,7 +159,9 @@ console.log('<<<LIveScore>>>>',liveScore)
                 </div>
                 {
                   activeTab === 'commentary' ? <Commentary Inning={InningNumber} matchId={mid} toss={MatchInfo?.toss?.text}/> : 
-                  activeTab === 'scoreCard' ? <ScoreCard   matchId={mid}/> : ''
+                  activeTab === 'scoreCard' ? <ScoreCard   matchId={mid}/> : 
+                  activeTab === 'standings' ? <Standings /> : 
+                  activeTab === 'stats' ? <Stats /> : ''
 
                 }
 
