@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import arrowIcons from 'assets/img/arrow.svg';
 import { API_ROUTES } from '../../../constants';
 import { getAPI } from 'utils/services';
+import { formatDate } from 'utils/helpers';
+import NoDataFound from 'components/noData';
 
 const Standings = ({ id,tab,seriesName }) => {
-  const [data,setData] = useState([1,2,2,2,2]);
+  const [data,setData] = useState({});
   const [ isLoading,setIsLoading ] = useState(false);
-  // const data = [1,1,1,1,1]
-  const [activeTableIndex, setActiveTableIndex] = useState(null)
+  const [activeTableIndex, setActiveTableIndex] = useState(null);
 
   const handleTableAccordian = (index)=> {
     if(activeTableIndex === index) {
-      setActiveTableIndex(null)
+      setActiveTableIndex(null);
     } else {
       setActiveTableIndex(index)
     }
@@ -22,7 +23,7 @@ const Standings = ({ id,tab,seriesName }) => {
     setIsLoading(true);
     try {
       const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`);
-      setData(res?.data?.data?.[0]?.teams);
+      setData(res?.data?.data[0]);
     } catch (error) {
       console.log({ error });
     }finally{
@@ -36,9 +37,8 @@ const Standings = ({ id,tab,seriesName }) => {
 
   return (
     <>
-      
       <div className="commonHeading mb-1">POINTS TABLE</div>
-      <div className="commonHeading text-capitalize">West Indies Test Championship Round</div>
+      <div className="commonHeading text-capitalize">{data?.name}</div>
       <div className="table-responsive">
         <table className='table commonTable mb-0'>
           <thead>
@@ -57,32 +57,43 @@ const Standings = ({ id,tab,seriesName }) => {
           </thead>
           <tbody>
             {
-              data?.map((item, index)=> (
+              data?.standingData?.map((item, index)=> {
+                const formArray = item?.lastfivematchresult?.split(",");
+                const array =[0,1,2,3,4];
+
+                return(
                 <>
                   <tr>
                     <td>{index + 1}</td>
                     <td className='text-nowrap'>
-                      <div className='linkTxt'>Windward Volcanoes</div>
+                      <div className='linkTxt'>{item?.team?.title}</div>
                     </td>
-                    <td>3</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>36</td>
-                    <td>1.833</td>
+                    <td>{item?.played ? item?.played : "-" }</td>
+                    <td>{item?.win ? item?.win : "-"}</td>
+                    <td>{item?.loss ? item?.loss :"-" }</td>
+                    <td>{item?.draw ?item?.draw :"-"}</td>
+                    <td>{item?.nr?item?.nr:"-"}</td>
+                    <td>{item?.points ? item?.points :"-"}</td>
+                    <td>{item?.netrr ? item?.netrr :"-"}</td>
                     <td>
                       <div className="d-flex align-items-center justify-content-between">
                         <div className="overBalls d-flex align-items-center gap-2">
                           {/* use red, green class here */}
-                          <div className="overBall">W</div>
-                          <div>-</div>
-                          <div>-</div>
-                          <div>-</div>
-                          <div>-</div>
-                          <div>-</div>
+                          {array.map((num)=>{
+                          if(formArray?.[num]){
+                            return <div className={`overBall ${formArray?.[num]==="W" ?"green":"red" } `}>{formArray?.[num]}</div>
+                          }else{
+                            return <div>-</div>
+                          }
+                          })}
                         </div>
-                        <div onClick={()=> handleTableAccordian(index)} className={`tableArrowIcon ${activeTableIndex === index ? 'active' : ''}`}>
+                        <div  onClick={()=>{
+                          // if(item.match.length){
+                            handleTableAccordian(index)
+                          // }else{
+                          //   handleTableAccordian(null);
+                          // }
+                        }} className={`tableArrowIcon ${activeTableIndex === index ? 'active' : ''}`}>
                           <img src={arrowIcons} alt="" />
                         </div>
                       </div>
@@ -101,22 +112,17 @@ const Standings = ({ id,tab,seriesName }) => {
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
+                              {item?.match?.length ? item?.match?.map((el)=>(
+                               <tr key={el?.teamaid} >
                                 <td>
-                                  <div>Jamaica Scorpions</div>
-                                  <div className='linkTxt'>Won by 9 wickets</div>
+                                  <div>{el?.teamaname}</div>
+                                  <div className='linkTxt'>{el?.status_note}</div>
                                 </td>
-                                <td>Match 1</td>
-                                <td>7 Feb 2024</td>
+                                <td>{el?.subtitle}</td>
+                                <td>{formatDate(el?.date_start,"DD MMMM YYYY")}</td>
                               </tr>
-                              <tr>
-                                <td>
-                                  <div>Jamaica Scorpions</div>
-                                  <div className='linkTxt'>Won by 9 wickets</div>
-                                </td>
-                                <td>Match 1</td>
-                                <td>7 Feb 2024</td>
-                              </tr>
+                              )): <NoDataFound />
+                            }
                             </tbody>
                           </table>
                         </td>
@@ -125,7 +131,8 @@ const Standings = ({ id,tab,seriesName }) => {
                   }
 
                 </>
-              ))
+              )
+            })
             }
             {isLoading ?<> <tr>
               <td colSpan={10} className='tableLoader'></td>

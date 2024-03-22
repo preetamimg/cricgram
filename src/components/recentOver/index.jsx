@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
-import arrowIcon from 'assets/img/arrow.svg'
+import arrowIcon from 'assets/img/arrow.svg';
 
 const loadingArray = [1,1,1,1]
 const RecentOver = () => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <>
       <div className="recentOvers mt-2">

@@ -8,7 +8,7 @@ import NoDataFound from "components/noData";
 
 const Squads = ({ id, tab, seriesName }) => {
   const [selectedSquad, setSelectedSquad] = useState({});
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const [batsmen, setBatsmen] = useState([]);
@@ -22,7 +22,7 @@ const Squads = ({ id, tab, seriesName }) => {
       const res = await getAPI(
         `${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`
       );
-      setData(res?.data?.data?.[0]?.Squads);
+      setData(res?.data?.data?.[0]);
     } catch (error) {
       console.log({ error });
     } finally {
@@ -53,13 +53,13 @@ const Squads = ({ id, tab, seriesName }) => {
 
     if (Object.keys(selectedSquad).length) {
       selectedSquad.players.forEach((item) => {
-        if (item.role === "bat") {
+        if (item.playing_role === "bat") {
           bat = [...bat, item];
-        } else if (item.role === "bowl") {
+        } else if (item.playing_role === "bowl") {
           bowl = [...bowl, item];
-        } else if (item.role === "wk") {
+        } else if (item.playing_role === "wk") {
           wk = [...wk, item];
-        } else if (item.role === "all") {
+        } else if (item.playing_role === "all") {
           all = [...all, item];
         }
       });
@@ -71,7 +71,7 @@ const Squads = ({ id, tab, seriesName }) => {
   }, [selectedSquad]);
 
   const handleSelect = (selected) => {
-    if (selected.name === selectedSquad?.name) {
+    if (selected?.title === selectedSquad?.title) {
       setSelectedSquad({});
     } else {
       setSelectedSquad(selected);
@@ -82,29 +82,29 @@ const Squads = ({ id, tab, seriesName }) => {
     <>
       <div className="row align-items-center mb-3">
         <div className="col">
-          <div className="commonHeading mb-0">{data?.name}</div>
+          <div className="commonHeading mb-0">{data?.seriesname}</div>
         </div>
         <div className="col-md col-6 customDropdown lightMode">
           <Dropdown>
             <Dropdown.Toggle id="team">
               <div className="innerTxt">
-                {selectedSquad?.name ? selectedSquad?.name : "Select Squad"}
+                {selectedSquad?.title ? selectedSquad?.title : "Select Squad"}
               </div>
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {data?.map((item) => (
+              {data?.squads?.map((item) => (
                 <Dropdown.Item
                   as="button"
                   onClick={() => handleSelect(item)}
                   className={`dropdownItem ${
-                    selectedSquad?.name?.trim()?.toLowerCase() ===
-                    item?.name?.trim()?.toLowerCase()
+                    selectedSquad?.title?.trim()?.toLowerCase() ===
+                    item?.title?.trim()?.toLowerCase()
                       ? "active"
                       : ""
                   }`}
-                  key={item?._id}
+                  key={item?.team_id}
                 >
-                  {item?.name}
+                  {item?.title}
                 </Dropdown.Item>
               ))}
             </Dropdown.Menu>
@@ -133,7 +133,7 @@ const Squads = ({ id, tab, seriesName }) => {
           <div className="row g-3 mb-4">
             {batsmen?.map((item) => {
               return (
-                <div className="col-6 col-lg-6 col-xl-4">
+                <div className="col-6 col-lg-6 col-xl-4" key={item?.pid} >
                   <SquadCard data={item} />
                 </div>
               );
@@ -148,7 +148,7 @@ const Squads = ({ id, tab, seriesName }) => {
           <div className="commonHeading">All rounder</div>
           <div className="row g-3 mb-4">
             {allRounder?.map((item) => (
-              <div className="col-6 col-lg-6 col-xl-4">
+              <div className="col-6 col-lg-6 col-xl-4" key={item?.pid} >
                 <SquadCard data={item} />
               </div>
             ))}
@@ -162,7 +162,7 @@ const Squads = ({ id, tab, seriesName }) => {
           <div className="commonHeading">wicket keeper</div>
           <div className="row g-3 mb-4">
             {wicketKeeper?.map((item) => (
-              <div className="col-6 col-lg-6 col-xl-4">
+              <div className="col-6 col-lg-6 col-xl-4" key={item?.pid} >
                 <SquadCard data={item} />
               </div>
             ))}
@@ -176,7 +176,7 @@ const Squads = ({ id, tab, seriesName }) => {
           <div className="commonHeading">Bowler</div>
           <div className="row g-3 mb-4">
             {bowler?.map((item) => (
-              <div className="col-6 col-lg-6 col-xl-4">
+              <div className="col-6 col-lg-6 col-xl-4" key={item?.pid} >
                 <SquadCard data={item} />
               </div>
             ))}

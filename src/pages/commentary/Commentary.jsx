@@ -1,17 +1,64 @@
-import React from "react";
+import React,{ useEffect, useRef, useState } from "react";
 import fourImg from "assets/img/four.svg";
 import sixImg from "assets/img/six.svg";
 import wicketImg from "assets/img/wicket.svg";
 import { formatDate } from "utils/helpers";
+import { API_ROUTES } from "../../constants";
+import { getAPI } from "utils/services";
 
 const commentryOverLoading = [
   [1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1],
 ];
 
-const commentryOvers = [1, 1, 1];
 
-const Commentary = ({ matchData }) => {
+const Commentary = ({ matchData,id }) => {
+   const [data,setData] =useState({});
+
+    const [ inning1,setInning1 ] = useState({});
+    const [ inning2,setInning2 ] = useState({}); 
+
+    const playersRef = useRef({});
+
+    const [ isLoading,setIsLoading ] = useState(false);
+
+   const getCommentaryData = async () => {
+    setIsLoading(true);
+    try {
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_COMMENTARY}/${id}`);
+      
+      console.log({ data:res.data.data });
+
+      let in1Player ={};
+      let in2Player ={};
+
+      res?.data?.data?.inning1?.[0]?.players.forEach((el)=>{
+          in1Player[String(el?.pid)]=el?.title
+      });
+
+      res?.data?.data?.inning2?.[0]?.players.forEach((el)=>{
+        in1Player[String(el?.pid)]=el?.title
+    });
+
+    playersRef.current = { ...in1Player,in2Player }
+
+      setInning1({...res?.data?.data?.inning1[0],commentaries:res?.data?.data?.inning1[0].commentaries.reverse()});
+
+      setInning2({...res?.data?.data?.inning2[0],commentaries:res?.data?.data?.inning2[0].commentaries.reverse()});
+
+      setData({  batsmen:[...res?.data?.data?.batsmen], bowlers:[ ...res?.data?.data?.bowlers],live_inning:{ ...res?.data?.data?.live_inning[0] }   });
+
+    } catch (error) {
+      console.log({ error });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(()=>{
+    getCommentaryData();
+  },[])
+  
 
   return matchData.status_str !== "Scheduled" ? (
     <>
@@ -30,18 +77,22 @@ const Commentary = ({ matchData }) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Salome Sunday*</td>
-                  <td>37</td>
-                  <td>48</td>
-                  <td>77.08</td>
-                  <td>4</td>
-                  <td>0</td>
-                </tr>
+                {data?.batsmen?.map((item)=>(
+                  <tr>
+                  <td>{item?.name}</td>
+                  <td>{item?.runs}</td>
+                  <td>{item?.balls_faced}</td>
+                  <td>{item?.strike_rate}</td>
+                  <td>{item?.fours}</td>
+                  <td>{item?.sixes}</td>
+                </tr>))}
+                
+{/* -------------------------------------------------------------------------------------------------------------------------------- */}
                 {/* loading td */}
-                <tr>
+                {/* <tr>
                   <td colSpan={6} className="tableLoader"></td>
-                </tr>
+                </tr> */}
+
               </tbody>
             </table>
           </div>
@@ -58,18 +109,24 @@ const Commentary = ({ matchData }) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Salome Sunday*</td>
-                  <td>37</td>
-                  <td>48</td>
-                  <td>77.08</td>
-                  <td>4</td>
-                  <td>0</td>
+                {data?.bowlers?.map((item)=>(
+                  <tr>
+                  <td>{item?.name}</td>
+                  <td>{item?.overs}</td>
+                  <td>{item?.maidens}</td>
+                  <td>{item?.runs_conceded}</td>
+                  <td>{item?.wickets}</td>
+                  <td>{item?.econ}</td>
                 </tr>
+                ))}
+                
+                {/* --------------------------------------------------------------------------------------------------------------- */}
                 {/* loading td */}
-                <tr>
+                {/* <tr>
                   <td colSpan={6} className="tableLoader"></td>
-                </tr>
+                </tr> */}
+
+
               </tbody>
             </table>
           </div>
@@ -83,15 +140,16 @@ const Commentary = ({ matchData }) => {
                 {" "}
                 <span>Partnership :</span>
               </div>
-              <div className="value text-end">10(6)</div>
+              <div className="value text-end">{data?.live_inning?.current_partnership?.runs}({data?.live_inning?.current_partnership?.balls})</div>
             </div>
+
 
             <div className="d-flex justify-content-between keyValueDiv">
               <div className="key value text-nowrap">
                 {" "}
                 <span>Last 5 Overs :</span>
               </div>
-              <div className="value text-end">26 Runs, 4 Wickets</div>
+              <div className="value text-end">{data?.live_inning?.last_five_overs}</div>
             </div>
 
             <div className="d-flex justify-content-between keyValueDiv">
@@ -100,7 +158,7 @@ const Commentary = ({ matchData }) => {
                 <span>Last Wicket :</span>
               </div>
               <div className="value text-end">
-                Blessing Etim 5(6) - c K Awino b L Anyait
+                {playersRef?.current[data?.live_inning?.last_wicket?.batsman_id]} {data?.live_inning?.last_wicket?.runs}({data?.live_inning?.last_wicket?.balls}) - {data?.live_inning?.last_wicket?.how_out}
               </div>
             </div>
 
@@ -109,7 +167,7 @@ const Commentary = ({ matchData }) => {
                 {" "}
                 <span>Toss :</span>
               </div>
-              <div className="value text-end">Nigeria Women (fielding)</div>
+              <div className="value text-end">{matchData?.tossWinningTeam}</div>
             </div>
           </div>
         </div>
@@ -123,8 +181,10 @@ const Commentary = ({ matchData }) => {
           </div>
         </div>
       </div>
+
       <div className="commentaryTabs">
         <div className="commentaryTab all active">All</div>
+
         <div className="commentaryTab">
           <div className="d-flex justify-content-between">
             <div className="">
@@ -136,6 +196,7 @@ const Commentary = ({ matchData }) => {
             </div>
           </div>
         </div>
+
         <div className="commentaryTab">
           <div className="d-flex justify-content-between">
             <div className="">
@@ -147,6 +208,7 @@ const Commentary = ({ matchData }) => {
             </div>
           </div>
         </div>
+
         <div className="commentaryTab">
           <div className="d-flex justify-content-between">
             <div className="">
@@ -158,6 +220,7 @@ const Commentary = ({ matchData }) => {
             </div>
           </div>
         </div>
+
         <div className="commentaryTab">
           <div className="d-flex justify-content-between">
             <div className="">
@@ -175,6 +238,7 @@ const Commentary = ({ matchData }) => {
             </div>
           </div>
         </div>
+
         <div className="commentaryTab">
           <div className="d-flex justify-content-between">
             <div className="">
@@ -193,14 +257,18 @@ const Commentary = ({ matchData }) => {
           </div>
         </div>
       </div>
-      <div className="mt-3">
+
+
+      {inning2?.commentaries?.length ? <div className="mt-3">
         <div className="commonHeading">
-          2 <sup>nd</sup> innings
+          2 <sup>nd</sup> inning
         </div>
-        {/* loader */}
+       
+
+        {/* --------------------------------------------------------------------------LOADER------------- */}
         {commentryOverLoading?.map((item, index) => (
           <ul className="list-unstyled m-0 p-0">
-            {item?.map((abc) => (
+            {/* {item?.map((abc) => (
               <li className="d-flex align-items-center commentryLine loading">
                 <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
                   <div className="over"></div>
@@ -208,9 +276,9 @@ const Commentary = ({ matchData }) => {
                 </div>
                 <div className="commentryTxt"></div>
               </li>
-            ))}
+            ))} */}
             {/* over description */}
-            <li className="d-flex align-items-center commentryOver loading">
+            {/* <li className="d-flex align-items-center commentryOver loading">
               <div className="row row-cols-xxl-5 g-3 w-100 justify-content-between mx-0">
                 <div className="col-6 col-xl-auto col-xxl commentryOverCol d-none d-xl-block">
                   <div className="smallTxt text-center"></div>
@@ -233,117 +301,185 @@ const Commentary = ({ matchData }) => {
                   <div className="bigTxt text-end text-lg-center"></div>
                 </div>
               </div>
-            </li>
+            </li> */}
           </ul>
         ))}
-        {commentryOvers?.map((item) => (
+
+
+        {inning1?.commentaries?.map((item) => (
           <ul key={item} className="list-unstyled m-0 p-0">
-            <li className="d-flex align-items-center commentryLine">
+            {item.event!=="overend" ? <li className="d-flex align-items-center commentryLine">
               <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                <div className="over">18.5</div>
+                <div className="over">{item?.over}.{item?.ball}</div>
                 <div className="run">1</div>
               </div>
               <div className="commentryTxt">
-                Ajima Sangma to Maina Narah, Four,
+                {item?.commentary}
               </div>
-            </li>
-            <li className="d-flex align-items-center commentryLine">
-              <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                <div className="over">18.5</div>
-                <div className="run">1</div>
-              </div>
-              <div className="commentryTxt">
-                Ajima Sangma to Maina Narah, Four,
-              </div>
-            </li>
-            <li className="d-flex align-items-center commentryLine">
-              <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                <div className="over">18.5</div>
-                <div className="run">1</div>
-              </div>
-              <div className="commentryTxt">
-                Ajima Sangma to Maina Narah, Four,
-              </div>
-            </li>
-            <li className="d-flex align-items-center commentryLine">
-              <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                <div className="over">18.5</div>
-                <div className="run">1</div>
-              </div>
-              <div className="commentryTxt">
-                Ajima Sangma to Maina Narah, Four,
-              </div>
-            </li>
-            <li className="d-flex align-items-center commentryLine">
-              <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                <div className="over">18.5</div>
-                <div className="run">1</div>
-              </div>
-              <div className="commentryTxt">
-                Ajima Sangma to Maina Narah, Four,
-              </div>
-            </li>
-            <li className="d-flex align-items-center commentryLine">
-              <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                <div className="over">18.5</div>
-                <div className="run">1</div>
-              </div>
-              <div className="commentryTxt">
-                Ajima Sangma to Maina Narah, Four,
-              </div>
-            </li>
+            </li>: null }
+            
+            
             {/* over description */}
-            <li className="d-flex align-items-center commentryOver">
+            {item.event==="overend" ? <li className="d-flex align-items-center commentryOver">
               <div className="row row-cols-xxl-5 g-3 w-100 justify-content-between mx-0">
                 <div className="col-6 col-xl-auto col-xxl commentryOverCol d-none d-xl-block">
                   <div className="smallTxt text-center">End Of Over</div>
-                  <div className="bigTxt text-center">18</div>
+                  <div className="bigTxt text-center">{item.over}</div>
                 </div>
                 <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
-                  <div className="smallTxt text-lg-center">Run Scored: 7</div>
+                  <div className="smallTxt text-lg-center">Run Scored:</div>
                   <div className="bigTxt d-flex gap-1 justify-content-lg-center">
-                    <span>0</span>
-                    <span>4</span>
+                    <span>{item?.runs}</span>
+                    {/* <span>4</span>
                     <span>2</span>
                     <span>1</span>
                     <span>0</span>
-                    <span>0</span>
+                    <span>0</span> */}
                   </div>
                 </div>
                 <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
                   <div className="smallTxt text-end text-lg-center">
-                    Score After 18 Overs
+                    Score After {item.over} Overs
                   </div>
                   <div className="bigTxt text-end text-lg-center">
-                    GTW Inning - 116/5
+                    GTW Inning - {item.score}
                   </div>
                 </div>
                 <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="smallTxt">Shivani Bishnoi</div>
+                    <div className="smallTxt">{playersRef?.current[item?.bats[0]?.batsman_id]}</div>
                     <div className="bigTxt">5(10)</div>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="smallTxt">Maina Narah</div>
+                    <div className="smallTxt">{playersRef?.current[item?.bats[1]?.batsman_id]}</div>
                     <div className="bigTxt">13(16)</div>
                   </div>
                 </div>
                 <div className="col-6 col-xl-auto col-xxl commentryOverCol">
                   <div className="smallTxt text-end text-lg-center">
-                    Urmila Chatterjee
+                  {playersRef?.current[item?.bowls[0]?.bowler_id]}
                   </div>
-                  <div className="bigTxt text-end text-lg-center">4-0-22-1</div>
+                  <div className="bigTxt text-end text-lg-center">{item?.bowls[0]?.overs}-{item?.bowls[0]?.maidens}-{item?.bowls[0]?.runs_conceded}-{item?.bowls[0]?.wickets}</div>
                 </div>
               </div>
-            </li>
+            </li>:null}
           </ul>
-        ))}
-      </div>
-      <div className="mt-3 d-flex justify-content-center">
+        ))} 
+      </div> : null }
+
+      {/* <div className="mt-3 d-flex justify-content-center">
         <div className="commonBtn" style={{ maxWidth: "150px" }}>
           Load more
         </div>
-      </div>
+      </div> */}
+      
+      {inning1?.commentaries?.length ? <div className="mt-3">
+        <div className="commonHeading">
+          1 <sup>st</sup> inning
+        </div>
+       
+
+        {/* --------------------------------------------------------------------------LOADER------------- */}
+        {commentryOverLoading?.map((item, index) => (
+          <ul className="list-unstyled m-0 p-0">
+            {/* {item?.map((abc) => (
+              <li className="d-flex align-items-center commentryLine loading">
+                <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+                  <div className="over"></div>
+                  <div className="run"></div>
+                </div>
+                <div className="commentryTxt"></div>
+              </li>
+            ))} */}
+            {/* over description */}
+            {/* <li className="d-flex align-items-center commentryOver loading">
+              <div className="row row-cols-xxl-5 g-3 w-100 justify-content-between mx-0">
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol d-none d-xl-block">
+                  <div className="smallTxt text-center"></div>
+                  <div className="bigTxt text-center"></div>
+                </div>
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
+                  <div className="smallTxt text-lg-center"></div>
+                  <div className="bigTxt d-flex gap-1 justify-content-lg-center"></div>
+                </div>
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
+                  <div className="smallTxt text-end text-lg-center"></div>
+                  <div className="bigTxt text-end text-lg-center"></div>
+                </div>
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol">
+                  <div className="smallTxt text-end text-lg-center"></div>
+                  <div className="bigTxt text-end text-lg-center"></div>
+                </div>
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol">
+                  <div className="smallTxt text-end text-lg-center"></div>
+                  <div className="bigTxt text-end text-lg-center"></div>
+                </div>
+              </div>
+            </li> */}
+          </ul>
+        ))}
+
+
+        {inning1?.commentaries?.map((item) => (
+          <ul key={item} className="list-unstyled m-0 p-0">
+            {item.event!=="overend" ? <li className="d-flex align-items-center commentryLine">
+              <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+                <div className="over">{item?.over}.{item?.ball}</div>
+                <div className="run">1</div>
+              </div>
+              <div className="commentryTxt">
+                {item?.commentary}
+              </div>
+            </li>: null }
+            
+            
+            {/* over description */}
+            {item.event==="overend" ? <li className="d-flex align-items-center commentryOver">
+              <div className="row row-cols-xxl-5 g-3 w-100 justify-content-between mx-0">
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol d-none d-xl-block">
+                  <div className="smallTxt text-center">End Of Over</div>
+                  <div className="bigTxt text-center">{item.over}</div>
+                </div>
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
+                  <div className="smallTxt text-lg-center">Run Scored:</div>
+                  <div className="bigTxt d-flex gap-1 justify-content-lg-center">
+                    <span>{item?.runs}</span>
+                    {/* <span>4</span>
+                    <span>2</span>
+                    <span>1</span>
+                    <span>0</span>
+                    <span>0</span> */}
+                  </div>
+                </div>
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
+                  <div className="smallTxt text-end text-lg-center">
+                    Score After {item.over} Overs
+                  </div>
+                  <div className="bigTxt text-end text-lg-center">
+                    GTW Inning - {item.score}
+                  </div>
+                </div>
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="smallTxt">{playersRef?.current[item?.bats[0]?.batsman_id]}</div>
+                    <div className="bigTxt">5(10)</div>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="smallTxt">{playersRef?.current[item?.bats[1]?.batsman_id]}</div>
+                    <div className="bigTxt">13(16)</div>
+                  </div>
+                </div>
+                <div className="col-6 col-xl-auto col-xxl commentryOverCol">
+                  <div className="smallTxt text-end text-lg-center">
+                  {playersRef?.current[item?.bowls[0]?.bowler_id]}
+                  </div>
+                  <div className="bigTxt text-end text-lg-center">{item?.bowls[0]?.overs}-{item?.bowls[0]?.maidens}-{item?.bowls[0]?.runs_conceded}-{item?.bowls[0]?.wickets}</div>
+                </div>
+              </div>
+            </li>:null}
+          </ul>
+        ))} 
+      </div> : null }
     </>
   ) : (
     <>

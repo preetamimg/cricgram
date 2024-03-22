@@ -15,20 +15,20 @@ const SquadCard = ({ data }) => {
     <>
       <div className="topRankerCard">
         <div className="playerImg">
-          <img src={data?.playerLogo} alt="" />
+          <img src={PlayerImage} alt="" />
         </div>
-        <div className="playerName">{data?.name}</div>
+        <div className="playerName">{data?.title}</div>
         <div className="playerCategory d-flex align-items-center text-capitalize">
           {
-            data?.role === 'wk' ?
+            data?.playing_role === 'wk' ?
               <div className="wicketKeeper me-1">W</div>
-            : <img src={data?.role === "bat" ? batsmanIcon : data?.role === "bowl" ? bowlerIcon : allrounderIcon} alt="" />
+            : <img src={data?.playing_role === "bat" ? batsmanIcon : data?.playing_role === "bowl" ? bowlerIcon : allrounderIcon} alt="" />
           }
-          {catObj[data?.role]}
+          {catObj[data?.playing_role]}
         </div>
       </div>
     </>
   )
 }
 
-export default SquadCard
+export default SquadCard;

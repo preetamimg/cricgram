@@ -578,6 +578,41 @@ body {
         @include md {
           font-size: 16px;
         }
+      }    
+      &.disabled {
+        color: $theme4;
+        opacity: 0.8;
+      }
+      &.playing {
+        position: relative;
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: -10px;
+          height: 6px;
+          width: 6px;
+          border-radius: 20px;
+          background-color: red;
+        }
+      }
+      &.winner {
+        position: relative;
+        padding-right: 20px;
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 0px;
+          height: 18px;
+          width: 18px;
+          border-radius: 20px;
+          background-image: url(./../img/cup.svg);
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       }
     }
     & .scoreDetail {
@@ -622,6 +657,9 @@ body {
         border-radius: 20px;
         background-color: white;
         box-shadow:0px 0px 8px 3px white ;
+      }
+      &.green {
+        background-color: $green;
       }
     }
     & .whoPlaying {

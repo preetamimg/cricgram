@@ -1,9 +1,9 @@
 import moment from "moment";
 
-export const formatDate = (dateString, dateFormat = 'DD MMMM YYYY hh:mm A') => {
+export const formatDate = (dateString, dateFormat = 'DD MMMM YYYY, ddd, h:mm A [IST]') => {
      const date = moment(dateString);
     
-     const formattedDate = date.format('DD MMMM YYYY, ddd, h:mm A [IST]');
+     const formattedDate = date.format(dateFormat);
      
      return formattedDate;
   };
