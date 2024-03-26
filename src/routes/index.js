@@ -34,7 +34,7 @@ const RouteComponent = () => {
 
         <Route path={`${ROUTE_CONST.OVERS}/:id/:matchName`} element={<AppLayout LayoutComponent={MatchDetailsLayout} Content={Overs} />}/>
 
-        <Route path={ROUTE_CONST.PLAYER_DETAIL} element={<AppLayout LayoutComponent={PlayerDetail}/>}/>
+        <Route path={`${ROUTE_CONST.PLAYER_DETAIL}/:playerId`} element={<AppLayout LayoutComponent={PlayerDetail}/>}/>
 
         <Route path={`${ROUTE_CONST.CRICKET_SERIES}/:id/:seriesName`} element={<AppLayout LayoutComponent={SeriesDetail}/>}/>
         <Route path={'*'} element={<PageNotFound/>}/>

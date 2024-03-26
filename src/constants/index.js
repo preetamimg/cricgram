@@ -30,6 +30,13 @@ export const API_ROUTES = {
   GET_SERIES_DATA:"getSeriesData",                    //?limit=5
   GET_MATCH_INFO:"getMatchInfo",                     //  /:real_matchKey
   GET_MATCH_INFO_COMMENTARY:"getMatchInfo/Commentary", // /:real_matchKey
+  GET_MATCH_INFO_SCORECARD:"/getMatchInfo/scoreCard",  //:real_matchKey
+  GET_MATCH_INFO_OVER:"/getMatchInfo/over",       //:real_matchKey
+  
+  // -------------------------------------------------- -------------------series>
+
   SERIES_GET_MATCH_DATA:"/series/getmatchData",      // :series_key
   SERIES_MATCHES:"series/matches",                    // :series_key
+  SERIES_GET_MATCH_DATA_PLAYER_INFO:"/series/getmatchData/playerInfo", //:playerId
+  
 }

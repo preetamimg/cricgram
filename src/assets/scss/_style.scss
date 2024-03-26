@@ -976,9 +976,12 @@ body {
     font-weight: 700;
     color: $theme4;
     border: 1px solid transparent;
-    &.four, 
-    &.six {
+    &.four{
       background-color: $green;
+      color: black;
+    } 
+    &.six {
+      background-color: $blueish;
       color: black;
     }
     &.wicket {
@@ -1561,7 +1564,23 @@ body {
           display: flex;
           font-weight: 500;
           align-items: center;
-          justify-content: center;
+          justify-content: center;            
+            &.four{
+              background-color: $green;
+              color: black;
+            } 
+            &.six {
+              background-color: $blueish;
+              color: black;
+            }
+            &.wicket {
+              background-color: red;
+              text-transform: uppercase;
+            }
+            &.zero {
+              background-color: transparent;
+              border: 1px solid $theme2 !important;
+            }
         }
         & .overCountt {
           font-size: 12px;

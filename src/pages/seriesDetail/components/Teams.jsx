@@ -22,7 +22,7 @@ const Teams = ({ id,tab,seriesName }) => {
 
   useEffect(()=>{
     getSeriesData();
-  },[]);//eslint-disable-line
+  },[id]);//eslint-disable-line
 
   return (
     <>

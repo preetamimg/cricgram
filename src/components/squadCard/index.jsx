@@ -1,8 +1,10 @@
-import React from 'react'
-import PlayerImage from 'assets/img/playerPlaceholder.webp'
-import batsmanIcon from 'assets/img/batsman.svg'
-import bowlerIcon from 'assets/img/bowler.svg'
-import allrounderIcon from 'assets/img/allRounder.png'
+import React from 'react';
+import PlayerImage from 'assets/img/playerPlaceholder.webp';
+import batsmanIcon from 'assets/img/batsman.svg';
+import bowlerIcon from 'assets/img/bowler.svg';
+import allrounderIcon from 'assets/img/allRounder.png';
+import { useNavigate } from 'react-router-dom';
+import { ROUTE_CONST } from '../../constants';
 
 const SquadCard = ({ data }) => {
   const catObj={
@@ -10,10 +12,13 @@ const SquadCard = ({ data }) => {
     "bat":"Batsman",
     "bowl":"Bowler",
     "all":"All Rounder"
-  }
+  };
+
+  const navigate = useNavigate();
+
   return (
     <>
-      <div className="topRankerCard">
+      <div className="topRankerCard" onClick={()=>navigate(`${ROUTE_CONST.PLAYER_DETAIL}/${data?.pid}`)} >
         <div className="playerImg">
           <img src={PlayerImage} alt="" />
         </div>

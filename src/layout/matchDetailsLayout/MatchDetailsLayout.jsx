@@ -29,6 +29,7 @@ const MatchDetailsLayout = ({ Content }) => {
   const [matchData, setMatchData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+
   const { id, matchName } = useParams();
 
   const navigate = useNavigate();
@@ -259,7 +260,7 @@ const MatchDetailsLayout = ({ Content }) => {
               </div>
 
               {/* Content--------------------------------------------------------------------------------> */}
-              <Content matchData={matchData}  id={id} matchName={matchName} />
+              <Content matchData={matchData}  id={id} matchName={matchName}  />
               {/* Content--------------------------------------------------------------------------------> */}
             </div>
 

@@ -21,6 +21,7 @@ const Standings = ({ id,tab,seriesName }) => {
 
   const getSeriesData =async()=>{
     setIsLoading(true);
+    setData({});
     try {
       const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`);
       setData(res?.data?.data[0]);
@@ -33,7 +34,7 @@ const Standings = ({ id,tab,seriesName }) => {
 
   useEffect(()=>{
     getSeriesData();
-  },[]);//eslint-disable-line
+  },[id]);//eslint-disable-line
 
   return (
     <>
@@ -88,11 +89,7 @@ const Standings = ({ id,tab,seriesName }) => {
                           })}
                         </div>
                         <div  onClick={()=>{
-                          // if(item.match.length){
                             handleTableAccordian(index)
-                          // }else{
-                          //   handleTableAccordian(null);
-                          // }
                         }} className={`tableArrowIcon ${activeTableIndex === index ? 'active' : ''}`}>
                           <img src={arrowIcons} alt="" />
                         </div>

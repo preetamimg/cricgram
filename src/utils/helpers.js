@@ -9,6 +9,21 @@ export const formatDate = (dateString, dateFormat = 'DD MMMM YYYY, ddd, h:mm A [
   };
 
 
+  export function formatDobWithAge(dobString) {
+    if (!dobString) return null; 
+  
+    const dob = moment(dobString);
+    const today = moment();
+  
+    const years = today.diff(dob, 'years');
+    const days = today.diff(dob, 'days') % 365;
+  
+    const formattedDob = dob.format('D MMM YYYY');
+    const ageString = `${years}y ${days}d`;
+  
+    return `${formattedDob} (${ageString})`;
+  }
+
 export const shareUrl=async(url,title="CricGram",)=>{
    if (navigator.share) {
       try {

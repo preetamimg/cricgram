@@ -23,6 +23,8 @@ const Squads = ({ id, tab, seriesName }) => {
         `${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`
       );
       setData(res?.data?.data?.[0]);
+
+      setSelectedSquad(res?.data?.data?.[0]?.squads?.[0]);
     } catch (error) {
       console.log({ error });
     } finally {
@@ -30,20 +32,10 @@ const Squads = ({ id, tab, seriesName }) => {
     }
   };
 
-  // const getTeamsList =async()=>{
-  //   try {
-  //     const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=Teams`);
-
-  //     setTeamsList(res?.data?.data?.[0]?.teams);
-  //   } catch (error) {
-  //     console.log({ error });
-  //   }
-  // }
 
   useEffect(() => {
     getSeriesData();
-    // getTeamsList();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     let bat = [];
