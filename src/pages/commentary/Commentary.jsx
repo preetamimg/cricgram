@@ -30,35 +30,33 @@ const Commentary = ({ matchData, id }) => {
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_COMMENTARY}/${id}`);
 
-      console.log({ data: res.data.data });
-
       let in1Player = {};
       let in2Player = {};
 
-      res?.data?.data?.inning1?.[0]?.players.forEach((el) => {
+      res?.data?.data?.inning1?.[0]?.players?.forEach((el) => {
         in1Player[String(el?.pid)] = el?.title;
       });
 
-      res?.data?.data?.inning2?.[0]?.players.forEach((el) => {
+      res?.data?.data?.inning2?.[0]?.players?.forEach((el) => {
         in1Player[String(el?.pid)] = el?.title;
       });
 
       playersRef.current = { ...in1Player, in2Player };
 
       setInning1({
-        ...res?.data?.data?.inning1[0],
-        commentaries: res?.data?.data?.inning1[0].commentaries.reverse(),
+        ...res?.data?.data?.inning1?.[0],
+        commentaries: res?.data?.data?.inning1?.[0]?.commentaries?.reverse(),
       });
 
       setInning2({
-        ...res?.data?.data?.inning2[0],
-        commentaries: res?.data?.data?.inning2[0].commentaries.reverse(),
+        ...res?.data?.data?.inning2?.[0],
+        commentaries: res?.data?.data?.inning2?.[0]?.commentaries?.reverse(),
       });
 
       setData({
         batsmen: [...res?.data?.data?.batsmen],
         bowlers: [...res?.data?.data?.bowlers],
-        live_inning: { ...res?.data?.data?.live_inning[0] },
+        live_inning: { ...res?.data?.data?.live_inning?.[0] },
         fows:[ ...res?.data?.data?.fows ]
       });
 
@@ -194,7 +192,7 @@ const Commentary = ({ matchData, id }) => {
         <div className="col-xl-5 col-xxl-4">
           <div className="fallOfWickets h-100">
             {/* loading class here */}
-            <div className="title">KEY STATS</div>
+            <div className={`title ${isLoading ? "loading":""}`}>KEY STATS</div>
             <div className="d-flex justify-content-between keyValueDiv">
               <div className="key value text-nowrap">
                 {" "}
@@ -281,13 +279,13 @@ const Commentary = ({ matchData, id }) => {
               </div>
               <div className="name">Innings</div>
             </div>
-            <div>
+            {/* <div>
               <img
                 className="image"
                 src={`https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-43_a162.png&w=40&q=75`}
                 alt=""
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -306,13 +304,13 @@ const Commentary = ({ matchData, id }) => {
               </div>
               <div className="name">Innings</div>
             </div>
-            <div>
+            {/* <div>
               <img
                 className="image"
                 src={`https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-42_85a2.png&w=40&q=75`}
                 alt=""
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -370,6 +368,67 @@ const Commentary = ({ matchData, id }) => {
         </div>
       </div>
 
+
+      {isLoading ?
+        <ul className="list-unstyled m-0 p-0">
+          <li className="d-flex align-items-center commentryLine loading">
+            <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+              <div className="over"></div>
+              <div className="run"></div>
+            </div>
+            <div className="commentryTxt"></div>
+          </li>
+        <li className="d-flex align-items-center commentryLine loading">
+            <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+              <div className="over"></div>
+              <div className="run"></div>
+            </div>
+            <div className="commentryTxt"></div>
+          </li>
+          <li className="d-flex align-items-center commentryLine loading">
+            <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+              <div className="over"></div>
+              <div className="run"></div>
+            </div>
+            <div className="commentryTxt"></div>
+          </li>
+          <li className="d-flex align-items-center commentryLine loading">
+            <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
+              <div className="over"></div>
+              <div className="run"></div>
+            </div>
+            <div className="commentryTxt"></div>
+          </li>
+
+          {/* over description */}
+          <li className="d-flex align-items-center commentryOver loading">
+          <div className="row row-cols-xxl-5 g-3 w-100 justify-content-between mx-0">
+            <div className="col-6 col-xl-auto col-xxl commentryOverCol d-none d-xl-block">
+              <div className="smallTxt text-center"></div>
+              <div className="bigTxt text-center"></div>
+            </div>
+            <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
+              <div className="smallTxt text-lg-center"></div>
+              <div className="bigTxt d-flex gap-1 justify-content-lg-center"></div>
+            </div>
+            <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
+              <div className="smallTxt text-end text-lg-center"></div>
+              <div className="bigTxt text-end text-lg-center"></div>
+            </div>
+            <div className="col-6 col-xl-auto col-xxl commentryOverCol">
+              <div className="smallTxt text-end text-lg-center"></div>
+              <div className="bigTxt text-end text-lg-center"></div>
+            </div>
+            <div className="col-6 col-xl-auto col-xxl commentryOverCol">
+              <div className="smallTxt text-end text-lg-center"></div>
+              <div className="bigTxt text-end text-lg-center"></div>
+            </div>
+          </div>
+        </li>
+        
+        </ul>
+      :""}
+
       {inning2?.commentaries?.length && activeTab !== "Innings1" ? (
         <div className="mt-3">
           <div className="commonHeading">
@@ -377,44 +436,6 @@ const Commentary = ({ matchData, id }) => {
           </div>
 
           {/* --------------------------------------------------------------------------LOADER------------- */}
-          {commentryOverLoading?.map((item, index) => (
-            <ul className="list-unstyled m-0 p-0">
-              {/* {item?.map((abc) => (
-              <li className="d-flex align-items-center commentryLine loading">
-                <div className="d-flex flex-column-reverse flex-md-row align-items-center me-2 gap-1 gap-md-2">
-                  <div className="over"></div>
-                  <div className="run"></div>
-                </div>
-                <div className="commentryTxt"></div>
-              </li>
-            ))} */}
-              {/* over description */}
-              {/* <li className="d-flex align-items-center commentryOver loading">
-              <div className="row row-cols-xxl-5 g-3 w-100 justify-content-between mx-0">
-                <div className="col-6 col-xl-auto col-xxl commentryOverCol d-none d-xl-block">
-                  <div className="smallTxt text-center"></div>
-                  <div className="bigTxt text-center"></div>
-                </div>
-                <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
-                  <div className="smallTxt text-lg-center"></div>
-                  <div className="bigTxt d-flex gap-1 justify-content-lg-center"></div>
-                </div>
-                <div className="col-6 col-xl-auto col-xxl commentryOverCol pb-3 pb-xl-0">
-                  <div className="smallTxt text-end text-lg-center"></div>
-                  <div className="bigTxt text-end text-lg-center"></div>
-                </div>
-                <div className="col-6 col-xl-auto col-xxl commentryOverCol">
-                  <div className="smallTxt text-end text-lg-center"></div>
-                  <div className="bigTxt text-end text-lg-center"></div>
-                </div>
-                <div className="col-6 col-xl-auto col-xxl commentryOverCol">
-                  <div className="smallTxt text-end text-lg-center"></div>
-                  <div className="bigTxt text-end text-lg-center"></div>
-                </div>
-              </div>
-            </li> */}
-            </ul>
-          ))}
 
           {inning2Filtered?.map((item,index) => (
             <ul key={index} className="list-unstyled m-0 p-0">

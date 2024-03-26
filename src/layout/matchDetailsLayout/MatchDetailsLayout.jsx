@@ -39,7 +39,7 @@ const MatchDetailsLayout = ({ Content }) => {
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO}/${id}`);
       
-      setMatchData(res.data.data[0]);
+      setMatchData({...res?.data?.data?.[0],lastFiveOver:res?.data?.data?.[0]?.lastFiveOver?.reverse()});
     } catch (error) {
       console.log({ error });
     } finally {
@@ -53,7 +53,7 @@ const MatchDetailsLayout = ({ Content }) => {
 
   useEffect(() => {
     getMatchData();
-  }, []); //eslint-disable-line
+  }, [id]); //eslint-disable-line
 
   console.log("matchData",matchData);
 
@@ -66,7 +66,7 @@ const MatchDetailsLayout = ({ Content }) => {
               <div className="matchDetailCard">
                 {" "}
                 {/* add loading class here for loader*/}
-                <div className="row align-items-start">
+                <div className={`row align-items-start ${isLoading ? "loading" :"" }`}>
                   <div className="col-10 matchTeams">
                     {/* Mumbai vs Vidarbha, Final - Live Cricket Score */}
                     {matchData?.name}
@@ -108,7 +108,7 @@ const MatchDetailsLayout = ({ Content }) => {
 
               {/* add loading class here for loader (below) */}
               {matchData.status_str !== "Scheduled" ? (
-                <div className="matchDetailCard mt-2 ">
+                <div className={`matchDetailCard mt-2 ${ isLoading ? "loading" : "" }`}>
                   <div className="row align-items-center">
                     <div className="col-12 teamAndMatchs">
                       <div className="row mb-2">
@@ -185,7 +185,7 @@ const MatchDetailsLayout = ({ Content }) => {
                 </div>
               ) : null}
               
-              {matchData.status_str !== "Scheduled" ? <RecentOver /> : ""}
+              {matchData.status_str !== "Scheduled" ? <RecentOver isLoading={isLoading} data={matchData?.lastFiveOver}  /> : ""}
 
               <div className="commonTabs mt-2 mb-2 mb-md-3">
                 <div
