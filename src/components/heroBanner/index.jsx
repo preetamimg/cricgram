@@ -33,7 +33,7 @@ const banners = [
 const HeroBanner = () => {
   return (
     <>
-      <div className="heroBanner container-fluid mt-4">
+      <div className="heroBanner container-fluid">
         <div className="container px-0">
           <Swiper pagination={true} modules={[Pagination]} className="mySwiper">
             {
