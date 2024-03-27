@@ -1,7 +1,10 @@
-import React from 'react'
+import React from 'react';
 
-const StatsTable = () => {
-  const data = [1,1,1,1,1,1,1,1,1]
+
+
+const StatsTable = ({ isLoading }) => {
+  const data = [1,1,1,1,1,1,1,1,1];
+
   return (
     <>
       <div className="table-responsive">
@@ -24,7 +27,7 @@ const StatsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {
+            {!isLoading ? 
               data?.map((item, index)=> (
                 <tr>
                   <td>{index + 1}</td>
@@ -43,11 +46,25 @@ const StatsTable = () => {
                   <td>1</td>
                   <td>1</td>
                 </tr>
-              ))
+              )): null
             }
+            {isLoading ?<> 
             <tr>
               <td colSpan={13} className='tableLoader'></td>
             </tr>
+            <tr>
+              <td colSpan={13} className='tableLoader'></td>
+            </tr>
+            <tr>
+              <td colSpan={13} className='tableLoader'></td>
+            </tr>
+            <tr>
+              <td colSpan={13} className='tableLoader'></td>
+            </tr>
+            <tr>
+              <td colSpan={13} className='tableLoader'></td>
+            </tr> 
+            </>: null}
           </tbody>
         </table>
       </div>

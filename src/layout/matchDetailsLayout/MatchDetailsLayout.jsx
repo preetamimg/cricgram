@@ -12,6 +12,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { API_ROUTES, ROUTE_CONST } from "../../constants";
 import { getAPI } from "utils/services";
 import { formatDate, shareUrl } from "utils/helpers";
+import { useRefreshValue } from "context/refresh-value/RefreshContext";
 
 const tabObject = {
   [ROUTE_CONST.LIVE_SCORE]: "commentary",
@@ -23,11 +24,14 @@ const tabObject = {
 
 const MatchDetailsLayout = ({ Content }) => {
   const location = useLocation();
+  const { value,initialLoad } =useRefreshValue();
+
   const pathName = `/${location.pathname.split("/")[1]}`;
   const [activeTab, setActiveTab] = useState(tabObject[pathName]);
 
   const [matchData, setMatchData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
 
   const { id, matchName } = useParams();
 
@@ -38,11 +42,20 @@ const MatchDetailsLayout = ({ Content }) => {
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO}/${id}`);
       
-      setMatchData(res.data.data[0]);
+      setMatchData({...res?.data?.data?.[0],lastFiveOver:res?.data?.data?.[0]?.lastFiveOver?.reverse()});
     } catch (error) {
       console.log({ error });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const getMatchDataLive = async () => {
+    try {
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO}/${id}`);
+      setMatchData({...res?.data?.data?.[0],lastFiveOver:res?.data?.data?.[0]?.lastFiveOver?.reverse()});
+    } catch (error) {
+      console.log({ error });
     }
   };
 
@@ -52,7 +65,13 @@ const MatchDetailsLayout = ({ Content }) => {
 
   useEffect(() => {
     getMatchData();
-  }, []); //eslint-disable-line
+  }, [id]); //eslint-disable-line
+
+  useEffect(()=>{
+    if(!initialLoad){
+      getMatchDataLive();
+    }
+  },[value]);//eslint-disable-line
 
   return (
     <>
@@ -63,7 +82,7 @@ const MatchDetailsLayout = ({ Content }) => {
               <div className="matchDetailCard">
                 {" "}
                 {/* add loading class here for loader*/}
-                <div className="row align-items-start">
+                <div className={`row align-items-start ${isLoading ? "loading" :"" }`}>
                   <div className="col-10 matchTeams">
                     {/* Mumbai vs Vidarbha, Final - Live Cricket Score */}
                     {matchData?.name}
@@ -78,7 +97,7 @@ const MatchDetailsLayout = ({ Content }) => {
                   </div>
                   <div className="col-12 matchDes">
                     <span
-                      onClick={() => navigate("/series")}
+                      onClick={() => navigate(`${ROUTE_CONST.CRICKET_SERIES}/${matchData?.seriesData?.series_key}/${matchData?.seriesData?.name.replaceAll(" ","-")}?tab=Home`)}
                       className="urlLink"
                     >
                       {matchData?.seriesData?.name}
@@ -105,18 +124,21 @@ const MatchDetailsLayout = ({ Content }) => {
 
               {/* add loading class here for loader (below) */}
               {matchData.status_str !== "Scheduled" ? (
-                <div className="matchDetailCard mt-2 ">
+                <div className={`matchDetailCard mt-2 ${ isLoading ? "loading" : "" }`}>
                   <div className="row align-items-center">
                     <div className="col-12 teamAndMatchs">
                       <div className="row mb-2">
                         <div className="col d-flex align-items-center gap-2 gap-md-3 overflow-hidden">
-                          <div className="mStatus">Live</div>
+                          
+                          {matchData?.status_str==="Live" ? <div className="mStatus">Live</div>: "" }
+                          {matchData?.status_str==="Completed" ? <div className="mStatus green">Result</div>: "" }
+                          
                           <div className="whoPlaying">
-                            Icon Academy Women elected to bat{" "}
+                            {matchData?.seriesData?.name}
                           </div>
                         </div>
                         <div className="col-auto d-none d-md-block">
-                          <div className="runRate">Current Run Rate : 5.76</div>
+                          {/* <div className="runRate">Current Run Rate : 5.76</div> */}
                         </div>
                       </div>
                     </div>
@@ -128,20 +150,20 @@ const MatchDetailsLayout = ({ Content }) => {
                               <div className="flex align-items-center teamName">
                                 <div className="teamNameImg">
                                   <img
-                                    src="https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-43_a162.png&w=40&q=75"
+                                    src={matchData?.teamAImage}
                                     alt=""
                                   />
                                 </div>
                               </div>
                             </td>
                             <td className="ps-0">
-                              <div className="flex align-items-center teamName pe-3 pe-md-4">
-                                <span>IAW</span>
+                              <div className={`flex align-items-center teamName pe-3 pe-md-4 ${matchData?.status_str==="Completed"?  (matchData?.teamAId === matchData?.winningTeamId ? "winner" :'disabled'):""}`}>
+                                <span>{matchData?.teamaname}</span>
                               </div>
                             </td>
                             <td>
                               <div className="scoreDetail nowPlaying">
-                                *91/4 (13.4 ov)
+                                {matchData?.teamAFullScore}
                               </div>
                             </td>
                           </tr>
@@ -150,19 +172,19 @@ const MatchDetailsLayout = ({ Content }) => {
                               <div className="flex align-items-center teamName">
                                 <div className="teamNameImg">
                                   <img
-                                    src="https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-42_85a2.png&w=40&q=75"
+                                    src={matchData?.teamBImage}
                                     alt=""
                                   />
                                 </div>
                               </div>
                             </td>
                             <td className="ps-0">
-                              <div className="flex align-items-center teamName pe-3 pe-md-4">
-                                <span>gtw</span>
+                              <div className={`flex align-items-center teamName pe-3 pe-md-4 ${matchData?.status_str==="Completed"?  (matchData?.teamBId === matchData?.winningTeamId ? "winner" :'disabled'):"" }`}>
+                                <span>{matchData?.teambname}</span>{}
                               </div>
                             </td>
                             <td>
-                              <div className="scoreDetail">Yet To Bat</div>
+                              <div className="scoreDetail">{matchData?.teamBFullScore}</div>
                             </td>
                           </tr>
                         </tbody>
@@ -171,14 +193,15 @@ const MatchDetailsLayout = ({ Content }) => {
                     <div className="col-12 mt-2 teamAndMatchs d-md-none">
                       <div className="row">
                         <div className="col-auto">
-                          <div className="runRate">Current Run Rate : 5.76</div>
+                          {/* <div className="runRate">Current Run Rate : 5.76</div> */}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               ) : null}
-              {matchData.status_str !== "Scheduled" ? <RecentOver /> : ""}
+              
+              {matchData.status_str !== "Scheduled" ? <RecentOver isLoading={isLoading} data={matchData?.lastFiveOver}  /> : ""}
 
               <div className="commonTabs mt-2 mb-2 mb-md-3">
                 <div
@@ -253,7 +276,7 @@ const MatchDetailsLayout = ({ Content }) => {
               </div>
 
               {/* Content--------------------------------------------------------------------------------> */}
-              <Content matchData={matchData} />
+              <Content matchData={matchData}  id={id} matchName={matchName}  />
               {/* Content--------------------------------------------------------------------------------> */}
             </div>
 

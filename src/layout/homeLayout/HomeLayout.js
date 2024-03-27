@@ -70,7 +70,7 @@ const series = [
 const tabObject={
     [ROUTE_CONST.CRICKET_MATCH_RESULTS]:"Completed",
     [ROUTE_CONST.CRICKET_UPCOMING_MATCHES_SCHEDULE]:"Scheduled",
-    [ROUTE_CONST.LIVE_CRICKET_SCORES]:"live"
+    [ROUTE_CONST.LIVE_CRICKET_SCORES]:"live",
 }
 
 const HomeLayout = ({ Content }) => {
@@ -226,6 +226,17 @@ const HomeLayout = ({ Content }) => {
                       }`}
                     >
                       domestic
+                    </div>
+                    <div
+                      onClick={() => {
+                        setCategory("women");
+                        setCurrentPage(1);
+                      }}
+                      className={`tab ${
+                        category === "women" ? "active" : ""
+                      }`}
+                    >
+                      Women
                     </div>
                   </div>
                 </div>

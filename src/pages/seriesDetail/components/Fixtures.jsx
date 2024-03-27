@@ -233,7 +233,7 @@ const Fixtures = ({ id,tab,seriesName }) => {
 
   useEffect(()=>{
     getSeriesData();
-  },[]);
+  },[id]);
 
   return (
     <>

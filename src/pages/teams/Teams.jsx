@@ -5,9 +5,9 @@ import allRounderIcon from "assets/img/allRounder.png";
 import bowler from "assets/img/bowler.svg";
 import NoDataFound from "components/noData";
 
-const players = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 const Teams = ({ matchData }) => {
+  
   return (
     <>
       <div className="commonHeading mt-3">PLAYING XI</div>
@@ -191,7 +191,7 @@ const Teams = ({ matchData }) => {
             </ul>
           </div>
         </div>
-      </div>:<NoDataFound title={"Yet to be announced"} />}
+      </div>:<NoDataFound />}
     </>
   );
 };

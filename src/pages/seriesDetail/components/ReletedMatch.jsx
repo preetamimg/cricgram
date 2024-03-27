@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Navigation, Pagination } from 'swiper/modules';
 import MatchCard from 'components/matchCard';
-import arrowIcon from 'assets/img/arrow.svg'
+import arrowIcon from 'assets/img/arrow.svg';
 
 const ReletedMatch = ({ data }) => {
 
@@ -61,4 +61,4 @@ const ReletedMatch = ({ data }) => {
   )
 }
 
-export default ReletedMatch
+export default ReletedMatch;

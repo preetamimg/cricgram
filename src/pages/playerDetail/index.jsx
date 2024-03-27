@@ -1,11 +1,14 @@
+import React, { useEffect, useState } from 'react';
 import CurrentSeries from 'components/currentSeries';
 import NoDataFound from 'components/noData';
-import { RESPONSIVE_WIDTH } from 'constants';
-import React, { useState } from 'react'
+import { API_ROUTES,RESPONSIVE_WIDTH } from '../../constants';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { getAPI } from 'utils/services';
 import { useMediaQuery } from 'utils/useMediaQuery';
+import { useParams } from 'react-router-dom';
+import { formatDate, formatDobWithAge } from 'utils/helpers';
 
-const data = [1,1,1,1]
+const mdata = [1,1,1,1]
 
 const matchType = [
   {
@@ -29,7 +32,29 @@ const matchType = [
 const PlayerDetail = () => {
   const [selectedType , setSelectedType] = useState(matchType?.[0]?.name)
   const isMdScreen = useMediaQuery(RESPONSIVE_WIDTH.MD_SCREEN)
+  
+  const [ data,setData ] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const { playerId } =useParams();
 
+
+  const getMatchData = async () => {
+    setIsLoading(true);
+    try {
+      const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA_PLAYER_INFO}/${playerId}`);
+      console.log({ res })
+
+      setData(res?.data?.data);
+    } catch (error) {
+      console.log({ error });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getMatchData();
+  }, []); //eslint-disable-line
 
   return (
     <>
@@ -38,12 +63,12 @@ const PlayerDetail = () => {
           <div className="row">
             <div className="col-lg-4 col-xl-3">
               <div className="playerImgCard mb-1 mb-lg-3">
-                <div className="pName">JOE CARTER</div>
+                <div className="pName">{data?.fullname}</div>
                 <div className="pTeam">
                   <div className="pImg">
                     <img src="https://www.crictracker.com/_next/image/?url=%2F_next%2Fstatic%2Fmedia%2Fteam-placeholder.4512091e.jpg&w=40&q=75" alt="" />
                   </div>
-                  New Zealand
+                  {data?.nationality}
                 </div>
                 <div className="playerImg">
                   <img src={'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png'} alt="" />
@@ -60,38 +85,38 @@ const PlayerDetail = () => {
                 <div className="row g-4 row-cols-2 row-cols-md-3 row-cols-xl-4">
                   <div className="col">
                     <div className="pTitle">Full Name</div>
-                    <div className="pValue">Joe Carter</div>
+                    <div className="pValue">{data?.fullname}</div>
                   </div>
                   <div className="col">
                     <div className="pTitle">Nationality</div>
-                    <div className="pValue">New Zealand</div>
+                    <div className="pValue">{data?.nationality}</div>
                   </div>
                   <div className="col">
                     <div className="pTitle">Other Name</div>
-                    <div className="pValue">Joe Carter</div>
+                    <div className="pValue">{data?.player_name}</div>
                   </div>
                   <div className="col">
                     <div className="pTitle">Role</div>
-                    <div className="pValue">Batter</div>
+                    <div className="pValue">{data?.role}</div>
                   </div>
                   <div className="col">
                     <div className="pTitle">Birth Date</div>
-                    <div className="pValue">17 Dec 1992 (31y 92d)</div>
+                    <div className="pValue">{formatDobWithAge(data?.dob)}</div>
                   </div>
                   <div className="col">
                     <div className="pTitle">Birth Place</div>
-                    <div className="pValue">--</div>
+                    <div className="pValue">{data?.birthplace}</div>
                   </div>
                   <div className="col">
                     <div className="pTitle">Batting Style</div>
-                    <div className="pValue">Right Hand Bat</div>
+                    <div className="pValue">{data?.battingstyle}</div>
                   </div>
                   <div className="col">
                     <div className="pTitle">Bowling Style</div>
-                    <div className="pValue">--</div>
+                    <div className="pValue">{data?.bowlingstyle}</div>
                   </div>
                 </div>
-                <div className="row playerTeams gy-3">
+                {/* <div className="row playerTeams gy-3">
                   <div className="col-12">
                     <div className="commonHeading mb-0">Teams</div>
                   </div>
@@ -111,7 +136,7 @@ const PlayerDetail = () => {
                       <span>Northern Districts</span>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="playerPerformanceCard mt-4">
                 <div className="row">
@@ -138,22 +163,42 @@ const PlayerDetail = () => {
                     </thead>
                     <tbody>
                       {
-                        data?.map((item, index)=> (
+                        Object.keys(data?.batting?.[0] || {})?.map((key)=> {
+                         
+                          return (
                           <tr>
-                            <td>T20</td>
-                            <td>39</td>
-                            <td>37</td>
-                            <td>7</td>
-                            <td>628</td>
-                            <td>76</td>
-                            <td>20.93</td>
-                            <td>560</td>
-                            <td>112.24</td>
-                            <td>--</td>
-                            <td>3</td>
+                            <td>{key}</td>
+                            <td>{data.batting?.[0]?.[key]?.matches ? data.batting?.[0]?.[key]?.matches : "---"}</td>
+                            <td>{data.batting?.[0]?.[key]?.innings? data.batting?.[0]?.[key]?.innings :"---"}</td>
+                            <td>{data.batting?.[0]?.[key]?.notout?data.batting?.[0]?.[key]?.notout:"---"}</td>
+                            <td>{data.batting?.[0]?.[key]?.runs?data.batting?.[0]?.[key]?.runs:"---"}</td>
+                            <td>{data.batting?.[0]?.[key]?.highest?data.batting?.[0]?.[key]?.highest:"---"}</td>
+                            <td>{data.batting?.[0]?.[key]?.average?data.batting?.[0]?.[key]?.average:"---"}</td>
+                            <td>{data.batting?.[0]?.[key]?.balls ? data.batting?.[0]?.[key]?.balls :"--"}</td>
+                            <td>{data.batting?.[0]?.[key]?.strike?data.batting?.[0]?.[key]?.strike:"---"}</td>
+                            <td>{data.batting?.[0]?.[key]?.run100?data.batting?.[0]?.[key]?.run100:"---"}</td>
+                            <td>{data.batting?.[0]?.[key]?.run50?data.batting?.[0]?.[key]?.run50:"---"}</td>
                           </tr>
-                        ))
+                        )})
                       }
+                      {isLoading ? <>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      </>
+                      :null}
                     </tbody>
                   </table>
                 </div>
@@ -184,31 +229,56 @@ const PlayerDetail = () => {
                     </thead>
                     <tbody>
                       {
-                        data?.map((item, index)=> (
+                        Object.keys(data?.bowling?.[0] || {})?.map((key)=> (
                           <tr className='text-nowrap'>
-                            <td>T20</td>
-                            <td>39</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
+                            <td>{key}</td>
+                            <td>{data.bowling?.[0]?.[key]?.matches ? data.bowling?.[0]?.[key]?.matches : "--"}</td>
+                            <td>{data.bowling?.[0]?.[key]?.innings? data.bowling?.[0]?.[key]?.innings :"--"}</td>
+                            
+                            <td>{data?.bowling?.[0]?.[key]?.overs ? data.bowling?.[0]?.[key]?.overs:"--"}</td>
+
+                            <td>{data.bowling?.[0]?.[key]?.runs ? data.bowling?.[0]?.[key]?.runs:"--"}</td>
+
+                            <td>{data.bowling?.[0]?.[key]?.wickets ? data.bowling?.[0]?.[key]?.wickets:"--"}</td>
+
+                            <td>{data.bowling?.[0]?.[key]?.bestinning ? data.bowling?.[0]?.[key]?.bestinning:"--"}</td>
+                            
+                            <td>{data.bowling?.[0]?.[key]?.average ? data.bowling?.[0]?.[key]?.average:"--"}</td>
+
+                            <td>{data.bowling?.[0]?.[key]?.econ ? data.bowling?.[0]?.[key]?.econ:"--"}</td>
+                            
+                            <td>{data.bowling?.[0]?.[key]?.strike ? data.bowling?.[0]?.[key]?.strike:"--"}</td>
+                            
+                            <td>{data.bowling?.[0]?.[key]?.wicket4i ? data.bowling?.[0]?.[key]?.wicket4i:"--"}</td>
+                            
+                            <td>{data.bowling?.[0]?.[key]?.wicket5i ? data.bowling?.[0]?.[key]?.wicket5i:"--"}</td>
                           </tr>
                         ))
                       }
+                      {isLoading ? <>
                       <tr>
                         <td className='tableLoader' colSpan={12}></td>
                       </tr>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      <tr>
+                        <td className='tableLoader' colSpan={12}></td>
+                      </tr>
+                      </>
+                      :null}
                     </tbody>
                   </table>
                 </div>
               </div>
-              <div className="playerPerformanceCard mt-4">
+              {/* -----------------------------------------------------------> Recent Form ( Last 5 matches )  [ ⚠️ Do Not Remove ⚠️ ] */}
+              {/* <div className="playerPerformanceCard mt-4">
                 <div className="row align-items-center mb-2">
                   <div className="col cardTitle mb-0">
                     RECENT FORM (LAST 5 MATCHES)
@@ -245,7 +315,7 @@ const PlayerDetail = () => {
                     </thead>
                     <tbody>
                       {
-                        data?.map((item, index)=> (
+                        mdata?.map((item, index)=> (
                           <tr>
                             <td className='text-nowrap'>ND vs AUK</td>
                             <td className='text-nowrap'>124 & 58</td>
@@ -258,7 +328,7 @@ const PlayerDetail = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </div> */}
             </div>
             {
                 isMdScreen ? <>
@@ -274,4 +344,4 @@ const PlayerDetail = () => {
   )
 }
 
-export default PlayerDetail
+export default PlayerDetail; 

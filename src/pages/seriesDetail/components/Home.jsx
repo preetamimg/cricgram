@@ -3,10 +3,11 @@ import TopRankerCard from 'components/topRankerCard';
 import TopRankerCardLoader from 'components/topRankerCard/Loader';
 import { API_ROUTES } from '../../../constants';
 import { getAPI } from 'utils/services';
+import NoDataFound from 'components/noData';
 
 
 const Home = ({ id,tab,seriesName }) => {
-  const [data,setData] = useState([1,2,3,4,5,]);
+  const [data,setData] = useState([]);
   const [ isLoading,setIsLoading ] = useState(false);
 
 
@@ -24,7 +25,7 @@ const Home = ({ id,tab,seriesName }) => {
 
   useEffect(()=>{
     getSeriesData();
-  },[]);
+  },[id]);
 
   return (
     <>
@@ -36,6 +37,9 @@ const Home = ({ id,tab,seriesName }) => {
             </div>
           ))
         :null}
+        {
+          !data.length ? <NoDataFound  /> :null
+        }
         {isLoading ?
           <>
             <div className="col-6 col-lg-4 col-xl-3">

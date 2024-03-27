@@ -37,7 +37,7 @@ const SeriesDetail = () => {
 
   useEffect(()=>{
     getSeriesData();
-  },[]);
+  },[id]);
 
 
   useEffect(()=>{

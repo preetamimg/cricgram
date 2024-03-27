@@ -57,7 +57,7 @@ const PrivacyPolicy = () => {
             </div>
             <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
               <CurrentSeries />
-              <AdsComp/>
+              {/* <AdsComp/> */}
             </div>
           </div>
         </div>

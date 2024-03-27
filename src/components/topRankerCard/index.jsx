@@ -2,9 +2,10 @@ import React from 'react'
 import PlayerImage from 'assets/img/playerPlaceholder.webp'
 
 const TopRankerCard = () => {
+  
   return (
     <>
-      <div className="topRankerCard">
+      <div className="topRankerCard"  >
         <div className="playerImg">
           <img src={PlayerImage} alt="" />
         </div>

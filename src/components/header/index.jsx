@@ -17,22 +17,22 @@ const Header = () => {
     {
       id: 'nav2',
       name: 'About Us',
-      url: '/'
+      url: ROUTE_CONST.ABOUT_US
     },
     {
       id: 'nav3',
       name: 'Contact Us',
-      url: '/'
+      url: ROUTE_CONST.CONTACT_US
     },
     {
       id: 'nav4',
       name: 'Disclaimer',
-      url: '/'
+      url: ROUTE_CONST.DISCLAIMER
     },
     {
       id: 'nav5',
       name: 'Privacy Policy',
-      url: '/'
+      url: ROUTE_CONST.PRIVACY_POLICY
     }
   ]
   return (

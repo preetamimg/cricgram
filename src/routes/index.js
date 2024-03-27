@@ -17,6 +17,9 @@ import Overs from 'pages/overs/Overs';
 import Teams from 'pages/teams/Teams';
 import PageNotFound from 'pages/pageNotFound';
 import PrivacyPolicy from 'pages/privacyPolicy';
+import AboutUs from 'pages/aboutUs';
+import Disclaimer from 'pages/disclaimer';
+import ContactUs from 'pages/contactUs';
 
 const RouteComponent = () => {
   return (
@@ -34,11 +37,15 @@ const RouteComponent = () => {
 
         <Route path={`${ROUTE_CONST.OVERS}/:id/:matchName`} element={<AppLayout LayoutComponent={MatchDetailsLayout} Content={Overs} />}/>
 
-        <Route path={ROUTE_CONST.PLAYER_DETAIL} element={<AppLayout LayoutComponent={PlayerDetail}/>}/>
+        <Route path={`${ROUTE_CONST.PLAYER_DETAIL}/:playerId`} element={<AppLayout LayoutComponent={PlayerDetail}/>}/>
 
         <Route path={`${ROUTE_CONST.CRICKET_SERIES}/:id/:seriesName`} element={<AppLayout LayoutComponent={SeriesDetail}/>}/>
         <Route path={'*'} element={<PageNotFound/>}/>
         <Route path={ROUTE_CONST.PRIVACY_POLICY} element={<AppLayout LayoutComponent={PrivacyPolicy}/>}/>
+        <Route path={ROUTE_CONST.ABOUT_US} element={<AppLayout LayoutComponent={AboutUs}/>}/>
+        <Route path={ROUTE_CONST.DISCLAIMER} element={<AppLayout LayoutComponent={Disclaimer}/>}/>
+        <Route path={ROUTE_CONST.CONTACT_US} element={<AppLayout LayoutComponent={ContactUs}/>}/>
+
       </Routes>
     </>
   )

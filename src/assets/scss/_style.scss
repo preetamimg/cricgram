@@ -578,6 +578,41 @@ body {
         @include md {
           font-size: 16px;
         }
+      }    
+      &.disabled {
+        color: $theme4;
+        opacity: 0.8;
+      }
+      &.playing {
+        position: relative;
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: -10px;
+          height: 6px;
+          width: 6px;
+          border-radius: 20px;
+          background-color: red;
+        }
+      }
+      &.winner {
+        position: relative;
+        padding-right: 20px;
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 0px;
+          height: 18px;
+          width: 18px;
+          border-radius: 20px;
+          background-image: url(./../img/cup.svg);
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       }
     }
     & .scoreDetail {
@@ -622,6 +657,9 @@ body {
         border-radius: 20px;
         background-color: white;
         box-shadow:0px 0px 8px 3px white ;
+      }
+      &.green {
+        background-color: $green;
       }
     }
     & .whoPlaying {
@@ -780,7 +818,7 @@ body {
     font-size: 12px;
     color: $theme4;
     font-weight: 500;
-    border-right: 1px solid $theme5;
+    // border-right: 1px solid $theme5;
     padding-right: 35px;
     @include md {
       font-size: 14px;
@@ -793,14 +831,14 @@ body {
     flex-direction: column;
     font-size: 12px;
     color: $theme4;
-    padding-right: 15px;
+    padding-left: 15px;
+    border-left: 1px solid $theme5;
     & span {
       display: block;
     }
   }
   & .overBoxParent {
-    border-right: 1px solid $theme5;
-    padding-right: 15px;
+    // padding-right: 15px;
     @include md {
       gap: 0.75rem !important;
     }
@@ -938,9 +976,12 @@ body {
     font-weight: 700;
     color: $theme4;
     border: 1px solid transparent;
-    &.four, 
-    &.six {
+    &.four{
       background-color: $green;
+      color: black;
+    } 
+    &.six {
+      background-color: $blueish;
       color: black;
     }
     &.wicket {
@@ -1523,7 +1564,23 @@ body {
           display: flex;
           font-weight: 500;
           align-items: center;
-          justify-content: center;
+          justify-content: center;            
+            &.four{
+              background-color: $green;
+              color: black;
+            } 
+            &.six {
+              background-color: $blueish;
+              color: black;
+            }
+            &.wicket {
+              background-color: red;
+              text-transform: uppercase;
+            }
+            &.zero {
+              background-color: transparent;
+              border: 1px solid $theme2 !important;
+            }
         }
         & .overCountt {
           font-size: 12px;

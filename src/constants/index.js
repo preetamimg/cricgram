@@ -12,7 +12,10 @@ export const ROUTE_CONST = {
   // RESULT:"/result",
   PLAYER_DETAIL: '/player',
   CRICKET_SERIES: '/cricket-series',
-  PRIVACY_POLICY: '/privacy-policy'
+  PRIVACY_POLICY: '/privacy-policy',
+  ABOUT_US: '/about-us',
+  DISCLAIMER: '/disclaimer',
+  CONTACT_US: '/contact-us'
 }
 
 
@@ -29,6 +32,15 @@ export const API_ROUTES = {
   GET_MATCHES_DATA:"getMatchData",                     // /:category/:status  *required params
   GET_SERIES_DATA:"getSeriesData",                    //?limit=5
   GET_MATCH_INFO:"getMatchInfo",                     //  /:real_matchKey
-  SERIES_GET_MATCH_DATA:"/series/getmatchData",      // :series_key
+  GET_MATCH_INFO_COMMENTARY:"getMatchInfo/Commentary", // /:real_matchKey
+  GET_MATCH_INFO_SCORECARD:"getMatchInfo/scoreCard",  //:real_matchKey
+  GET_MATCH_INFO_OVER:"getMatchInfo/over",       //:real_matchKey
+  
+  // -------------------------------------------------- -------------------series>
+
+  SERIES_GET_MATCH_DATA:"series/getmatchData",      // :series_key
   SERIES_MATCHES:"series/matches",                    // :series_key
+  SERIES_GET_MATCH_DATA_STAT_TYPE:"series/getmatchData/statTypes",     // :seriesKey
+  SERIES_GET_MATCH_DATA_STAT_DATA:"series/getmatchData/statData",  // :seriesKey && :name ( stat type )
+  SERIES_GET_MATCH_DATA_PLAYER_INFO:"series/getmatchData/playerInfo",   //:playerId
 }
