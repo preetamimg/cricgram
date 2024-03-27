@@ -6,6 +6,7 @@ import { formatDate } from "utils/helpers";
 import { API_ROUTES } from "../../constants";
 import { getAPI } from "utils/services";
 import NoDataFound from "components/noData";
+import { useRefreshValue } from "context/refresh-value/RefreshContext";
 
 const commentryOverLoading = [
   [1, 1, 1, 1, 1, 1],
@@ -16,6 +17,8 @@ const Commentary = ({ matchData, id }) => {
   const [data, setData] = useState({});
   const [activeTab, setActiveTab] = useState("All");
   const [ error,setError ] = useState(null);
+  
+  const { value,initialLoad } =useRefreshValue();
 
   const [inning1, setInning1] = useState({});
   const [inning2, setInning2] = useState({});
@@ -71,6 +74,51 @@ const Commentary = ({ matchData, id }) => {
     }
   };
 
+  const getCommentaryDataLive = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_COMMENTARY}/${id}`);
+
+      let in1Player = {};
+      let in2Player = {};
+
+      res?.data?.data?.inning1?.[0]?.players?.forEach((el) => {
+        in1Player[String(el?.pid)] = el?.title;
+      });
+
+      res?.data?.data?.inning2?.[0]?.players?.forEach((el) => {
+        in1Player[String(el?.pid)] = el?.title;
+      });
+
+      playersRef.current = { ...in1Player, in2Player };
+
+      setInning1({
+        ...res?.data?.data?.inning1?.[0],
+        commentaries: res?.data?.data?.inning1?.[0]?.commentaries?.reverse(),
+      });
+
+      setInning2({
+        ...res?.data?.data?.inning2?.[0],
+        commentaries: res?.data?.data?.inning2?.[0]?.commentaries?.reverse(),
+      });
+
+      setData({
+        batsmen: [...res?.data?.data?.batsmen],
+        bowlers: [...res?.data?.data?.bowlers],
+        live_inning: { ...res?.data?.data?.live_inning?.[0] },
+        fows:[ ...res?.data?.data?.fows ]
+      });
+
+    } catch (error) {
+      console.log({ error });
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
   const handleClick = (tabId) => {
     if (tabId === activeTab) {
       setActiveTab("All");
@@ -118,7 +166,13 @@ const Commentary = ({ matchData, id }) => {
 
   useEffect(() => {
     getCommentaryData();
-  }, []);//eslint-disable-line
+  }, [id,]);//eslint-disable-line
+
+  useEffect(() => {
+    if(!initialLoad){
+      getCommentaryDataLive();
+    }
+  }, [value]);//eslint-disable-line
 
   useEffect(() => {
     handleFiltering();
@@ -570,8 +624,14 @@ const Commentary = ({ matchData, id }) => {
               ) : null}
             </ul>
           ))}
+          {
+            !inning2Filtered?.length ? <NoDataFound />  :null
+          }
         </div>
       ) : null}
+      {/* {
+        !inning2.commentaries?.length ?  : null
+      } */}
 
       {/* <div className="mt-3 d-flex justify-content-center">
         <div className="commonBtn" style={{ maxWidth: "150px" }}>
@@ -684,7 +744,7 @@ const Commentary = ({ matchData, id }) => {
               ) : null}
 
               {/* over description */}
-              {item.event === "overend" ? (
+              {item?.event === "overend" ? (
                 <li className="d-flex align-items-center commentryOver">
                   <div className="row row-cols-xxl-5 g-3 w-100 justify-content-between mx-0">
                     <div className="col-6 col-xl-auto col-xxl commentryOverCol d-none d-xl-block">
@@ -739,8 +799,12 @@ const Commentary = ({ matchData, id }) => {
               ) : null}
             </ul>
           ))}
+        {
+          !inning1Filtered?.length ? <NoDataFound />  :null
+        }
         </div>
       ) : null}
+
     </>
    : <NoDataFound /> ): (
     <>

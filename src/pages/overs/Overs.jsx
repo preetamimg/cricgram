@@ -3,6 +3,7 @@ import OverCard from "components/overCard";
 import { API_ROUTES } from "../../constants";
 import React, { useEffect, useState } from "react";
 import { getAPI } from "utils/services";
+import { useRefreshValue } from "context/refresh-value/RefreshContext";
 
 function transformCricketData(data=[]) {
   const transformedData = [];
@@ -33,14 +34,15 @@ function transformCricketData(data=[]) {
 const Overs = ({ matchData, id }) => {
   const [data, setData] = useState({});
   const [ selectedInning,setSelectedInning ]=useState({});
+  const { value,initialLoad } =useRefreshValue();
 
-  const [matchKey, setMatchKey] = useState("");
+  // const [matchKey, setMatchKey] = useState("");
 
-  const getScoreboardData = async () => {
+  const getOversData = async () => {
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_OVER}/${id}`);
 
-      setMatchKey(res?.data?.data?.real_matchkey);
+      // setMatchKey(res?.data?.data?.real_matchkey);
 
       delete res.data.data.real_matchkey;
       delete res.data.data._id;
@@ -52,10 +54,29 @@ const Overs = ({ matchData, id }) => {
     }
   };
 
-  useEffect(() => {
-    getScoreboardData();
-  }, []); //eslint-disable-line
+  const getOversDataLive = async () => {
+    try {
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_OVER}/${id}`);
+      // setMatchKey(res?.data?.data?.real_matchkey);
+      delete res.data.data.real_matchkey;
+      delete res.data.data._id;
+      setData(res?.data?.data);
+      setSelectedInning(res?.data?.data?.inning1[0]);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
 
+  useEffect(() => {
+    getOversData();
+  }, [id]); //eslint-disable-line
+
+  useEffect(() => {
+    if(!initialLoad){
+      getOversDataLive();
+    }
+    
+  }, [value]); //eslint-disable-line
   
   const handleClick = (item) => {
     setSelectedInning(item);

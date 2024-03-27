@@ -277,7 +277,8 @@ const PlayerDetail = () => {
                   </table>
                 </div>
               </div>
-              <div className="playerPerformanceCard mt-4">
+              {/* -----------------------------------------------------------> Recent Form ( Last 5 matches )  [ ⚠️ Do Not Remove ⚠️ ] */}
+              {/* <div className="playerPerformanceCard mt-4">
                 <div className="row align-items-center mb-2">
                   <div className="col cardTitle mb-0">
                     RECENT FORM (LAST 5 MATCHES)
@@ -327,7 +328,7 @@ const PlayerDetail = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </div> */}
             </div>
             {
                 isMdScreen ? <>

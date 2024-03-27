@@ -12,6 +12,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { API_ROUTES, ROUTE_CONST } from "../../constants";
 import { getAPI } from "utils/services";
 import { formatDate, shareUrl } from "utils/helpers";
+import { useRefreshValue } from "context/refresh-value/RefreshContext";
 
 const tabObject = {
   [ROUTE_CONST.LIVE_SCORE]: "commentary",
@@ -23,6 +24,8 @@ const tabObject = {
 
 const MatchDetailsLayout = ({ Content }) => {
   const location = useLocation();
+  const { value,initialLoad } =useRefreshValue();
+
   const pathName = `/${location.pathname.split("/")[1]}`;
   const [activeTab, setActiveTab] = useState(tabObject[pathName]);
 
@@ -47,6 +50,15 @@ const MatchDetailsLayout = ({ Content }) => {
     }
   };
 
+  const getMatchDataLive = async () => {
+    try {
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO}/${id}`);
+      setMatchData({...res?.data?.data?.[0],lastFiveOver:res?.data?.data?.[0]?.lastFiveOver?.reverse()});
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
   useEffect(() => {
     setActiveTab(tabObject[pathName]);
   }, [pathName]);
@@ -55,7 +67,11 @@ const MatchDetailsLayout = ({ Content }) => {
     getMatchData();
   }, [id]); //eslint-disable-line
 
-  console.log("matchData",matchData);
+  useEffect(()=>{
+    if(!initialLoad){
+      getMatchDataLive();
+    }
+  },[value]);//eslint-disable-line
 
   return (
     <>

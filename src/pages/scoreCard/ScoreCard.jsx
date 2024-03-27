@@ -9,17 +9,27 @@ import NoDataFound from "components/noData";
 import { getAPI } from "utils/services";
 import { API_ROUTES } from "../../constants";
 import { formatDate } from "utils/helpers";
+import { useRefreshValue } from "context/refresh-value/RefreshContext";
 
 
 const ScoreCard = ({ matchData, id }) => {
   const [data, setData] = useState([]);
+  const { value,initialLoad } =useRefreshValue();
 
   const getScoreboardData = async () => {
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_SCORECARD}/${id}`);
 
-      // console.log({ res });
 
+      setData(res.data.data.scoreCardData);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  const getScoreboardDataLive = async () => {
+    try {
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_SCORECARD}/${id}`);
       setData(res.data.data.scoreCardData);
     } catch (error) {
       console.log({ error });
@@ -28,7 +38,14 @@ const ScoreCard = ({ matchData, id }) => {
 
   useEffect(() => {
     getScoreboardData();
-  }, []); //eslint-disable-line
+  }, [id]); //eslint-disable-line
+
+  
+  useEffect(() => {
+    if(!initialLoad){
+      getScoreboardData();
+    }
+  }, [initialLoad,value]); //eslint-disable-line
 
   return matchData.status_str !== "Scheduled" ? (
     <>

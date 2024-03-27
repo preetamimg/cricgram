@@ -40,6 +40,7 @@ export const API_ROUTES = {
 
   SERIES_GET_MATCH_DATA:"series/getmatchData",      // :series_key
   SERIES_MATCHES:"series/matches",                    // :series_key
-  SERIES_GET_MATCH_DATA_PLAYER_INFO:"series/getmatchData/playerInfo", //:playerId
-  
+  SERIES_GET_MATCH_DATA_STAT_TYPE:"series/getmatchData/statTypes",     // :seriesKey
+  SERIES_GET_MATCH_DATA_STAT_DATA:"series/getmatchData/statData",  // :seriesKey && :name ( stat type )
+  SERIES_GET_MATCH_DATA_PLAYER_INFO:"series/getmatchData/playerInfo",   //:playerId
 }
