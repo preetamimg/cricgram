@@ -5,6 +5,7 @@ import wicketImg from "assets/img/wicket.svg";
 import { formatDate } from "utils/helpers";
 import { API_ROUTES } from "../../constants";
 import { getAPI } from "utils/services";
+import NoDataFound from "components/noData";
 
 const commentryOverLoading = [
   [1, 1, 1, 1, 1, 1],
@@ -14,6 +15,7 @@ const commentryOverLoading = [
 const Commentary = ({ matchData, id }) => {
   const [data, setData] = useState({});
   const [activeTab, setActiveTab] = useState("All");
+  const [ error,setError ] = useState(null);
 
   const [inning1, setInning1] = useState({});
   const [inning2, setInning2] = useState({});
@@ -27,6 +29,7 @@ const Commentary = ({ matchData, id }) => {
 
   const getCommentaryData = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_COMMENTARY}/${id}`);
 
@@ -62,6 +65,7 @@ const Commentary = ({ matchData, id }) => {
 
     } catch (error) {
       console.log({ error });
+      setError(error);
     } finally {
       setIsLoading(false);
     }
@@ -80,27 +84,27 @@ const Commentary = ({ matchData, id }) => {
     const innings2Data = structuredClone(inning2.commentaries);
 
     if (activeTab === "Wickets") {
-      const filtered1 = innings1Data.filter((item) => item.event === "wicket");
-      const filtered2 = innings2Data.filter((item) => item.event === "wicket");
+      const filtered1 = innings1Data?.filter((item) => item.event === "wicket");
+      const filtered2 = innings2Data?.filter((item) => item.event === "wicket");
 
       setInning1Filtered(filtered1);
       setInning2Filtered(filtered2);
     } else if (activeTab === "Fours") {
-      const filtered1 = innings1Data.filter(
-        (item) => item.event === "ball" && item.four
+      const filtered1 = innings1Data?.filter(
+        (item) => item?.event === "ball" && item?.four
       );
-      const filtered2 = innings2Data.filter(
-        (item) => item.event === "ball" && item.four
+      const filtered2 = innings2Data?.filter(
+        (item) => item?.event === "ball" && item?.four
       );
 
       setInning1Filtered(filtered1);
       setInning2Filtered(filtered2);
     } else if (activeTab === "Sixes") {
-      const filtered1 = innings1Data.filter(
-        (item) => item.event === "ball" && item.six
+      const filtered1 = innings1Data?.filter(
+        (item) => item?.event === "ball" && item?.six
       );
-      const filtered2 = innings2Data.filter(
-        (item) => item.event === "ball" && item.six
+      const filtered2 = innings2Data?.filter(
+        (item) => item?.event === "ball" && item?.six
       );
 
       setInning1Filtered(filtered1);
@@ -120,7 +124,7 @@ const Commentary = ({ matchData, id }) => {
     handleFiltering();
   }, [activeTab,inning1,inning2]);//eslint-disable-line
 
-  return matchData.status_str !== "Scheduled" ? (
+  return matchData?.status_str !== "Scheduled" ?( !error ? 
     <>
       <div className="row g-3 mb-3">
         <div className="xol-xl-7 col-xxl-8">
@@ -150,9 +154,14 @@ const Commentary = ({ matchData, id }) => {
 
                 {/* -------------------------------------------------------------------------------------------------------------------------------- */}
                 {/* loading td */}
-                {/* <tr>
+                {isLoading ?<> 
+                <tr>
                   <td colSpan={6} className="tableLoader"></td>
-                </tr> */}
+                </tr>
+                <tr>
+                  <td colSpan={6} className="tableLoader"></td>
+                </tr>
+                </>:""}
               </tbody>
             </table>
           </div>
@@ -182,9 +191,14 @@ const Commentary = ({ matchData, id }) => {
 
                 {/* --------------------------------------------------------------------------------------------------------------- */}
                 {/* loading td */}
-                {/* <tr>
-                  <td colSpan={6} className="tableLoader"></td>
-                </tr> */}
+              {isLoading ? <>
+              <tr>
+                <td colSpan={6} className="tableLoader"></td>
+              </tr>
+              <tr>
+                <td colSpan={6} className="tableLoader"></td>
+              </tr>
+              </>:""}
               </tbody>
             </table>
           </div>
@@ -192,15 +206,18 @@ const Commentary = ({ matchData, id }) => {
         <div className="col-xl-5 col-xxl-4">
           <div className="fallOfWickets h-100">
             {/* loading class here */}
-            <div className={`title ${isLoading ? "loading":""}`}>KEY STATS</div>
+            <div className={`title ${!isLoading ? "loading":""}`}>KEY STATS</div>
             <div className="d-flex justify-content-between keyValueDiv">
               <div className="key value text-nowrap">
                 {" "}
                 <span>Partnership :</span>
               </div>
               <div className="value text-end">
-                {data?.live_inning?.current_partnership?.runs}(
-                {data?.live_inning?.current_partnership?.balls})
+                {data?.live_inning?.current_partnership?.runs ? data?.live_inning?.current_partnership?.runs :""}
+                {data?.live_inning?.current_partnership?.balls ? <>({data?.live_inning?.current_partnership?.balls})</> :""}
+                {
+                  !data?.live_inning?.current_partnership?.runs && !data?.live_inning?.current_partnership?.balls ? "--" : ""
+                }
               </div>
             </div>
 
@@ -210,7 +227,7 @@ const Commentary = ({ matchData, id }) => {
                 <span>Last 5 Overs :</span>
               </div>
               <div className="value text-end">
-                {data?.live_inning?.last_five_overs}
+                {data?.live_inning?.last_five_overs ? data?.live_inning?.last_five_overs :"--"}
               </div>
             </div>
 
@@ -225,9 +242,11 @@ const Commentary = ({ matchData, id }) => {
                     data?.live_inning?.last_wicket?.batsman_id
                   ]
                 }{" "}
-                {data?.live_inning?.last_wicket?.runs}(
-                {data?.live_inning?.last_wicket?.balls}) -{" "}
-                {data?.live_inning?.last_wicket?.how_out}
+
+                {data?.live_inning?.last_wicket?.runs ? data?.live_inning?.last_wicket?.runs :""}
+                {data?.live_inning?.last_wicket?.balls ? <> ({data?.live_inning?.last_wicket?.balls})</> : ""} 
+                {data?.live_inning?.last_wicket?.how_out ? `- ${data?.live_inning?.last_wicket?.how_out}` :""}
+                
               </div>
             </div>
 
@@ -723,7 +742,7 @@ const Commentary = ({ matchData, id }) => {
         </div>
       ) : null}
     </>
-  ) : (
+   : <NoDataFound /> ): (
     <>
       <div className="commonHeading mt-3">MATCH INFO</div>
       <div className="fallOfWickets fallOfWic py-0">

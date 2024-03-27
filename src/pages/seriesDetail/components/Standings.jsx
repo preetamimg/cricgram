@@ -82,7 +82,7 @@ const Standings = ({ id,tab,seriesName }) => {
                           {/* use red, green class here */}
                           {array.map((num)=>{
                           if(formArray?.[num]){
-                            return <div className={`overBall ${formArray?.[num]==="W" ?"green":"red" } `}>{formArray?.[num]}</div>
+                            return <div className={`overBall ${formArray?.[num]==="W" ?"green":formArray?.[num]==="L" ? "red":"" } `}>{formArray?.[num]}</div>
                           }else{
                             return <div>-</div>
                           }
