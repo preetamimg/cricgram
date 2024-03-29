@@ -6,7 +6,6 @@ import arrowIcon from 'assets/img/arrow.svg';
 
 const loadingArray = [1,1,1,1]
 const RecentOver = ({ data,isLoading }) => {
-
   return (
     <>
       <div className="recentOvers mt-2">

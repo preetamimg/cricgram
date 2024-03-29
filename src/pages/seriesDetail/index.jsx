@@ -13,7 +13,7 @@ import Squads from './components/Squads';
 import ReletedMatch from './components/ReletedMatch';
 import { shareUrl } from 'utils/helpers';
 import { getAPI } from 'utils/services';
-import { API_ROUTES, } from '../../constants';
+import { API_ROUTES, ROUTE_CONST, } from '../../constants';
 
 const SeriesDetail = () => {
   const [ searchParams,setSearchParams ] = useSearchParams();
@@ -57,14 +57,14 @@ const SeriesDetail = () => {
                     <div className="col-10 matchBreadcrum">
                       <ul className="list-unstyled m-0 p-0">
                         <li>
-                          <Link to={'/'}>Home</Link>
+                          <Link to={`${ROUTE_CONST.LIVE_CRICKET_SCORES}`}>Home</Link>
                         </li>
-                        <li>
-                          <Link to={'/'}>{seriesData?.category}</Link>
-                        </li>
-                        <li>
-                          <Link to={'/'}>{seriesData?.name}</Link>
-                        </li>
+                        {seriesData?.category ? <li>
+                          <Link>{seriesData?.category}</Link>
+                        </li>:null}
+                        {seriesData?.name ? <li>
+                          <Link>{seriesData?.name}</Link>
+                        </li>:null}
                         <li>
                           <Link className='active' to={'/'}>{activeTab}</Link>
                         </li>
@@ -92,7 +92,7 @@ const SeriesDetail = () => {
 
                   {
                     activeTab === 'Home' ? <Home id={id} tab={activeTab} seriesName={seriesName} /> :
-                    activeTab === 'Fixtures' ? <Fixtures id={id} tab={activeTab} seriesName={seriesName} /> :
+                    activeTab === 'Fixtures' ? <Fixtures id={id} tab={activeTab} seriesName={seriesName} seriesData={seriesData} /> :
                     activeTab === 'Standings' ? <Standings id={id} tab={activeTab} seriesName={seriesName} /> : 
                     activeTab === 'Stats' ? <Stats id={id} tab={activeTab} seriesName={seriesName} /> :
                     activeTab === 'Teams' ? <Teams id={id} tab={activeTab} seriesName={seriesName} /> : 

@@ -2,35 +2,14 @@ import React, { useEffect, useState } from 'react';
 import CurrentSeries from 'components/currentSeries';
 import NoDataFound from 'components/noData';
 import { API_ROUTES,RESPONSIVE_WIDTH } from '../../constants';
-import Dropdown from 'react-bootstrap/Dropdown';
 import { getAPI } from 'utils/services';
 import { useMediaQuery } from 'utils/useMediaQuery';
 import { useParams } from 'react-router-dom';
-import { formatDate, formatDobWithAge } from 'utils/helpers';
-
-const mdata = [1,1,1,1]
-
-const matchType = [
-  {
-    id: 'type1',
-    name: 'All'
-  },
-  {
-    id: 'type2',
-    name: 'Test'
-  },    
-  {
-    id: 'type3',
-    name: 'ODI'
-  },    
-  {
-    id: 'type4',
-    name: 'T20'
-  },
-]
+import { formatDobWithAge } from 'utils/helpers';
+import teamPlacedHolder from "assets/img/team-placeholder.webp"
+import playerPlaceHolder from "assets/img/player-placeholder.png"
 
 const PlayerDetail = () => {
-  const [selectedType , setSelectedType] = useState(matchType?.[0]?.name)
   const isMdScreen = useMediaQuery(RESPONSIVE_WIDTH.MD_SCREEN)
   
   const [ data,setData ] = useState({});
@@ -42,7 +21,7 @@ const PlayerDetail = () => {
     setIsLoading(true);
     try {
       const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA_PLAYER_INFO}/${playerId}`);
-      console.log({ res })
+      
 
       setData(res?.data?.data);
     } catch (error) {
@@ -66,12 +45,12 @@ const PlayerDetail = () => {
                 <div className="pName">{data?.fullname}</div>
                 <div className="pTeam">
                   <div className="pImg">
-                    <img src="https://www.crictracker.com/_next/image/?url=%2F_next%2Fstatic%2Fmedia%2Fteam-placeholder.4512091e.jpg&w=40&q=75" alt="" />
+                    <img src={teamPlacedHolder} alt="" />
                   </div>
                   {data?.nationality}
                 </div>
                 <div className="playerImg">
-                  <img src={'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png'} alt="" />
+                  <img src={playerPlaceHolder} alt="" />
                 </div>
               </div>
               {
@@ -81,7 +60,7 @@ const PlayerDetail = () => {
               }
             </div>
             <div className="col-lg-8 col-xl-9 mt-3 mt-lg-0">
-              <div className="playerDetailCard">
+              {!isLoading && Object.keys(data || {}).length ? <div className="playerDetailCard">
                 <div className="row g-4 row-cols-2 row-cols-md-3 row-cols-xl-4">
                   <div className="col">
                     <div className="pTitle">Full Name</div>
@@ -137,8 +116,8 @@ const PlayerDetail = () => {
                     </div>
                   </div>
                 </div> */}
-              </div>
-              <div className="playerPerformanceCard mt-4">
+              </div>:null}
+              {!isLoading && Object.keys(data?.batting?.[0] || {}).length ? <div className="playerPerformanceCard mt-4">
                 <div className="row">
                   <div className="col-12 cardTitle">
                     BATTING PERFORMANCE
@@ -164,7 +143,6 @@ const PlayerDetail = () => {
                     <tbody>
                       {
                         Object.keys(data?.batting?.[0] || {})?.map((key)=> {
-                         
                           return (
                           <tr>
                             <td>{key}</td>
@@ -202,8 +180,9 @@ const PlayerDetail = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
-              <div className="playerPerformanceCard mt-4">
+              </div>:null}
+
+              {!isLoading && Object.keys(data?.bowling?.[0] || {}).length ? <div className="playerPerformanceCard mt-4">
                 <div className="row">
                   <div className="col-12 cardTitle">
                     BOWLING PERFORMANCE
@@ -276,7 +255,12 @@ const PlayerDetail = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </div> :null}
+              {
+                (!isLoading && !Object.keys(data?.bowling?.[0] || {}).length && !Object.keys(data?.batting?.[0] || {}).length) ? <NoDataFound /> :null 
+              }
+
+
               {/* -----------------------------------------------------------> Recent Form ( Last 5 matches )  [ ⚠️ Do Not Remove ⚠️ ] */}
               {/* <div className="playerPerformanceCard mt-4">
                 <div className="row align-items-center mb-2">

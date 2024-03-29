@@ -9,68 +9,14 @@ import AdsComp from "components/ads";
 import { getAPI } from "utils/services";
 import { API_ROUTES, ROUTE_CONST } from "../../constants";
 import { useNavigate, useSearchParams } from "react-router-dom";
-
-const venue = [
-  {
-    id: "venue1",
-    name: "Mission Road Ground, Mong Kok, Hong Kong",
-  },
-  {
-    id: "venue2",
-    name: "Judges Field, Guwahati, India",
-  },
-];
-
-const team = [
-  {
-    id: "team1",
-    name: "Hong Kong",
-  },
-  {
-    id: "team2",
-    name: "Papua New Guinea",
-  },
-  {
-    id: "team3",
-    name: "91 Yard Club Women",
-  },
-  {
-    id: "team4",
-    name: "New Star Club Women",
-  },
-
-  {
-    id: "team1",
-    name: "Hong Kong",
-  },
-  {
-    id: "team2",
-    name: "Papua New Guinea",
-  },
-  {
-    id: "team3",
-    name: "91 Yard Club Women",
-  },
-  {
-    id: "team4",
-    name: "New Star Club Women",
-  },
-];
-
-const series = [
-  {
-    id: "series1",
-    name: "Hong Kong T20I Tri-Series",
-  },
-  {
-    id: "series2",
-    name: `Guwahati Women's T20 League`,
-  },
-];
+import MatchLoaderCard from "components/matchCard/MatchLoaderCard";
+import NoDataFound from "components/noData";
 
 const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [status, setStatus] = useState(searchParams.get("status") || "Completed");
+  const [status, setStatus] = useState(
+    searchParams.get("status") || "Completed"
+  );
   const [category, setCategory] = useState("international");
   const [isLoading, setIsLoading] = useState(false);
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
@@ -80,9 +26,10 @@ const Home = () => {
   const [selectedVenue, setSelectedVenue] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedSeries, setSelectedSeries] = useState("");
+  const [filtersData, setFiltersData] = useState({});
 
 
-  const navigate =useNavigate();
+  const navigate = useNavigate();
 
   const handleClearFilter = () => {
     setSelectedVenue("");
@@ -124,9 +71,24 @@ const Home = () => {
     }
   };
 
+  
+
+
+  const getFilterData = async () => {
+    try {
+      const res = await getAPI(`${API_ROUTES?.GET_MATCH_FILTER}/${category}/${status}`);
+      setFiltersData(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   useEffect(() => {
     getMatches();
+    getFilterData();
   }, [status, category]); //eslint-disable-line
+
 
   useEffect(() => {
     if (currentPage !== 1) {
@@ -137,6 +99,26 @@ const Home = () => {
   const handleLoadMore = () => {
     setCurrentPage((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    const getMatches = async () => {
+      setIsLoading(true);
+      try {
+        const res = await getAPI(
+          `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20&venue=${selectedVenue}&team=${selectedTeam}&series=${selectedSeries}`
+        );
+
+        setMatchListData(res?.data?.data);
+        setPageCount(res?.data?.pageCount);
+      } catch (error) {
+        console.log({ error });
+        setMatchListData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getMatches();
+  }, [selectedVenue, selectedTeam, selectedSeries]);//eslint-disable-line
 
   return (
     <>
@@ -152,7 +134,7 @@ const Home = () => {
                     setCurrentPage(1);
                     navigate(ROUTE_CONST.LIVE_CRICKET_SCORES);
                   }}
-                  className={`tab ${status === "live" ? "active" : ""}`}
+                  className={`tab ${status === "Live" ? "active" : ""}`}
                 >
                   Live
                 </div>
@@ -212,6 +194,15 @@ const Home = () => {
                     >
                       domestic
                     </div>
+                    <div
+                      onClick={() => {
+                        setCategory("women");
+                        setCurrentPage(1);
+                      }}
+                      className={`tab ${category === "women" ? "active" : ""}`}
+                    >
+                      Women
+                    </div>
                   </div>
                 </div>
                 <div className="col-auto">
@@ -236,19 +227,19 @@ const Home = () => {
                                 </div>
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
-                                {venue?.map((item) => (
+                              {filtersData?.venues?.map((item) => (
                                   <Dropdown.Item
                                     as="button"
-                                    onClick={() => setSelectedVenue(item?.name)}
+                                    onClick={() => setSelectedVenue(item)}
                                     className={`dropdownItem ${
                                       selectedVenue?.trim()?.toLowerCase() ===
-                                      item?.name?.trim()?.toLowerCase()
+                                      item?.trim()?.toLowerCase()
                                         ? "active"
                                         : ""
                                     }`}
-                                    key={item?.id}
+                                    key={item}
                                   >
-                                    {item?.name}
+                                    {item}
                                   </Dropdown.Item>
                                 ))}
                               </Dropdown.Menu>
@@ -263,19 +254,19 @@ const Home = () => {
                                 </div>
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
-                                {team?.map((item) => (
+                              {filtersData?.teams?.map((item) => (
                                   <Dropdown.Item
                                     as="button"
-                                    onClick={() => setSelectedTeam(item?.name)}
+                                    onClick={() => setSelectedTeam(item)}
                                     className={`dropdownItem ${
                                       selectedTeam?.trim()?.toLowerCase() ===
-                                      item?.name?.trim()?.toLowerCase()
+                                      item?.trim()?.toLowerCase()
                                         ? "active"
                                         : ""
                                     }`}
-                                    key={item?.id}
+                                    key={item}
                                   >
-                                    {item?.name}
+                                    {item}
                                   </Dropdown.Item>
                                 ))}
                               </Dropdown.Menu>
@@ -292,21 +283,19 @@ const Home = () => {
                                 </div>
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
-                                {series?.map((item) => (
+                              {filtersData?.seriesData?.map((item) => (
                                   <Dropdown.Item
                                     as="button"
-                                    onClick={() =>
-                                      setSelectedSeries(item?.name)
-                                    }
+                                    onClick={() => setSelectedSeries(item)}
                                     className={`dropdownItem ${
                                       selectedSeries?.trim()?.toLowerCase() ===
-                                      item?.name?.trim()?.toLowerCase()
+                                      item?.trim()?.toLowerCase()
                                         ? "active"
                                         : ""
                                     }`}
-                                    key={item?.id}
+                                    key={item}
                                   >
-                                    {item?.name}
+                                    {item}
                                   </Dropdown.Item>
                                 ))}
                               </Dropdown.Menu>
@@ -337,23 +326,37 @@ const Home = () => {
                         <MatchCard data={item} key={item?._id} />
                       ))}
                     </div>
-                    {(pageCount === currentPage) || (pageCount === 0) ? null : (
+                    {pageCount === currentPage || pageCount === 0 ? null : (
                       <div className="mt-3 d-flex justify-content-center">
-                        {!loadMoreLoading ? <div
-                          className="commonBtn"
-                          style={{ maxWidth: "150px" }}
-                          onClick={handleLoadMore}
-                        >
-                          Load more
-                        </div>:<div style={{ color: "white" }}>Loading.....</div>}
+                        {!loadMoreLoading ? (
+                          <div
+                            className="commonBtn"
+                            style={{ maxWidth: "150px" }}
+                            onClick={handleLoadMore}
+                          >
+                            Load more
+                          </div>
+                        ) : (
+                          <div className="row row-cols-1 row-cols-xl-2 g-3">
+                            <MatchLoaderCard />
+                            <MatchLoaderCard />
+                            <MatchLoaderCard />
+                            <MatchLoaderCard />
+                          </div>
+                        )}
                       </div>
                     )}
                   </>
                 ) : (
-                  <div style={{ color: "white" }}> No data </div>
+                  <NoDataFound />
                 )
               ) : (
-                <div style={{ color: "white" }}>Loading.....</div>
+                <div className="row row-cols-1 row-cols-xl-2 g-3">
+                  <MatchLoaderCard />
+                  <MatchLoaderCard />
+                  <MatchLoaderCard />
+                  <MatchLoaderCard />
+                </div>
               )}
             </div>
             <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">

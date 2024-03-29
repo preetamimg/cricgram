@@ -35,12 +35,18 @@ export const API_ROUTES = {
   GET_MATCH_INFO_COMMENTARY:"getMatchInfo/Commentary", // /:real_matchKey
   GET_MATCH_INFO_SCORECARD:"getMatchInfo/scoreCard",  //:real_matchKey
   GET_MATCH_INFO_OVER:"getMatchInfo/over",       //:real_matchKey
+  GET_MATCH_FILTER:"getMatchFilter",          //:category/:status
+  GET_MATCH_INFO_MATCH:"getMatchInfo/match",    //:real_matchkey   
+  GET_MATCH_INFO_LAST_FIVE_OVER:"getMatchInfo/lastFiveOver", //:real_matchkey
+  GET_MATCH_INFO_PLAYER:"getMatchInfo/player",       //:real_matchkey
+  //  -------------------------------------------------- -------------------series>
   
-  // -------------------------------------------------- -------------------series>
-
   SERIES_GET_MATCH_DATA:"series/getmatchData",      // :series_key
   SERIES_MATCHES:"series/matches",                    // :series_key
   SERIES_GET_MATCH_DATA_STAT_TYPE:"series/getmatchData/statTypes",     // :seriesKey
   SERIES_GET_MATCH_DATA_STAT_DATA:"series/getmatchData/statData",  // :seriesKey && :name ( stat type )
   SERIES_GET_MATCH_DATA_PLAYER_INFO:"series/getmatchData/playerInfo",   //:playerId
+  SERIES_GET_TOP_RANK_PLAYERS:"series/getTopRankPlayers",     //:seriesKey
+  SERIES_GET_MATCH_FILTER:"getMatchFilter",          //:seriesKey
+  SERIES_GET_MOST_RUNS_INNINGS:"series/getMostRunsInnings"  //:seriesKey
 }

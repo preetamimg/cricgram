@@ -63,15 +63,14 @@ const battingStats = [
   },
 ];
 
-
-const Stats = ({ id, tab,seriesName }) => {
-  const [ statsData,setStatsData ] = useState([]);
+const Stats = ({ id, tab, seriesName }) => {
+  const [statsData, setStatsData] = useState([]);
   const [statsList, setStatsList] = useState([]);
   const [selectedStat, setSelectedStat] = useState("");
-  const [ statLocation,setStatLocation ] = useState(null);
+  const [statLocation, setStatLocation] = useState(null);
   const [show, setShow] = useState(false);
-  const [ isLoading,setIsLoading ] =useState(false);
- 
+  const [isLoading, setIsLoading] = useState(false);
+
   const getStatsFilter = async () => {
     try {
       const res = await getAPI(
@@ -84,36 +83,32 @@ const Stats = ({ id, tab,seriesName }) => {
   };
 
   const getStatsData = async () => {
-  setIsLoading(true);
-  setShow(true);
+    setIsLoading(true);
+    setShow(true);
 
     try {
       const res = await getAPI(
         `${API_ROUTES.SERIES_GET_MATCH_DATA_STAT_DATA}/${id}/${selectedStat}`
       );
-      console.log({ res111: res });
-      // setStatsList(res?.data?.data?.stat_types);
-      console.log("API CALL",{selectedStat});
+      setStatsData(res?.data?.data?.[0]?.stat);
     } catch (error) {
       console.log("error", error);
-    }finally{
-  setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     getStatsFilter();
-  }, [id]);//eslint-disable-line
+  }, [id]); //eslint-disable-line
 
-  useEffect(()=>{
-    if(selectedStat){
+  useEffect(() => {
+    if (selectedStat) {
       getStatsData();
     }
-  },[selectedStat,id]);//eslint-disable-line
+  }, [selectedStat, id]); //eslint-disable-line
 
-  const handleClick = (stat,index) => {
-    // setShow(true);
-    console.log({ stat,index })
+  const handleClick = (stat, index) => {
     setSelectedStat(stat);
     setStatLocation(index);
   };
@@ -123,52 +118,112 @@ const Stats = ({ id, tab,seriesName }) => {
       {!show ? (
         <>
           <div className="row g-3">
-            {statsList.map((statsGroup,index) => {
+            {statsList.map((statsGroup, index) => {
               return (
                 <div className="col-md-4 statsCard">
                   <div className="statsHeading">{statsGroup?.group_title}</div>
                   <div className="statsData">
                     <ul className="listUnstyled m-0 p-0">
                       {Object.keys(statsGroup.types || {})?.map((key) => (
-                        <li key={key} onClick={()=>handleClick(key,index)}>
-                          <div className="statsLink">{statsGroup?.types?.[key]}</div>
+                        <li key={key} onClick={() => handleClick(key, index)}>
+                          <div className="statsLink">
+                            {statsGroup?.types?.[key]}
+                          </div>
                         </li>
                       ))}
                     </ul>
                   </div>
-                </div> 
+                </div>
               );
             })}
-            {
-              !statsList.length ? <NoDataFound /> :null 
-            }
+            {!statsList.length ? <NoDataFound /> : null}
           </div>
         </>
       ) : (
         <>
           <div className="row align-items-center mt-3 mb-2 mb-sm-3">
             <div className="col-sm">
-              <div className="commonHeading mb-0">{seriesName} {statsList?.[statLocation]?.types?.[selectedStat]}</div>
+              <div className="commonHeading mb-0">
+                {seriesName} {statsList?.[statLocation]?.types?.[selectedStat]}
+              </div>
             </div>
             <div className="col-md col-sm-6 customDropdown lightMode mt-2 mt-sm-0">
               <Dropdown>
                 <Dropdown.Toggle id="venue">
-                  <div className="innerTxt">{statsList?.[statLocation]?.types?.[selectedStat]}</div>
+                  <div className="innerTxt">
+                    {statsList?.[statLocation]?.types?.[selectedStat]}
+                  </div>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  {battingStats?.map((item) => (
+                  <Dropdown.Item
+                    className="dropdownItem"
+                    disabled
+                    style={{ background: "#3c3c3c" }}
+                  >
+                    Batsmen
+                  </Dropdown.Item>
+
+                  {Object.keys(statsList?.[0]?.types || {})?.map((key) => (
                     <Dropdown.Item
                       as="button"
-                      onClick={() => setSelectedStat(item?.name)}
+                      onClick={() => handleClick(key, 0)}
                       className={`dropdownItem ${
                         selectedStat?.trim()?.toLowerCase() ===
-                        item?.name?.trim()?.toLowerCase()
+                        key?.trim()?.toLowerCase()
                           ? "active"
                           : ""
                       }`}
-                      key={item?.id}
+                      key={key}
                     >
-                      {item?.name}
+                      {statsList?.[0]?.types?.[key]}
+                    </Dropdown.Item>
+                  ))}
+
+                  <Dropdown.Item
+                    className="dropdownItem"
+                    disabled
+                    style={{ background: "#3c3c3c" }}
+                  >
+                    Bowler
+                  </Dropdown.Item>
+
+                  {Object.keys(statsList?.[1]?.types || {})?.map((key) => (
+                    <Dropdown.Item
+                      as="button"
+                      onClick={() => handleClick(key, 1)}
+                      className={`dropdownItem ${
+                        selectedStat?.trim()?.toLowerCase() ===
+                        key?.trim()?.toLowerCase()
+                          ? "active"
+                          : ""
+                      }`}
+                      key={key}
+                    >
+                      {statsList?.[1]?.types?.[key]}
+                    </Dropdown.Item>
+                  ))}
+
+                  <Dropdown.Item
+                    className="dropdownItem"
+                    disabled
+                    style={{ background: "#3c3c3c" }}
+                  >
+                    Team
+                  </Dropdown.Item>
+
+                  {Object.keys(statsList?.[2]?.types || {})?.map((key) => (
+                    <Dropdown.Item
+                      as="button"
+                      onClick={() => handleClick(key, 2)}
+                      className={`dropdownItem ${
+                        selectedStat?.trim()?.toLowerCase() ===
+                        key?.trim()?.toLowerCase()
+                          ? "active"
+                          : ""
+                      }`}
+                      key={key}
+                    >
+                      {statsList?.[2]?.types?.[key]}
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
@@ -176,7 +231,7 @@ const Stats = ({ id, tab,seriesName }) => {
             </div>
           </div>
 
-          <StatsTable isLoading={isLoading}  />
+          <StatsTable isLoading={isLoading} selectedStat={selectedStat} data={statsData} />
         </>
       )}
     </>

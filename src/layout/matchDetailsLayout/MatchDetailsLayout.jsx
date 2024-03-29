@@ -13,6 +13,7 @@ import { API_ROUTES, ROUTE_CONST } from "../../constants";
 import { getAPI } from "utils/services";
 import { formatDate, shareUrl } from "utils/helpers";
 import { useRefreshValue } from "context/refresh-value/RefreshContext";
+import NoDataFound from "components/noData";
 
 const tabObject = {
   [ROUTE_CONST.LIVE_SCORE]: "commentary",
@@ -31,7 +32,9 @@ const MatchDetailsLayout = ({ Content }) => {
 
   const [matchData, setMatchData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
+  const [ recentIsLoading,setRecentIsLoading ] = useState(false);
+  const [ recentOversData,setRecentOversData ] = useState([]);
+  const [ noData,setNodata ] =useState(false);
 
   const { id, matchName } = useParams();
 
@@ -39,12 +42,16 @@ const MatchDetailsLayout = ({ Content }) => {
 
   const getMatchData = async () => {
     setIsLoading(true);
+    setNodata(false);
     try {
-      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO}/${id}`);
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_MATCH}/${id}`);
       
-      setMatchData({...res?.data?.data?.[0],lastFiveOver:res?.data?.data?.[0]?.lastFiveOver?.reverse()});
+      setMatchData(res?.data?.data?.[0]);
     } catch (error) {
       console.log({ error });
+      if(error?.response?.data?.message.toLowerCase().includes("no") && error?.response?.data?.message.toLowerCase().includes("data")){
+        setNodata(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -52,8 +59,29 @@ const MatchDetailsLayout = ({ Content }) => {
 
   const getMatchDataLive = async () => {
     try {
-      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO}/${id}`);
-      setMatchData({...res?.data?.data?.[0],lastFiveOver:res?.data?.data?.[0]?.lastFiveOver?.reverse()});
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_MATCH}/${id}`);
+      setMatchData(res?.data?.data?.[0]);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  const getRecentOverData = async () => {
+    setRecentIsLoading(true);
+    try {
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_LAST_FIVE_OVER}/${id}`);
+      setRecentOversData({...res?.data?.data?.[0],lastFiveOver:res?.data?.data?.[0]?.lastFiveOver?.reverse()});
+    } catch (error) {
+      console.log({ error });
+    }finally{
+      setRecentIsLoading(false);
+    }
+  };
+
+  const getRecentOverDataLive = async () => {
+    try {
+      const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_LAST_FIVE_OVER}/${id}`);
+      setRecentOversData({...res?.data?.data?.[0],lastFiveOver:res?.data?.data?.[0]?.lastFiveOver?.reverse()});
     } catch (error) {
       console.log({ error });
     }
@@ -65,24 +93,26 @@ const MatchDetailsLayout = ({ Content }) => {
 
   useEffect(() => {
     getMatchData();
+    getRecentOverData();
   }, [id]); //eslint-disable-line
 
   useEffect(()=>{
     if(!initialLoad){
       getMatchDataLive();
+      getRecentOverDataLive();
     }
   },[value]);//eslint-disable-line
-
   return (
     <>
       <div className="container-fluid my-4">
         <div className="container px-0">
           <div className="row">
             <div className="col-lg-8 col-xl-9">
-              <div className="matchDetailCard">
+
+              {!noData ? <div className="matchDetailCard">
                 {" "}
                 {/* add loading class here for loader*/}
-                <div className={`row align-items-start ${isLoading ? "loading" :"" }`}>
+                 <div className={`row align-items-start ${isLoading ? "loading" :"" }`}>
                   <div className="col-10 matchTeams">
                     {/* Mumbai vs Vidarbha, Final - Live Cricket Score */}
                     {matchData?.name}
@@ -106,10 +136,11 @@ const MatchDetailsLayout = ({ Content }) => {
                     {matchData?.stadiumName}
                   </div>
                 </div>
-              </div>
+
+              </div>:<NoDataFound />}
 
               {/* timer for upcoming details */}
-              {matchData?.start_date && matchData.status_str === "Scheduled" ? (
+              {matchData?.start_date && matchData?.status_str === "Scheduled" ? (
                 <div className="matchDetailCard mt-2">
                   <div className="row align-items-center">
                     <div className="col-12 py-4">
@@ -121,10 +152,9 @@ const MatchDetailsLayout = ({ Content }) => {
               ) : (
                 ""
               )}
-
               {/* add loading class here for loader (below) */}
-              {matchData.status_str !== "Scheduled" ? (
-                <div className={`matchDetailCard mt-2 ${ isLoading ? "loading" : "" }`}>
+              {matchData?.status_str !== "Scheduled" ? (
+                !noData ? <div className={`matchDetailCard mt-2 ${ isLoading ? "loading" : "" }`}>
                   <div className="row align-items-center">
                     <div className="col-12 teamAndMatchs">
                       <div className="row mb-2">
@@ -132,7 +162,7 @@ const MatchDetailsLayout = ({ Content }) => {
                           
                           {matchData?.status_str==="Live" ? <div className="mStatus">Live</div>: "" }
                           {matchData?.status_str==="Completed" ? <div className="mStatus green">Result</div>: "" }
-                          
+
                           <div className="whoPlaying">
                             {matchData?.seriesData?.name}
                           </div>
@@ -162,7 +192,7 @@ const MatchDetailsLayout = ({ Content }) => {
                               </div>
                             </td>
                             <td>
-                              <div className="scoreDetail nowPlaying">
+                              <div className={`scoreDetail ${matchData?.livePlayingTeamId===matchData?.teamAId?"nowPlaying":""}`}>
                                 {matchData?.teamAFullScore}
                               </div>
                             </td>
@@ -180,11 +210,11 @@ const MatchDetailsLayout = ({ Content }) => {
                             </td>
                             <td className="ps-0">
                               <div className={`flex align-items-center teamName pe-3 pe-md-4 ${matchData?.status_str==="Completed"?  (matchData?.teamBId === matchData?.winningTeamId ? "winner" :'disabled'):"" }`}>
-                                <span>{matchData?.teambname}</span>{}
+                                <span>{matchData?.teambname}</span>
                               </div>
                             </td>
                             <td>
-                              <div className="scoreDetail">{matchData?.teamBFullScore}</div>
+                              <div className={`scoreDetail ${matchData?.livePlayingTeamId===matchData?.teamBId?"nowPlaying":""}`}>{matchData?.teamBFullScore}</div>
                             </td>
                           </tr>
                         </tbody>
@@ -198,10 +228,10 @@ const MatchDetailsLayout = ({ Content }) => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> :null
               ) : null}
               
-              {matchData.status_str !== "Scheduled" ? <RecentOver isLoading={isLoading} data={matchData?.lastFiveOver}  /> : ""}
+              {matchData?.status_str !== "Scheduled" ? <RecentOver isLoading={recentIsLoading} data={recentOversData?.lastFiveOver}  /> : ""}
 
               <div className="commonTabs mt-2 mb-2 mb-md-3">
                 <div
@@ -233,8 +263,9 @@ const MatchDetailsLayout = ({ Content }) => {
                   Teams
                 </div>
                 <div
-                  onClick={() =>
-                    window.open(
+                  onClick={() =>{
+                    if(matchData?.seriesData?.series_key){
+                      window.open(
                       `${ROUTE_CONST.CRICKET_SERIES}/${
                         matchData?.seriesData?.series_key
                       }/${matchData?.seriesData?.name.replaceAll(
@@ -242,15 +273,16 @@ const MatchDetailsLayout = ({ Content }) => {
                         "-"
                       )}?tab=Standings`,
                       "_blank"
-                    )
-                  }
+                    )}
+                  }}
                   className={`tab ${activeTab === "Standings" ? "active" : ""}`}
                 >
                   Standings
                 </div>
                 <div
-                  onClick={() =>
-                    window.open(
+                  onClick={() =>{
+                    if(matchData?.seriesData?.series_key){
+                      window.open(
                       `${ROUTE_CONST.CRICKET_SERIES}/${
                         matchData?.seriesData?.series_key
                       }/${matchData?.seriesData?.name.replaceAll(
@@ -258,8 +290,8 @@ const MatchDetailsLayout = ({ Content }) => {
                         "-"
                       )}?tab=Stats`,
                       "_blank"
-                    )
-                  }
+                    )}
+                  }}
                   className={`tab ${activeTab === "Stats" ? "active" : ""}`}
                 >
                   Stats

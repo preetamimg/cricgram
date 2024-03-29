@@ -86,22 +86,17 @@ const Overs = ({ matchData, id }) => {
     <>
       <div className="commentaryTabs mb-3">
       
-
         {Object.keys(data || {}).map((key) => {
           return (
-            <div className={`commentaryTab ${data?.[key]?.[0]?.inning?.short_name===selectedInning?.inning?.short_name ? "active" :""}`} onClick={() => handleClick(data?.[key]?.[0])}>
+            data?.[key]?.length && data?.[key]?.[0]!=="Invalid inning." ?(<div className={`commentaryTab ${data?.[key]?.[0]?.inning?.short_name===selectedInning?.inning?.short_name ? "active" :""}`} onClick={() => handleClick(data?.[key]?.[0])}>
               <div className="d-flex justify-content-between">
                 <div className="">
                   <div className="value">
                     {data?.[key]?.[0]?.inning?.short_name}
                   </div>
-                  {/* <div className='name'>Innings</div> */}
                 </div>
-                {/* <div>
-            <img className='image' src={`https://www.crictracker.com/_next/image/?url=https%3A%2F%2Fmedia.crictracker.com%2Fteam%2FthumbUrl%2Fnorthern-1-43_a162.png&w=40&q=75`} alt="" />
-          </div> */}
               </div>
-            </div>
+            </div>):""
           );
         })}
 

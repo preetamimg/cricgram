@@ -13,7 +13,7 @@ const CurrentSeries = () => {
   const getSeriesList =async()=>{
     try {
       const res = await getAPI(`${API_ROUTES.GET_SERIES_DATA}?limit=5`);
-      setSeriesList(res.data.data);
+      setSeriesList(res?.data?.data?.reverse());
     } catch (error) {
       console.log("error ---->",{ error });
     }

@@ -9,69 +9,11 @@ import { getAPI } from "utils/services";
 import { API_ROUTES, ROUTE_CONST } from "../../constants";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const venue = [
-  {
-    id: "venue1",
-    name: "Mission Road Ground, Mong Kok, Hong Kong",
-  },
-  {
-    id: "venue2",
-    name: "Judges Field, Guwahati, India",
-  },
-];
-
-const team = [
-  {
-    id: "team1",
-    name: "Hong Kong",
-  },
-  {
-    id: "team2",
-    name: "Papua New Guinea",
-  },
-  {
-    id: "team3",
-    name: "91 Yard Club Women",
-  },
-  {
-    id: "team4",
-    name: "New Star Club Women",
-  },
-
-  {
-    id: "team1",
-    name: "Hong Kong",
-  },
-  {
-    id: "team2",
-    name: "Papua New Guinea",
-  },
-  {
-    id: "team3",
-    name: "91 Yard Club Women",
-  },
-  {
-    id: "team4",
-    name: "New Star Club Women",
-  },
-];
-
-const series = [
-  {
-    id: "series1",
-    name: "Hong Kong T20I Tri-Series",
-  },
-  {
-    id: "series2",
-    name: `Guwahati Women's T20 League`,
-  },
-];
-
-const tabObject={
-    [ROUTE_CONST.CRICKET_MATCH_RESULTS]:"Completed",
-    [ROUTE_CONST.CRICKET_UPCOMING_MATCHES_SCHEDULE]:"Scheduled",
-    [ROUTE_CONST.LIVE_CRICKET_SCORES]:"live",
-}
+const tabObject = {
+  [ROUTE_CONST.CRICKET_MATCH_RESULTS]: "Completed",
+  [ROUTE_CONST.CRICKET_UPCOMING_MATCHES_SCHEDULE]: "Scheduled",
+  [ROUTE_CONST.LIVE_CRICKET_SCORES]: "live",
+};
 
 const HomeLayout = ({ Content }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -82,13 +24,12 @@ const HomeLayout = ({ Content }) => {
   const [selectedVenue, setSelectedVenue] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedSeries, setSelectedSeries] = useState("");
-  
-  const { pathname } = useLocation()
-  
+  const [filtersData, setFiltersData] = useState({});
+
+  const { pathname } = useLocation();
+
   const [status, setStatus] = useState(tabObject[pathname]);
   const [category, setCategory] = useState("international");
-  
-  
   const navigate = useNavigate();
 
   const handleClearFilter = () => {
@@ -97,14 +38,13 @@ const HomeLayout = ({ Content }) => {
     setSelectedSeries("");
   };
 
-
-
   const getMatches = async () => {
     setIsLoading(true);
     try {
       const res = await getAPI(
         `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20`
       );
+
 
 
       setMatchListData(res?.data?.data);
@@ -124,7 +64,6 @@ const HomeLayout = ({ Content }) => {
         `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20`
       );
 
-
       setMatchListData((prev) => [...prev, ...res.data.data]);
       setPageCount(res?.data?.pageCount);
     } catch (error) {
@@ -137,6 +76,7 @@ const HomeLayout = ({ Content }) => {
 
   useEffect(() => {
     getMatches();
+    getFilterData();
   }, [status, category]); //eslint-disable-line
 
   useEffect(() => {
@@ -145,13 +85,44 @@ const HomeLayout = ({ Content }) => {
     }
   }, [currentPage]); //eslint-disable-line
 
-  useEffect(()=>{
+  useEffect(() => {
     setStatus(tabObject[pathname]);
-  },[pathname]);
+  }, [pathname]);
 
   const handleLoadMore = () => {
     setCurrentPage((prev) => prev + 1);
   };
+
+  const getFilterData = async () => {
+    try {
+      const res = await getAPI(`${API_ROUTES?.GET_MATCH_FILTER}/${category}/${status}`);
+      setFiltersData(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  useEffect(() => {
+    const getMatches = async () => {
+      setIsLoading(true);
+      try {
+        const res = await getAPI(
+          `${API_ROUTES.GET_MATCHES_DATA}/${category}/${status}?page=${currentPage}&pageSize=20&venue=${selectedVenue}&team=${selectedTeam}&series=${selectedSeries}`
+        );
+
+        setMatchListData(res?.data?.data);
+        setPageCount(res?.data?.pageCount);
+      } catch (error) {
+        console.log({ error });
+        setMatchListData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getMatches();
+  }, [selectedVenue, selectedTeam, selectedSeries]);//eslint-disable-line
+
 
   return (
     <>
@@ -232,9 +203,7 @@ const HomeLayout = ({ Content }) => {
                         setCategory("women");
                         setCurrentPage(1);
                       }}
-                      className={`tab ${
-                        category === "women" ? "active" : ""
-                      }`}
+                      className={`tab ${category === "women" ? "active" : ""}`}
                     >
                       Women
                     </div>
@@ -262,19 +231,19 @@ const HomeLayout = ({ Content }) => {
                                 </div>
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
-                                {venue?.map((item) => (
+                                {filtersData?.venues?.map((item) => (
                                   <Dropdown.Item
                                     as="button"
-                                    onClick={() => setSelectedVenue(item?.name)}
+                                    onClick={() => setSelectedVenue(item)}
                                     className={`dropdownItem ${
                                       selectedVenue?.trim()?.toLowerCase() ===
-                                      item?.name?.trim()?.toLowerCase()
+                                      item?.trim()?.toLowerCase()
                                         ? "active"
                                         : ""
                                     }`}
-                                    key={item?.id}
+                                    key={item}
                                   >
-                                    {item?.name}
+                                    {item}
                                   </Dropdown.Item>
                                 ))}
                               </Dropdown.Menu>
@@ -289,19 +258,19 @@ const HomeLayout = ({ Content }) => {
                                 </div>
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
-                                {team?.map((item) => (
+                                {filtersData?.teams?.map((item) => (
                                   <Dropdown.Item
                                     as="button"
-                                    onClick={() => setSelectedTeam(item?.name)}
+                                    onClick={() => setSelectedTeam(item)}
                                     className={`dropdownItem ${
                                       selectedTeam?.trim()?.toLowerCase() ===
-                                      item?.name?.trim()?.toLowerCase()
+                                      item?.trim()?.toLowerCase()
                                         ? "active"
                                         : ""
                                     }`}
-                                    key={item?.id}
+                                    key={item}
                                   >
-                                    {item?.name}
+                                    {item}
                                   </Dropdown.Item>
                                 ))}
                               </Dropdown.Menu>
@@ -318,21 +287,19 @@ const HomeLayout = ({ Content }) => {
                                 </div>
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
-                                {series?.map((item) => (
+                                {filtersData?.seriesData?.map((item) => (
                                   <Dropdown.Item
                                     as="button"
-                                    onClick={() =>
-                                      setSelectedSeries(item?.name)
-                                    }
+                                    onClick={() => setSelectedSeries(item)}
                                     className={`dropdownItem ${
                                       selectedSeries?.trim()?.toLowerCase() ===
-                                      item?.name?.trim()?.toLowerCase()
+                                      item?.trim()?.toLowerCase()
                                         ? "active"
                                         : ""
                                     }`}
-                                    key={item?.id}
+                                    key={item}
                                   >
-                                    {item?.name}
+                                    {item}
                                   </Dropdown.Item>
                                 ))}
                               </Dropdown.Menu>
@@ -353,18 +320,21 @@ const HomeLayout = ({ Content }) => {
                   </Accordion>
                 </div>
               </div>
-              {/* Content-------------------------------------------------------------------> */}
-                
-                <Content 
-                    isLoading={isLoading} 
-                    matchListData={matchListData} 
-                    pageCount={pageCount} 
-                    currentPage={currentPage} 
-                    loadMoreLoading={loadMoreLoading} 
-                    handleLoadMore={handleLoadMore} 
-                />
+
 
               {/* Content-------------------------------------------------------------------> */}
+
+              <Content
+                isLoading={isLoading}
+                matchListData={matchListData}
+                pageCount={pageCount}
+                currentPage={currentPage}
+                loadMoreLoading={loadMoreLoading}
+                handleLoadMore={handleLoadMore}
+              />
+
+              {/* Content-------------------------------------------------------------------> */}
+              
             </div>
             <div className="col-lg-4 col-xl-3 mt-4 mt-lg-0">
               <CurrentSeries />

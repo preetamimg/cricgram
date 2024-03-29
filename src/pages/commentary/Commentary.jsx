@@ -75,7 +75,6 @@ const Commentary = ({ matchData, id }) => {
   };
 
   const getCommentaryDataLive = async () => {
-    setIsLoading(true);
     setError(null);
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_COMMENTARY}/${id}`);
@@ -113,8 +112,6 @@ const Commentary = ({ matchData, id }) => {
     } catch (error) {
       console.log({ error });
       setError(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -206,7 +203,7 @@ const Commentary = ({ matchData, id }) => {
                   </tr>
                 ))}
 
-                {/* -------------------------------------------------------------------------------------------------------------------------------- */}
+          {/* --------------------------------------------------------------------------------------------------------------- */}
                 {/* loading td */}
                 {isLoading ?<> 
                 <tr>
@@ -341,10 +338,10 @@ const Commentary = ({ matchData, id }) => {
           className={`commentaryTab ${
             activeTab === "Innings1" ? "active" : ""
           } `}
+          onClick={() => handleClick("Innings1")}
         >
           <div
             className="d-flex justify-content-between"
-            onClick={() => handleClick("Innings1")}
           >
             <div className="">
               <div className="value">
@@ -366,10 +363,10 @@ const Commentary = ({ matchData, id }) => {
           className={`commentaryTab ${
             activeTab === "Innings2" ? "active" : ""
           } `}
+          onClick={() => handleClick("Innings2")}
         >
           <div
             className="d-flex justify-content-between"
-            onClick={() => handleClick("Innings2")}
           >
             <div className="">
               <div className="value">

@@ -19,8 +19,6 @@ const ScoreCard = ({ matchData, id }) => {
   const getScoreboardData = async () => {
     try {
       const res = await getAPI(`${API_ROUTES.GET_MATCH_INFO_SCORECARD}/${id}`);
-
-
       setData(res.data.data.scoreCardData);
     } catch (error) {
       console.log({ error });
@@ -279,11 +277,10 @@ const ScoreCard = ({ matchData, id }) => {
         </div>
       </div>
     </>
-
-      <div className="fallOfWickets fallOfWic py-0 mt-3">
+      {/* <div className="fallOfWickets fallOfWic py-0 mt-3"> */}
         {" "}
         {/* add loading class here */}
-        <div className="row keyValueDiv">
+        {/* <div className="row keyValueDiv">
           <div className="col-7 col-sm-4 value">WEATHER REPORT</div>
           <div className="col-5 col-sm-8 key value">
             {" "}
@@ -310,15 +307,15 @@ const ScoreCard = ({ matchData, id }) => {
             {" "}
             <span>Mumbai</span>
           </div>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
 
       {/* match preview */}
-      <div className="commonHeading mt-3">PREVIEW</div>
-      <div className="matchDetailCard">
+      {/* <div className="commonHeading mt-3">PREVIEW</div> */}
+      {/* <div className="matchDetailCard"> */}
         {" "}
         {/* add loading class here */}
-        <div className="previewTxt">
+        {/* <div className="previewTxt">
           Mumbai will take on Vidarbha in the Final of the Ranji Trophy. This
           match will be played at the iconic Wankhede Stadium in Mumbai.
           Vidarbha secured qualification to the final with a 62-run victory over
@@ -328,8 +325,8 @@ const ScoreCard = ({ matchData, id }) => {
           performance by Shardul Thakur. Vidarbha will look to secure its third
           Ranji Trophy title while Mumbai has a chance of winning a record 42nd
           title.
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </>
   ) : (
     <NoDataFound />

@@ -11,11 +11,11 @@ const Home = ({ id,tab,seriesName }) => {
   const [ isLoading,setIsLoading ] = useState(false);
 
 
-  const getSeriesData =async()=>{
+  const getTopPlayers =async()=>{
     setIsLoading(true);
     try {
-      const res = await getAPI(`${API_ROUTES.SERIES_GET_MATCH_DATA}/${id}?type=${tab}`);
-      // setData(res.data.data[0]);
+      const res = await getAPI(`${API_ROUTES.SERIES_GET_MOST_RUNS_INNINGS}/${id}`);
+      setData(res.data.data);
     } catch (error) {
       console.log({ error });
     }finally{
@@ -24,8 +24,8 @@ const Home = ({ id,tab,seriesName }) => {
   }
 
   useEffect(()=>{
-    getSeriesData();
-  },[id]);
+    getTopPlayers();
+  },[id]);//eslint-disable-line
 
   return (
     <>
@@ -33,12 +33,12 @@ const Home = ({ id,tab,seriesName }) => {
         {!isLoading ?
           data?.map((item)=> (
             <div className="col-6 col-lg-4 col-xl-3">
-              <TopRankerCard/>
+              <TopRankerCard data={item} />
             </div>
           ))
         :null}
         {
-          !data.length ? <NoDataFound  /> :null
+          !data.length && !isLoading ? <NoDataFound  /> :null
         }
         {isLoading ?
           <>
